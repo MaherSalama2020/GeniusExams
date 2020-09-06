@@ -36,6 +36,18 @@
                 <tr @dblclick="showEditinDialog(item)">
                   <td>{{ item.id }}</td>
                   <td>{{ item.name }}</td>
+                  <td class="text-xs-right" v-if="item.image">
+                    <v-img
+                      :src="item.image"
+                      max-height="125"
+                      max-width="125"
+                      contain
+                      class="py-3 px-3"
+                    ></v-img>
+                  </td>
+                  <td v-else>
+                    <v-icon>mdi-image</v-icon>No Image
+                  </td>
                   <td>
                     <v-chip
                       v-if="item.options"
@@ -86,7 +98,7 @@
                   <th>Option Text</th>
                   <th>Sequence</th>
                   <th>Correct?</th>
-                  <th colspan="2">Explaination</th>
+                  <th colspan="3">Explaination</th>
                 </tr>
                 <tr
                   :colspan="headers.length"
@@ -106,7 +118,7 @@
                       dark
                     >{{option.isCorrect == 1? "Yes" : "No" }}</v-chip>
                   </td>
-                  <td colspan="2">{{option.explaination}}</td>
+                  <td colspan="3">{{option.explaination}}</td>
                 </tr>
 
                 <tr v-if="item.options.length==0" :colspan="headers.length">
@@ -263,6 +275,12 @@ export default {
         {
           text: "Question Text",
           value: "name",
+          groupable: false,
+          sortable: true,
+        },
+        {
+          text: "Question Image",
+          value: "image",
           groupable: false,
           sortable: true,
         },

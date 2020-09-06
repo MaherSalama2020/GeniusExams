@@ -1,22 +1,36 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="showOptionsDialog" width="800px">
+    <v-layout row justify-center>
+      <v-dialog v-model="spinner" hide-overlay persistent width="300">
+        <v-card color="orange" dark>
+          <v-card-text>
+            Processing
+            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </v-layout>
+    <v-dialog
+      v-model="showOptionsDialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
       <v-card>
-        <v-card-title>
-          <span class="headline">Options of question</span>
-          <v-spacer />
-          <span @click="closeOptionsDialog">
-            <v-icon class="close" medium>close</v-icon>
-          </span>
-        </v-card-title>
+        <v-toolbar dark color="orange">
+          <v-btn icon dark @click="closeOptionsDialog">
+            <v-icon class="close">mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>Options of question</v-toolbar-title>
+        </v-toolbar>
         <v-card-text>
           <hr class="hr mt-0" />
           <h6>{{data.name}}</h6>
           <v-form dense v-model="isValid" ref="optionsForm">
-            <v-row>
+            <v-row no-gutters>
               <v-col cols="12">
                 <v-container class="inputs-container">
-                  <v-row>
+                  <v-row no-gutters>
                     <v-col cols="12" md="12">
                       <v-text-field
                         dense
@@ -32,25 +46,40 @@
                       />
                     </v-col>
                   </v-row>
-                  <v-row>
-                    <v-col cols="12" md="4">
-                      <v-btn
-                        block
-                        :disabled="!isValid"
-                        color="orange white--text"
-                        @click="addOption($event)"
-                      >Save</v-btn>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                      <v-checkbox
-                        class="mx-auto"
-                        hide-details
-                        v-model="option.isCorrect"
-                        label="Correct?"
-                        :value="option.isCorrect"
+                  <v-row no-gutters v-if="isImageOption">
+                    <v-col cols="12" md="12">
+                      <img
+                        id="cImage"
+                        class="col-md-3"
+                        height="75px"
+                        width="75px"
+                        :src="option.image"
+                        v-show="option.image"
+                        @dblclick="alertImageDialog"
+                      />
+                      <v-text-field
+                        label="Select Image"
+                        @click="pickImage"
+                        v-model="option.image"
+                        prepend-inner-icon="image"
                         color="purple"
-                      ></v-checkbox>
+                        tabindex="-1"
+                        outlined
+                        dense
+                      ></v-text-field>
+
+                      <input
+                        class="form-control"
+                        type="file"
+                        id="file"
+                        @change="attachFile"
+                        style="display: none"
+                        accept="image/*"
+                        ref="image"
+                      />
                     </v-col>
+                  </v-row>
+                  <v-row no-gutters>
                     <v-col cols="12" md="4">
                       <v-text-field
                         dense
@@ -69,8 +98,29 @@
                         tabindex="-1"
                       />
                     </v-col>
+                    <v-col cols="12" md="4">
+                      <v-checkbox
+                        dense
+                        class="mx-auto"
+                        hide-details
+                        v-model="option.isCorrect"
+                        label="Correct?"
+                        :value="option.isCorrect"
+                        color="purple"
+                      ></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-checkbox
+                        dense
+                        class="mx-auto"
+                        hide-details
+                        v-model="isImageOption"
+                        label="Image?"
+                        color="purple"
+                      ></v-checkbox>
+                    </v-col>
                   </v-row>
-                  <v-row>
+                  <v-row no-gutters>
                     <v-col cols="12" md="12">
                       <v-textarea
                         dense
@@ -82,6 +132,16 @@
                         rows="2"
                         color="purple"
                       />
+                    </v-col>
+                  </v-row>
+                  <v-row no-gutters>
+                    <v-col cols="12" md="4">
+                      <v-btn
+                        block
+                        :disabled="!isValid"
+                        color="orange white--text"
+                        @click="addOption($event)"
+                      >Save</v-btn>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -110,6 +170,11 @@
         </v-card-text>
       </v-card>
       <ConfirmDialog :confirmdialog="confirmdialog" @OK="OK" @Cancel="Cancel" />
+      <ImageDialog
+        :showImageDialog="showImageDialog"
+        :image="option.image"
+        @closeImageDialog="closeImageDialog"
+      />
     </v-dialog>
   </v-row>
 </template>
@@ -118,15 +183,22 @@
 import draggable from "vuedraggable";
 import OptionCard from "./OptionCard";
 import ConfirmDialog from "../appcore/ConfirmDialog";
+import ImageDialog from "../appcore/ImageDialog";
 export default {
   props: ["question", "showOptionsDialog"],
   components: {
     draggable,
     OptionCard,
     ConfirmDialog,
+    ImageDialog,
   },
   data() {
     return {
+      isImageOption: false,
+      showImageDialog: false,
+      spinner: false,
+      imageChanged: false,
+      attachment: null,
       confirmdialog: false,
       errors: [], //for check not repeated sequence
       option: {
@@ -167,6 +239,35 @@ export default {
     },
   },
   methods: {
+    alertImageDialog() {
+      this.showImageDialog = true;
+    },
+    closeImageDialog() {
+      this.showImageDialog = false;
+    },
+    pickImage() {
+      this.$refs.image.click();
+    },
+    attachFile(event) {
+      if (event.target.files[0]) {
+        this.spinner = true;
+        var formData = new FormData();
+        this.attachment = event.target.files[0];
+        formData.append("image", this.attachment);
+        let headers = { "Content-Type": "multipart/form-data" };
+        axios
+          .post("/api/upload-file", formData, { headers })
+          .then((response) => {
+            this.option.image = response.data;
+            let image = response.data;
+            this.imageChanged = true;
+            this.spinner = false;
+          })
+          .catch((error) => {
+            this.spinner = false;
+          });
+      }
+    },
     // closeAddingOptions(event) {
     //   this.$emit("closeAddingOptions");
     // },
@@ -198,6 +299,9 @@ export default {
       else isCorrect = 1;
       let explaination = "";
       if (this.option.explaination) explaination = this.option.explaination;
+      let image = "";
+      if (!this.imageChanged) image = "";
+      else image = this.option.image;
       if (this.edit == false) {
         axios
           .post("/api/options/", {
@@ -206,9 +310,11 @@ export default {
             sequence,
             isCorrect,
             explaination,
+            image,
           })
           .then((response) => {
             this.edit = false;
+            this.imageChanged = false;
             this.option.name = "";
             this.option.sequence = "";
             this.option.isCorrect = null;
@@ -226,11 +332,13 @@ export default {
             sequence,
             isCorrect,
             explaination,
+            image,
           })
           .then((response) => {
             console.log(response.data.message);
             // this.question.options[index] = this.option;
             this.edit = false;
+            this.imageChanged = false;
             this.option.name = "";
             this.option.sequence = "";
             this.option.isCorrect = null;
@@ -252,6 +360,7 @@ export default {
       this.option.sequence = option.sequence;
       this.option.isCorrect = option.isCorrect;
       this.option.explaination = option.explaination;
+      this.option.image = option.image;
     },
     showConfirmDialog(id) {
       this.option_id = id;

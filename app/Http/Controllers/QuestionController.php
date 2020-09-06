@@ -40,6 +40,7 @@ class QuestionController extends Controller
         //
         $question = Question::create([
             'name' => $request->name,
+            'image' => $request->image,
         ]);
 
         return response()->json([
@@ -138,7 +139,7 @@ class QuestionController extends Controller
     public function update(Request $request, Question $question)
     {
         $status = $question->update(
-            $request->only(['name'])
+            $request->only(['name','image'])
         );
 
         return response()->json([

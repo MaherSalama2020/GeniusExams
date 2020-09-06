@@ -12,7 +12,7 @@ class Option extends Model
     use SoftDeletes;
     
     protected $fillable = [
-        'question_id', 'name', 'sequence',  'isCorrect', 'explaination'
+        'question_id', 'name', 'sequence',  'isCorrect', 'explaination', 'image'
     ];
     public function question()
     {

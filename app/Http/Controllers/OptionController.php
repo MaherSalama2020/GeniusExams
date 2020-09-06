@@ -42,6 +42,7 @@ class OptionController extends Controller
             'sequence' => $request->sequence,
             'isCorrect' => $request->isCorrect,
             'explaination' => $request->explaination,
+            'image'=>$request->image,
         ]);
 
         return response()->json([
@@ -83,7 +84,7 @@ class OptionController extends Controller
     public function update(Request $request, Option $option)
     {
         $status = $option->update(
-            $request->only(['question_id','name', 'sequence', 'isCorrect','explaination'])
+            $request->only(['question_id','name', 'sequence', 'isCorrect','explaination','image'])
         );
 
         return response()->json([

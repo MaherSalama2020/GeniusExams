@@ -1,5 +1,15 @@
 <template>
   <v-row justify="center">
+    <v-layout row justify-center>
+      <v-dialog v-model="spinner" hide-overlay persistent width="300">
+        <v-card color="orange" dark>
+          <v-card-text>
+            Processing
+            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </v-layout>
     <v-dialog v-model="showCertificateDialog" width="600px">
       <v-card>
         <v-card-title>
@@ -7,7 +17,7 @@
           <span v-else class="headline">Add Certificate</span>
           <v-spacer />
           <span @click="close">
-            <v-icon medium class="close">close</v-icon>
+            <v-icon class="close" medium>close</v-icon>
           </span>
         </v-card-title>
         <hr class="hr mt-0" />
@@ -29,7 +39,6 @@
               required
               outlined
               autofocus
-              color="purple"
             />
             <div class="form-row">
               <v-text-field
@@ -42,7 +51,6 @@
                 class="col-md-3 mr-3"
                 required
                 outlined
-                color="purple"
               />
               <v-text-field
                 dense
@@ -54,7 +62,6 @@
                 class="col-md-3 mr-3"
                 required
                 outlined
-                color="purple"
               />
               <v-text-field
                 dense
@@ -65,7 +72,6 @@
                 v-model="data.bookedNO"
                 outlined
                 disabled
-                color="purple"
               />
             </div>
             <v-textarea
@@ -77,7 +83,6 @@
               required
               outlined
               no-resize
-              color="purple"
             />
             <!-- <v-image-input
               v-model="data.image"
@@ -88,11 +93,32 @@
               :imageHeight="75"
             />-->
             <div class="form-group">
-              <img id="cImage" class="col-md-3" :src="data.image" v-show="data.image != null" />
-              <input class="form-control" type="file" id="file" @change="attachFile" />
+              <img
+                id="cImage"
+                class="col-md-3"
+                :src="data.image"
+                v-show="data.image"
+                @dblclick="alertImageDialog"
+              />
+              <v-text-field
+                label="Select Image"
+                @click="pickImage"
+                v-model="data.image"
+                prepend-icon="image"
+                color="purple"
+                tabindex="-1"
+              ></v-text-field>
+
+              <input
+                class="form-control"
+                type="file"
+                id="file"
+                @change="attachFile"
+                style="display: none"
+                accept="image/*"
+                ref="image"
+              />
             </div>
-            <v-divider></v-divider>
-            <v-spacer />
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -111,6 +137,11 @@
           >Add Certificate</v-btn>
         </v-card-actions>
       </v-card>
+      <ImageDialog
+        :showImageDialog="showImageDialog"
+        :image="data.image"
+        @closeImageDialog="closeImageDialog"
+      />
     </v-dialog>
   </v-row>
 </template>
@@ -119,11 +150,14 @@
 
 <script>
 import VImageInput from "vuetify-image-input";
+import ImageDialog from "../appcore/ImageDialog";
 export default {
   props: ["certificate", "edit", "certificates", "showCertificateDialog"],
   data() {
     return {
-      imagechanged: null,
+      showImageDialog: false,
+      spinner: false,
+      imageChanged: false,
       attachment: null,
       isValid: true,
       requiredRules: [(v) => !!v || "required!!"],
@@ -133,7 +167,7 @@ export default {
       ],
     };
   },
-  components: { VImageInput },
+  components: { VImageInput, ImageDialog },
   // mounted() {
   //   alert(this.edit);
   // },
@@ -153,16 +187,38 @@ export default {
     },
   },
   methods: {
+    alertImageDialog() {
+      this.showImageDialog = true;
+    },
+    closeImageDialog() {
+      this.showImageDialog = false;
+    },
     close(event) {
       this.$emit("close", this.certificate);
     },
+    pickImage() {
+      this.$refs.image.click();
+    },
     attachFile(event) {
       // alert(event.target.files[0].name);
-      document
-        .getElementById("cImage")
-        .setAttribute("src", event.target.files[0].name);
-      this.imagechanged = true;
-      this.attachment = event.target.files[0];
+      if (event.target.files[0]) {
+        this.spinner = true;
+        var formData = new FormData();
+        this.attachment = event.target.files[0];
+        formData.append("image", this.attachment);
+        let headers = { "Content-Type": "multipart/form-data" };
+        axios
+          .post("/api/upload-file", formData, { headers })
+          .then((response) => {
+            this.data.image = response.data;
+            let image = response.data;
+            this.imageChanged = true;
+            this.spinner = false;
+          })
+          .catch((error) => {
+            this.spinner = false;
+          });
+      }
     },
     saveCertificate(e) {
       e.preventDefault();
@@ -181,48 +237,22 @@ export default {
       // if (price === "") return;
       // if (price < 0) return;
       // if (description === "") return;
-      if (this.imagechanged != null) {
-        if (this.attachment != null) {
-          var formData = new FormData();
-          formData.append("image", this.attachment);
-          let headers = { "Content-Type": "multipart/form-data" };
-          axios
-            .post("/api/upload-file", formData, { headers })
-            .then((response) => {
-              this.certificate.image = response.data;
-              let image = response.data;
-              axios
-                .put(`/api/certificates/${this.certificate.id}`, {
-                  name,
-                  bookedNO,
-                  price,
-                  available_for,
-                  description,
-                  image,
-                })
-                .then((response) => {
-                  this.certificates[index] = this.certificate;
-                  this.$emit("close", this.certificate);
-                });
-            });
-        }
-      } else {
-        let image = this.certificate.image;
-        axios
-          .put(`/api/certificates/${this.certificate.id}`, {
-            name,
-            bookedNO,
-            price,
-            available_for,
-            description,
-            image,
-          })
-          .then((response) => {
-            this.$emit("close", this.certificate);
-            this.certificates[index] = this.certificate;
-            this.$emit("close", this.certificate);
-          });
-      }
+
+      let image = this.certificate.image;
+      axios
+        .put(`/api/certificates/${this.certificate.id}`, {
+          name,
+          bookedNO,
+          price,
+          available_for,
+          description,
+          image,
+        })
+        .then((response) => {
+          this.$emit("close", this.certificate);
+          this.certificates[index] = this.certificate;
+          this.$emit("close", this.certificate);
+        });
     },
     addCertificate(e) {
       e.preventDefault();
@@ -231,58 +261,26 @@ export default {
       let price = this.certificate.price;
       let available_for = this.certificate.available_for;
       let description = this.certificate.description;
-      if (name === "" || description === "") return;
-      if (this.imagechanged != null) {
-        if (this.attachment != null) {
-          var formData = new FormData();
-          formData.append("image", this.attachment);
-          let headers = { "Content-Type": "multipart/form-data" };
-          axios
-            .post("/api/upload-file", formData, { headers })
-            .then((response) => {
-              // alert(JSON.stringify(response.data));
-              this.certificate.image = response.data;
-              let image = response.data;
-              axios
-                .post("/api/certificates/", {
-                  name,
-                  bookedNO,
-                  price,
-                  available_for,
-                  description,
-                  image,
-                })
-                .then((res) => {
-                  // alert(image);
-                  this.$emit("close", this.certificate);
-                  this.certificate.image = image;
-                  this.certificate.id = res.data.id;
-                  this.certificate.exams = [];
-                  this.certificates.unshift(this.certificate);
-                  this.$emit("close", this.certificate);
-                });
-            });
-        }
-      } else {
-        let image = "http://localhost:8000/images/exam.jpeg";
-        axios
-          .post("/api/certificates/", {
-            name,
-            bookedNO,
-            price,
-            available_for,
-            description,
-            image,
-          })
-          .then((res) => {
-            // alert(image);
-            this.$emit("close", this.certificate);
-            this.certificate.image = image;
-            this.certificate.id = res.data.id;
-            this.certificate.exams = [];
-            this.certificates.unshift(this.certificate);
-          });
-      }
+      let image = "";
+      if (!this.imageChanged) image = "http://localhost:8000/images/exam.jpeg";
+      else image = this.certificate.image;
+      axios
+        .post("/api/certificates/", {
+          name,
+          bookedNO,
+          price,
+          available_for,
+          description,
+          image,
+        })
+        .then((res) => {
+          // alert(image);
+          this.$emit("close", this.certificate);
+          this.certificate.image = image;
+          this.certificate.id = res.data.id;
+          this.certificate.exams = [];
+          this.certificates.unshift(this.certificate);
+        });
     },
   },
 };

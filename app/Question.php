@@ -12,7 +12,7 @@ class Question extends Model
     //
     use SoftDeletes;
     protected $fillable = [
-        'name', 
+        'name', 'image'
     ];
 
     public function options(){

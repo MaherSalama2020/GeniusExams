@@ -21,6 +21,7 @@ class CreateOptionsTable extends Migration
             $table->integer('sequence');
             $table->boolean('isCorrect');
             $table->text('explaination')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

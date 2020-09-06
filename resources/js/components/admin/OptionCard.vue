@@ -2,122 +2,122 @@
   <div>
     <v-card
       v-if="option.isCorrect"
-      v-bind:class="{'orange lighten-4':edit &&currentEditedOption==option,'success': currentEditedOption!=option }"
+      v-bind:class="{'orange lighten-4':edit &&currentEditedOption==option,'success lighten-4': currentEditedOption!=option }"
       class="cursor-move"
       height="75"
     >
-      <v-container>
-        <v-row justify="space-between" cols="2">
-          <v-col cols="12" sm="10">
-            <span
-              class="font-weight-black textover"
-            >{{optionsNames[option.sequence - 1]}}.{{option.name}}</span>
-          </v-col>
-          <v-col cols="12" sm="1">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  x-small
-                  fab
-                  dark
-                  color="orange"
-                  @click="editOption(option)"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon>edit</v-icon>
-                </v-btn>
-              </template>
-              Edit Option
-            </v-tooltip>
-          </v-col>
-          <v-col cols="12" sm="1">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  dark
-                  x-small
-                  fab
-                  color="orange"
-                  @click="$emit('on-delete', option)"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon>delete</v-icon>
-                </v-btn>
-              </template>
-              Delete Option
-            </v-tooltip>
-          </v-col>
-        </v-row>
-      </v-container>
+      <v-card-text>
+        <span class="font-weight-black textover">
+          {{optionsNames[option.sequence - 1]}}.{{option.name}}
+          <span v-if="option.image">
+            <img height="35px" :src="option.image" v-show="option.image" @click="alertImageDialog" />
+          </span>
+        </span>
+        <span class="actions">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                x-small
+                fab
+                dark
+                color="orange"
+                @click="editOption(option)"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>edit</v-icon>
+              </v-btn>
+            </template>
+            Edit Option
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                dark
+                x-small
+                fab
+                color="orange"
+                @click="$emit('on-delete', option)"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </template>
+            Delete Option
+          </v-tooltip>
+        </span>
+      </v-card-text>
     </v-card>
-
     <v-card
       v-else
-      height="75"
       v-bind:class="{'orange lighten-4':edit &&currentEditedOption==option }"
       class="cursor-move"
+      height="75"
     >
-      <v-container>
-        <v-row justify="space-between" cols="2">
-          <v-col cols="12" sm="10">
-            <span
-              class="font-weight-black textover"
-            >{{optionsNames[option.sequence - 1]}}.{{option.name}}</span>
-          </v-col>
-          <v-col cols="12" sm="1">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  x-small
-                  fab
-                  dark
-                  color="orange"
-                  @click="editOption(option)"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon>edit</v-icon>
-                </v-btn>
-              </template>
-              Edit Option
-            </v-tooltip>
-          </v-col>
-          <v-col cols="12" sm="1">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  x-small
-                  fab
-                  dark
-                  color="orange"
-                  @click="$emit('on-delete', option)"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon>delete</v-icon>
-                </v-btn>
-              </template>
-              Delete Option
-            </v-tooltip>
-          </v-col>
-        </v-row>
-      </v-container>
+      <v-card-text>
+        <span class="font-weight-black textover">
+          {{optionsNames[option.sequence - 1]}}.{{option.name}}
+          <span v-if="option.image">
+            <img height="35px" :src="option.image" v-show="option.image" @click="alertImageDialog" />
+          </span>
+        </span>
+        <span class="actions">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                x-small
+                fab
+                dark
+                color="orange"
+                @click="editOption(option)"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>edit</v-icon>
+              </v-btn>
+            </template>
+            Edit Option
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                dark
+                x-small
+                fab
+                color="orange"
+                @click="$emit('on-delete', option)"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </template>
+            Delete Option
+          </v-tooltip>
+        </span>
+      </v-card-text>
     </v-card>
+    <ImageDialog
+      :showImageDialog="showImageDialog"
+      :image="option.image"
+      @closeImageDialog="closeImageDialog"
+    />
   </div>
 </template>
 <script>
+import ImageDialog from "../appcore/ImageDialog";
 export default {
   props: ["index"],
   data() {
     return {
+      showImageDialog: false,
       edit: false,
       currentEditedOption: "",
       optionsNames: ["A", "B", "C", "D", "E", "F"],
     };
   },
-  components: {},
+  components: { ImageDialog },
   props: {
     option: {
       type: Object,
@@ -125,6 +125,12 @@ export default {
     },
   },
   methods: {
+    alertImageDialog() {
+      this.showImageDialog = true;
+    },
+    closeImageDialog() {
+      this.showImageDialog = false;
+    },
     editOption(option) {
       this.edit = true;
       this.currentEditedOption = option;
@@ -156,5 +162,13 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 1; /* number of lines to show */
   -webkit-box-orient: vertical;
+}
+.actions {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+}
+img {
+  cursor: pointer;
 }
 </style>
