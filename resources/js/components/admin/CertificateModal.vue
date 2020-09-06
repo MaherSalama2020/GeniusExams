@@ -6,8 +6,8 @@
           <span v-if="edit" class="headline">Edit Certificate</span>
           <span v-else class="headline">Add Certificate</span>
           <v-spacer />
-          <span @click="close" class="close">
-            <v-icon x-large>close</v-icon>
+          <span @click="close">
+            <v-icon medium class="close">close</v-icon>
           </span>
         </v-card-title>
         <hr class="hr mt-0" />
@@ -29,6 +29,7 @@
               required
               outlined
               autofocus
+              color="purple"
             />
             <div class="form-row">
               <v-text-field
@@ -41,6 +42,7 @@
                 class="col-md-3 mr-3"
                 required
                 outlined
+                color="purple"
               />
               <v-text-field
                 dense
@@ -52,6 +54,7 @@
                 class="col-md-3 mr-3"
                 required
                 outlined
+                color="purple"
               />
               <v-text-field
                 dense
@@ -62,6 +65,7 @@
                 v-model="data.bookedNO"
                 outlined
                 disabled
+                color="purple"
               />
             </div>
             <v-textarea
@@ -73,6 +77,7 @@
               required
               outlined
               no-resize
+              color="purple"
             />
             <!-- <v-image-input
               v-model="data.image"
@@ -95,34 +100,22 @@
           <v-btn
             v-if="edit"
             :disabled="!isValid"
-            color="info"
+            color="orange white--text"
             @click="saveCertificate"
           >Save Certificate</v-btn>
-          <v-btn v-else :disabled="!isValid" color="info" @click="addCertificate">Add Certificate</v-btn>
+          <v-btn
+            v-else
+            :disabled="!isValid"
+            color="orange white--text"
+            @click="addCertificate"
+          >Add Certificate</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
   </v-row>
 </template>
 
-<style scoped>
-.close {
-  font-size: 2rem;
-}
-.close:hover {
-  cursor: pointer;
-}
-.hr {
-  border: 0;
-  height: 3px;
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.75),
-    rgba(0, 0, 0, 0)
-  );
-}
-</style>
+
 
 <script>
 import VImageInput from "vuetify-image-input";
@@ -294,3 +287,20 @@ export default {
   },
 };
 </script>
+<style scoped>
+.close:hover {
+  color: orange;
+  cursor: pointer;
+  transform: rotate(90deg);
+}
+.hr {
+  border: 0;
+  height: 3px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  );
+}
+</style>

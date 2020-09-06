@@ -5,8 +5,8 @@
         <v-card-title>
           <span class="headline">Options of question</span>
           <v-spacer />
-          <span class="close" @click="closeOptionsDialog">
-            <v-icon x-large>close</v-icon>
+          <span @click="closeOptionsDialog">
+            <v-icon class="close" medium>close</v-icon>
           </span>
         </v-card-title>
         <v-card-text>
@@ -28,6 +28,7 @@
                         outlined
                         autofocus
                         class="pa-0 ma-0"
+                        color="purple"
                       />
                     </v-col>
                   </v-row>
@@ -46,6 +47,7 @@
                         required
                         outlined
                         @input="checkIfSequenceisExist"
+                        color="purple"
                       />
                     </v-col>
                     <v-col cols="12" md="4">
@@ -55,10 +57,16 @@
                         v-model="option.isCorrect"
                         label="Correct?"
                         :value="option.isCorrect"
+                        color="purple"
                       ></v-checkbox>
                     </v-col>
                     <v-col cols="12" md="4">
-                      <v-btn block :disabled="!isValid" color="info" @click="addOption($event)">Save</v-btn>
+                      <v-btn
+                        block
+                        :disabled="!isValid"
+                        color="orange white--text"
+                        @click="addOption($event)"
+                      >Save</v-btn>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -71,6 +79,7 @@
                         outlined
                         no-resize
                         rows="2"
+                        color="purple"
                       />
                     </v-col>
                   </v-row>
@@ -103,25 +112,7 @@
     </v-dialog>
   </v-row>
 </template>
-<style scoped>
-.hr {
-  border: 0;
-  height: 3px;
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.75),
-    rgba(0, 0, 0, 0)
-  );
-}
-.close {
-  font-size: 2rem;
-}
-.close:hover {
-  color: crimson;
-  cursor: pointer;
-}
-</style>
+
 <script>
 import draggable from "vuedraggable";
 import OptionCard from "./OptionCard";
@@ -314,3 +305,20 @@ export default {
   },
 };
 </script>
+<style scoped>
+.close:hover {
+  color: orange;
+  cursor: pointer;
+  transform: rotate(90deg);
+}
+.hr {
+  border: 0;
+  height: 3px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  );
+}
+</style>

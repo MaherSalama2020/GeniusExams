@@ -6,8 +6,8 @@
           <span v-if="edit" class="headline">Edit Question</span>
           <span v-else class="headline">Add Question</span>
           <v-spacer />
-          <span @click="close" class="close">
-            <v-icon x-large>close</v-icon>
+          <span @click="close">
+            <v-icon class="close" medium>close</v-icon>
           </span>
         </v-card-title>
         <hr class="hr mt-0" />
@@ -30,39 +30,31 @@
                 :rules="requiredRules"
                 outlined
                 no-resize
+                color="purple"
               />
             </div>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn v-if="edit" :disabled="!isValid" color="info" @click="saveQuestion">Save Question</v-btn>
-          <v-btn v-else :disabled="!isValid" color="info" @click="addQuestion">Add Question</v-btn>
+          <v-btn
+            v-if="edit"
+            :disabled="!isValid"
+            color="orange white--text"
+            @click="saveQuestion"
+          >Save Question</v-btn>
+          <v-btn
+            v-else
+            :disabled="!isValid"
+            color="orange white--text"
+            @click="addQuestion"
+          >Add Question</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
   </v-row>
 </template>
 
-<style scoped>
-.close {
-  font-size: 2rem;
-}
-.close:hover {
-  color: crimson;
-  cursor: pointer;
-}
-.hr {
-  border: 0;
-  height: 3px;
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.75),
-    rgba(0, 0, 0, 0)
-  );
-}
-</style>
 
 <script>
 export default {
@@ -134,3 +126,20 @@ export default {
   },
 };
 </script>
+<style scoped>
+.close:hover {
+  color: orange;
+  cursor: pointer;
+  transform: rotate(90deg);
+}
+.hr {
+  border: 0;
+  height: 3px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  );
+}
+</style>

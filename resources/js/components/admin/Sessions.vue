@@ -5,8 +5,8 @@
         <div class="col-md-12">
           <v-card>
             <v-card-title>
-              <v-btn @click="all" v-if="panel.length==0">all</v-btn>
-              <v-btn @click="none" v-else>none</v-btn>
+              <v-btn @click="all" color="orange white--text" v-if="panel.length==0">all</v-btn>
+              <v-btn @click="none" color="orange white--text" v-else>none</v-btn>
               <!-- <div>{{ panel }}</div> -->
               <!-- <button class="btn btn-primary" @click="newUser">Add New User</button> -->
               <v-spacer />
@@ -17,6 +17,7 @@
                 single-line
                 hide-details
                 clearable
+                color="purple"
               ></v-text-field>
             </v-card-title>
 
@@ -76,6 +77,7 @@
               :length="pagination.last_page"
               @input="fetchSessions"
               class="mt-3 mb-0"
+              color="orange"
             ></v-pagination>
             <div class="text-center mt-0">
               <div class="row">
@@ -90,6 +92,7 @@
                     name="pagescount"
                     v-model="selected_per_page"
                     @change="fetchSessions(1)"
+                    color="purple"
                   ></v-select>
                 </div>
                 <div class="col-md-4"></div>

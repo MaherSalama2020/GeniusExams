@@ -78,29 +78,34 @@ export default {
   components: { Parallax },
   mounted() {
     this.spinner = true;
-    axios.get("api/certificates/").then((response) => {
-      if (this.isLoggedIn) {
-        this.user = JSON.parse(localStorage.getItem("genius.user"));
-        this.certificates = response.data.filter((certificate) => {
-          if (certificate.orders.length == 0) return certificate;
-          else {
-            // let bookedBeforeFromThisUser = false;
-            let is_finished = true;
-            certificate.orders.forEach((order) => {
-              if (order.user_id === this.user.id) {
-                // bookedBeforeFromThisUser = true;
-                is_finished = is_finished && order.is_finished;
-              }
-            });
-            // if (!bookedBeforeFromThisUser) return certificate;
-            if (is_finished) return certificate;
-          }
-        });
-      } else {
-        this.certificates = response.data;
-      }
-      this.spinner = false;
-    });
+    axios
+      .get("api/certificates/")
+      .then((response) => {
+        if (this.isLoggedIn) {
+          this.user = JSON.parse(localStorage.getItem("genius.user"));
+          this.certificates = response.data.filter((certificate) => {
+            if (certificate.orders.length == 0) return certificate;
+            else {
+              // let bookedBeforeFromThisUser = false;
+              let is_finished = true;
+              certificate.orders.forEach((order) => {
+                if (order.user_id === this.user.id) {
+                  // bookedBeforeFromThisUser = true;
+                  is_finished = is_finished && order.is_finished;
+                }
+              });
+              // if (!bookedBeforeFromThisUser) return certificate;
+              if (is_finished) return certificate;
+            }
+          });
+        } else {
+          this.certificates = response.data;
+        }
+        this.spinner = false;
+      })
+      .catch((error) => {
+        this.spinner = false;
+      });
   },
   watch: {
     isLoggedIn: function (newValue, oldValue) {

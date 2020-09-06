@@ -2,9 +2,9 @@
   <v-row justify="center">
     <v-layout row justify-center>
       <v-dialog v-model="spinner" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
+        <v-card color="orange" dark>
           <v-card-text>
-            Please stand by
+            Processing
             <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
           </v-card-text>
         </v-card>
@@ -12,22 +12,22 @@
     </v-layout>
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card>
-        <v-toolbar dark color="primary">
+        <v-toolbar dark color="orange">
           <v-btn icon dark @click="closeAddingQuestions">
-            <v-icon>mdi-close</v-icon>
+            <v-icon class="close">mdi-close</v-icon>
           </v-btn>
-          <v-toolbar-title>{{data.name}}</v-toolbar-title>
+          <v-toolbar-title>
+            {{data.name}}
+            <v-chip :color="getColor(data.type)" dark>{{ data.type }}</v-chip>
+          </v-toolbar-title>
           <v-spacer></v-spacer>
           <!-- <v-toolbar-items>
             <v-btn dark text @click="close">Save</v-btn>
           </v-toolbar-items>-->
         </v-toolbar>
-        <div class="col-md-4 row ml-2">
-          <!-- <v-icon medium color="cyan" dense>help</v-icon> -->
-          <!-- <h5>{{data.name}}</h5> -->
-          <!-- <v-spacer /> -->
+        <!-- <div class="col-md-4 row ml-2">
           <v-chip :color="getColor(data.type)" dark>{{ data.type }}</v-chip>
-        </div>
+        </div>-->
         <v-form
           ref="questionsForm"
           v-model="isValid"
@@ -38,12 +38,12 @@
             <v-radio
               dense
               label="Edit Question"
-              color="cyan darken-2"
+              color="orange darken-2"
               value="Edit"
               v-if="isNew=='Edit'"
             ></v-radio>
-            <v-radio dense label="New Question" color="cyan darken-2" value="New"></v-radio>
-            <v-radio dense label="Exisiting Question" color="cyan darken-2" value="Exist"></v-radio>
+            <v-radio dense label="New Question" color="orange darken-2" value="New"></v-radio>
+            <v-radio dense label="Exisiting Question" color="orange darken-2" value="Exist"></v-radio>
           </v-radio-group>
           <div class="form-row">
             <div class="col-md-8">
@@ -61,6 +61,7 @@
                 autocomplete
                 required
                 :rules="requiredRules"
+                color="purple"
               ></v-select>
               <v-text-field
                 v-else
@@ -72,6 +73,7 @@
                 bottom
                 required
                 :rules="requiredRules"
+                color="purple"
               />
             </div>
             <div class="col-md-2">
@@ -88,25 +90,26 @@
                 :rules="numberRules"
                 outlined
                 @input="checkIfSequenceisExist"
+                color="purple"
               />
             </div>
             <div class="col-md-2">
               <v-btn
                 v-if="isNew=='Exist'"
                 :disabled="!isValid"
-                color="info"
+                color="orange white--text"
                 @click="joinQuestion"
               >Join Question</v-btn>
               <v-btn
                 v-if="isNew=='New'"
                 :disabled="!isValid"
-                color="info"
+                color="orange white--text"
                 @click="addQuestion"
               >Add Question</v-btn>
               <v-btn
                 v-if="isNew=='Edit'"
                 :disabled="!isValid"
-                color="info"
+                color="orange white--text"
                 @click="saveQuestion"
               >Save Question</v-btn>
             </div>
@@ -130,26 +133,39 @@
               <v-col>
                 <v-row class="mb-0" no-gutters>
                   <v-card
-                    :color="active ? 'cyan' : 'white'"
+                    :color="active ? 'orange lighten-4' : 'white'"
                     rounded
                     class="ma-4"
                     height="300"
                     width="300"
                     @click="toggle"
                   >
-                    <v-card-title
-                      v-if="active"
-                      class="white--text align-end"
-                    >{{question.pivot.sequence}}</v-card-title>
-                    <v-card-title v-else>{{question.pivot.sequence}}</v-card-title>
+                    <v-card-title v-if="active" class="black--text align-end">
+                      {{question.pivot.sequence}}
+                      <v-spacer />
+                      <v-icon color="success" v-if="question.options.length==4">check</v-icon>
+                      <v-icon
+                        color="error"
+                        v-if="question.options.length>0 && question.options.length<4"
+                      >warning</v-icon>
+                    </v-card-title>
+                    <v-card-title v-else>
+                      {{question.pivot.sequence}}
+                      <v-spacer />
+                      <v-icon color="success" v-if="question.options.length==4">check</v-icon>
+                      <v-icon
+                        color="error"
+                        v-if="question.options.length>0 && question.options.length<4"
+                      >warning</v-icon>
+                    </v-card-title>
                     <v-card-text
                       v-if="active"
-                      class="white--text align-end textover"
+                      class="black--text align-end textover"
                     >{{question.name}}</v-card-text>
                     <v-card-text v-else class="textover">{{question.name}}</v-card-text>
                     <v-card-subtitle
                       v-if="active"
-                      class="white--text align-end"
+                      class="black--text align-end"
                     >{{question.options.length}} Options</v-card-subtitle>
                     <v-card-subtitle v-else>{{question.options.length}} Options</v-card-subtitle>
                     <v-card-actions class="mb-0 p">
@@ -157,9 +173,9 @@
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
-                            icon
-                            medium
-                            :color="active ? 'white' : 'black'"
+                            fab
+                            x-small
+                            :color="active ? 'orange' : 'orange'"
                             dark
                             @click="editQuestion(toggle, question)"
                             v-bind="attrs"
@@ -173,9 +189,10 @@
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
-                            icon
-                            medium
-                            :color="active ? 'white' : 'black'"
+                            class="ml-1"
+                            fab
+                            x-small
+                            :color="active ? 'orange' : 'orange'"
                             dark
                             @click="showConfirmDialog(question.id)"
                             v-bind="attrs"
@@ -189,10 +206,11 @@
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
-                            medium
-                            icon
-                            :color="active ? 'white' : 'black'"
-                            light
+                            class="ml-1"
+                            x-small
+                            fab
+                            :color="active ? 'orange' : 'orange'"
+                            dark
                             @click="showOptions(question)"
                             v-bind="attrs"
                             v-on="on"
@@ -491,6 +509,11 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 5; /* number of lines to show */
   -webkit-box-orient: vertical;
+}
+.close:hover {
+  color: white;
+  cursor: pointer;
+  transform: rotate(90deg);
 }
 </style>
 

@@ -6,8 +6,8 @@
           <span v-if="edit" class="headline">Edit Exam</span>
           <span v-else class="headline">Add Exam</span>
           <v-spacer />
-          <span @click="close" class="close">
-            <v-icon x-large>close</v-icon>
+          <span @click="close">
+            <v-icon medium class="close">close</v-icon>
           </span>
         </v-card-title>
         <hr class="hr mt-0" />
@@ -34,6 +34,7 @@
                   required
                   :rules="requiredRules"
                   @input="getCertificate"
+                  color="purple"
                 ></v-select>
               </div>
               <div class="col-md-4">
@@ -46,6 +47,7 @@
                   required
                   :rules="requiredRules"
                   @input="data.passing_rate=null"
+                  color="purple"
                 ></v-select>
               </div>
               <div class="col-md-3" v-if="data.type=='Exam'">
@@ -59,6 +61,7 @@
                   :rules="rateRules"
                   error-count="2"
                   outlined
+                  color="purple"
                 />
               </div>
             </div>
@@ -73,6 +76,7 @@
                 error-count="2"
                 required
                 outlined
+                color="purple"
               />
               <v-text-field
                 dense
@@ -86,6 +90,7 @@
                 :rules="durationRules"
                 error-count="2"
                 outlined
+                color="purple"
               />
             </div>
             <v-textarea
@@ -97,13 +102,19 @@
               required
               outlined
               no-resize
+              color="purple"
             />
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn v-if="edit" :disabled="!isValid" color="info" @click="saveExam">Save Exam</v-btn>
-          <v-btn v-else :disabled="!isValid" color="info" @click="addExam">Add Exam</v-btn>
+          <v-btn
+            v-if="edit"
+            :disabled="!isValid"
+            color="orange white--text"
+            @click="saveExam"
+          >Save Exam</v-btn>
+          <v-btn v-else :disabled="!isValid" color="orange white--text" @click="addExam">Add Exam</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -137,25 +148,7 @@
   </div>-->
 </template>
 
-<style scoped>
-.close {
-  font-size: 2rem;
-}
-.close:hover {
-  color: crimson;
-  cursor: pointer;
-}
-.hr {
-  border: 0;
-  height: 3px;
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.75),
-    rgba(0, 0, 0, 0)
-  );
-}
-</style>
+
 
 <script>
 // import Datepicker from "vuejs-datepicker";
@@ -320,3 +313,20 @@ export default {
   },
 };
 </script>
+<style scoped>
+.close:hover {
+  color: orange;
+  cursor: pointer;
+  transform: rotate(90deg);
+}
+.hr {
+  border: 0;
+  height: 3px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  );
+}
+</style>

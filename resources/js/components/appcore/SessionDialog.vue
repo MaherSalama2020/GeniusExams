@@ -186,7 +186,7 @@
                     </template>
                     Show Correct Answer
                   </v-tooltip>
-                  <v-tooltip bottom v-if="!ViewMarkedAnswers">
+                  <v-tooltip bottom v-if="!ViewMarkedAnswers && !alertShowMark">
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         class="ml-5 mt-2 mb-2 text-center"
@@ -197,11 +197,26 @@
                         v-on="on"
                       >
                         Mark Question
-                        <v-icon v-if="!alertShowMark" color="grey" class="ml-2">mdi-star</v-icon>
-                        <v-icon v-else class="ml-2">mdi-star</v-icon>
+                        <v-icon color="grey" class="ml-2">mdi-star</v-icon>
                       </v-btn>
                     </template>
                     Mark Question
+                  </v-tooltip>
+                  <v-tooltip bottom v-if="!ViewMarkedAnswers && alertShowMark">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        class="ml-5 mt-2 mb-2 text-center"
+                        color="orange white--text"
+                        @click="markAnswer"
+                        small
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        Unmark Question
+                        <v-icon class="ml-2">mdi-star</v-icon>
+                      </v-btn>
+                    </template>
+                    Unmark Question
                   </v-tooltip>
                   <v-tooltip
                     bottom
@@ -313,6 +328,13 @@
           :answers="answers"
           :certificate_id="certificate_id"
           :exam_id="exam_id"
+          :result="(correctNO/examQuestions.length)*100"
+        />
+        <ResultDialog
+          :alertResultDialog="alertResultDialog"
+          @closeResultDialog="closeResultDialog"
+          :result="(correctNO/examQuestions.length)*100"
+          :passing_rate="passing_rate"
         />
         <PreviewDialog
           :optionChanged="optionChanged"
@@ -339,6 +361,7 @@ import TimeUpDialog from "./TimeUpDialog";
 import SubmitDialog from "./SubmitDialog";
 import PreviewDialog from "./PreviewDialog";
 import ConfirmDialog from "./ConfirmDialog";
+import ResultDialog from "./ResultDialog";
 export default {
   props: [
     "certificate_id",
@@ -381,6 +404,7 @@ export default {
       ViewMarkedAnswers: false,
       clicksAfterRewind: 0,
       alertSubmitDialog: false,
+      alertResultDialog: false,
       alertPreviewDialog: false,
       optionChanged: false,
       confirmdialog: false,
@@ -393,6 +417,7 @@ export default {
     SubmitDialog,
     PreviewDialog,
     ConfirmDialog,
+    ResultDialog,
   },
   mounted() {
     this.getUser();
@@ -578,11 +603,12 @@ export default {
     closeTimeUpDialog() {
       if (this.alertPreviewDialog) this.alertPreviewDialog = false;
       if (this.alertSubmitDialog) this.alertSubmitDialog = false;
+      if (this.alertResultDialog) this.alertResultDialog = false;
       if (this.confirmdialog) this.confirmdialog = false;
       this.submit();
       this.showTimeUpDialog = false;
       this.resetExam();
-      this.$emit("closeSessionDialog");
+      this.closeSessionDialog();
     },
     showSubmitDialog() {
       this.alertSubmitDialog = true;
@@ -590,6 +616,13 @@ export default {
     closeSubmitDialog() {
       this.alertSubmitDialog = false;
       // this.$emit("closeSessionDialog");
+    },
+    showResultDialog() {
+      this.alertResultDialog = true;
+    },
+    closeResultDialog() {
+      this.alertResultDialog = false;
+      this.closeSessionDialog();
     },
     showPreviewDialog() {
       this.alertPreviewDialog = true;
@@ -618,7 +651,8 @@ export default {
           axios
             .post("/api/answers/", { answers, session_id })
             .then((res) => {
-              this.closeSessionDialog();
+              this.alertSubmitDialog = false;
+              this.alertResultDialog = true;
             })
             .catch((error) => console.log(error));
         })
@@ -660,13 +694,17 @@ export default {
       } else {
         this.alertShowMark = false;
         this.currentStep = 1;
-        if (this.answers[0])
+        if (this.answers[0]) {
+          this.alertShowMark = this.answers[0].alertShowMark;
           this.selectedOption = this.answers[0].selectedOption;
-        else this.selectedOption = null;
+        } else {
+          this.alertShowMark = false;
+          this.selectedOption = null;
+        }
         // this.markedAnswers = [];
-        this.answers.forEach((answer) => {
-          answer.alertShowMark = false;
-        });
+        // this.answers.forEach((answer) => {
+        //   answer.alertShowMark = false;
+        // });
         this.currentQuestionID = this.examQuestions[0].id;
         this.arrivetostart = true;
         this.arrivetoend = false;

@@ -12,10 +12,11 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  medium
-                  color="white"
+                  x-small
+                  fab
+                  dark
+                  color="orange"
                   @click="$emit('on-edit', option)"
-                  icon
                   v-bind="attrs"
                   v-on="on"
                 >
@@ -29,10 +30,11 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  medium
-                  color="white"
+                  dark
+                  x-small
+                  fab
+                  color="orange"
                   @click="$emit('on-delete', option)"
-                  icon
                   v-bind="attrs"
                   v-on="on"
                 >
@@ -58,10 +60,11 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  medium
-                  color="black"
+                  x-small
+                  fab
+                  dark
+                  color="orange"
                   @click="$emit('on-edit', option)"
-                  icon
                   v-bind="attrs"
                   v-on="on"
                 >
@@ -75,10 +78,11 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  medium
-                  color="black"
+                  x-small
+                  fab
+                  dark
+                  color="orange"
                   @click="$emit('on-delete', option)"
-                  icon
                   v-bind="attrs"
                   v-on="on"
                 >

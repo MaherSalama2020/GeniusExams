@@ -5,7 +5,7 @@
         <div class="col-md-12">
           <v-card>
             <v-card-title>
-              <button class="btn btn-primary" @click="showAddingDialog">Add New Order</button>
+              <v-btn color="orange white--text" @click="showAddingDialog">Add New Order</v-btn>
               <v-spacer />
               <v-text-field
                 v-model="search"
@@ -13,7 +13,8 @@
                 label="Search"
                 single-line
                 hide-details
-                clearable63AhMaYaPLutOIt5
+                clearable
+                color="purple"
               ></v-text-field>
             </v-card-title>
             <v-data-table
@@ -133,6 +134,7 @@
               :length="pagination.last_page"
               @input="fetchOrders"
               class="mt-3 mb-0"
+              color="orange"
             ></v-pagination>
             <div class="text-center mt-0">
               <div class="row">
@@ -147,6 +149,7 @@
                     name="pagescount"
                     v-model="selected_per_page"
                     @change="fetchOrders(1)"
+                    color="purple"
                   ></v-select>
                 </div>
                 <div class="col-md-4"></div>

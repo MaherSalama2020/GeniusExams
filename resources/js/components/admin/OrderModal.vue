@@ -6,8 +6,8 @@
           <span v-if="edit" class="headline">Edit Order</span>
           <span v-else class="headline">Add Order</span>
           <v-spacer />
-          <span @click="close" class="close">
-            <v-icon x-large>close</v-icon>
+          <span @click="close">
+            <v-icon medium class="close">close</v-icon>
           </span>
         </v-card-title>
         <hr class="hr mt-0" />
@@ -34,6 +34,7 @@
                   required
                   :rules="requiredRules"
                   @input="getCertificate"
+                  color="purple"
                 ></v-select>
               </div>
               <div class="col-md-4">
@@ -50,15 +51,16 @@
                   required
                   :rules="requiredRules"
                   @input="getUser"
+                  color="purple"
                 ></v-select>
               </div>
             </div>
             <div class="row">
               <div class="col-md-4">
-                <date-picker v-model="data.date" :config="dateoptions" required></date-picker>
+                <date-picker v-model="data.date" :config="dateoptions" required color="purole"></date-picker>
               </div>
               <div class="col-md-4">
-                <date-picker v-model="data.time" :config="timeoptions" required></date-picker>
+                <date-picker v-model="data.time" :config="timeoptions" required color="purple"></date-picker>
               </div>
             </div>
             <div class="form-row">
@@ -67,6 +69,7 @@
                   v-model="data.is_finished"
                   label="is Finished?"
                   :value="data.is_finished"
+                  color="purple"
                 ></v-checkbox>
               </div>
             </div>
@@ -74,33 +77,18 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn v-if="edit" :disabled="!isValid" color="info" @click="saveOrder">Save Order</v-btn>
-          <v-btn v-else :disabled="!isValid" color="info" @click="addOrder">Add Order</v-btn>
+          <v-btn
+            v-if="edit"
+            :disabled="!isValid"
+            color="orange white--text"
+            @click="saveOrder"
+          >Save Order</v-btn>
+          <v-btn v-else :disabled="!isValid" color="orange white--text" @click="addOrder">Add Order</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
   </v-row>
 </template>
-
-<style scoped>
-.close {
-  font-size: 2rem;
-}
-.close:hover {
-  color: crimson;
-  cursor: pointer;
-}
-.hr {
-  border: 0;
-  height: 3px;
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.75),
-    rgba(0, 0, 0, 0)
-  );
-}
-</style>
 
 <script>
 // import "../../plugins/vuetify-datetime.js";
@@ -232,3 +220,20 @@ export default {
   },
 };
 </script>
+<style scoped>
+.close:hover {
+  color: orange;
+  cursor: pointer;
+  transform: rotate(90deg);
+}
+.hr {
+  border: 0;
+  height: 3px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  );
+}
+</style>

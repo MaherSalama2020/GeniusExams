@@ -2,9 +2,9 @@
   <v-row justify="center">
     <v-layout row justify-center>
       <v-dialog v-model="spinner" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
+        <v-card color="orange" dark>
           <v-card-text>
-            Please stand by
+            Processing
             <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
           </v-card-text>
         </v-card>
@@ -15,9 +15,9 @@
         <v-btn color="primary" dark v-bind="attrs" v-on="on">Open Dialog</v-btn>
       </template>-->
       <v-card>
-        <v-toolbar dark color="primary">
+        <v-toolbar dark color="orange">
           <v-btn icon dark @click="close">
-            <v-icon>mdi-close</v-icon>
+            <v-icon class="close">mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>Exams in {{data.name}}</v-toolbar-title>
           <v-spacer></v-spacer>
@@ -37,10 +37,11 @@
                 autocomplete
                 required
                 :rules="requiredRules"
+                color="purple"
               ></v-select>
             </div>
             <div class="col-md-4">
-              <v-btn :disabled="!isValid" color="info" @click="joinExam">Join Exam</v-btn>
+              <v-btn :disabled="!isValid" color="orange white--text" @click="joinExam">Join Exam</v-btn>
             </div>
           </div>
         </v-form>
@@ -59,18 +60,18 @@
               <v-col>
                 <v-row class="mb-0" no-gutters>
                   <v-card
-                    :color="active ? 'cyan' : 'white'"
+                    :color="active ? 'orange lighten-4' : 'white'"
                     rounded
                     class="ma-4"
                     height="300"
                     width="300"
                     @click="toggle"
                   >
-                    <v-card-title v-if="active" class="white--text align-end">{{exam.name}}</v-card-title>
+                    <v-card-title v-if="active" class="black--text align-end">{{exam.name}}</v-card-title>
                     <v-card-title v-else>{{exam.name}}</v-card-title>
                     <v-card-text
                       v-if="active"
-                      class="white--text align-end textover"
+                      class="black--text align-end textover"
                     >{{exam.description}}</v-card-text>
                     <v-card-text v-else class="textover">{{exam.description}}</v-card-text>
 
@@ -80,9 +81,9 @@
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
-                            icon
-                            medium
-                            :color="active ? 'white' : 'black'"
+                            fab
+                            x-small
+                            :color="active ? 'orange' : 'orange'"
                             dark
                             @click="showConfirmDialog(exam.id)"
                             v-bind="attrs"
@@ -252,6 +253,11 @@ export default {
 };
 </script>
 <style scoped>
+.close:hover {
+  color: orange;
+  cursor: pointer;
+  transform: rotate(90deg);
+}
 .textover {
   overflow: hidden;
   text-overflow: ellipsis;
