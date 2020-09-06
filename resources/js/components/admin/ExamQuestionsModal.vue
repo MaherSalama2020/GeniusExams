@@ -91,6 +91,7 @@
                 outlined
                 @input="checkIfSequenceisExist"
                 color="purple"
+                tabindex="-1"
               />
             </div>
             <div class="col-md-2">
@@ -310,6 +311,8 @@ export default {
   computed: {
     data: function () {
       if (this.exam != null) {
+        if (this.isNew == "Exist" || this.isNew == "New")
+          this.enteredsequence = this.exam.questions.length + 1;
         return this.exam;
       }
       return {};
@@ -328,6 +331,7 @@ export default {
           .post("/api/exams/equestions/", { id })
           .then((response) => {
             this.questions = response.data;
+            this.enteredsequence = this.questions.length + 1;
             this.exams[index].questions = response.data;
             this.spinner = false;
           })
@@ -379,7 +383,8 @@ export default {
           sequence,
         })
         .then((response) => {
-          this.$refs.questionsForm.reset();
+          // this.$refs.questionsForm.reset();
+          this.isNew = "Exist";
           this.fetchQuestions();
         })
         .catch((error) => {
@@ -405,7 +410,9 @@ export default {
               sequence,
             })
             .then((res) => {
-              this.$refs.questionsForm.reset();
+              // this.$refs.questionsForm.reset();
+              this.enteredQuestion = "";
+              this.isNew = "New";
               this.fetchQuestions();
             })
             .catch((error) => {

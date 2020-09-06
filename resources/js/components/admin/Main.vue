@@ -4,7 +4,7 @@
       <v-col class>
         <v-row gutters style="height: 150px; ">
           <v-col>
-            <v-card class="mx-auto" color="#26c6da" dark max-width="400" shaped>
+            <v-card class="mx-auto" color="orange" dark max-width="400" shaped>
               <v-card-title>
                 <v-icon large left>mdi-twitter</v-icon>
                 <span class="font-weight-light">Certificates ({{certificates.length}})</span>
@@ -13,7 +13,7 @@
             </v-card>
           </v-col>
           <v-col>
-            <v-card class="mx-auto" color="#26c6da" dark max-width="400" shaped>
+            <v-card class="mx-auto" color="orange" dark max-width="400" shaped>
               <v-card-title>
                 <v-icon large left>mdi-twitter</v-icon>
                 <span class="font-weight-light">Requests ({{orders.length}})</span>
@@ -24,7 +24,7 @@
         </v-row>
         <v-row gutters style="height: 150px; ">
           <v-col>
-            <v-card class="mx-auto" color="#26c6da" dark max-width="400" shaped>
+            <v-card class="mx-auto" color="orange" dark max-width="400" shaped>
               <v-card-title>
                 <v-icon large left>mdi-twitter</v-icon>
                 <span class="font-weight-light">Exams ({{exams.length}})</span>
@@ -32,7 +32,7 @@
             </v-card>
           </v-col>
           <v-col>
-            <v-card class="mx-auto" color="#26c6da" dark max-width="400" shaped>
+            <v-card class="mx-auto" color="orange" dark max-width="400" shaped>
               <v-card-title>
                 <v-icon large left>mdi-twitter</v-icon>
                 <span class="font-weight-light">Questions ({{questions.length}})</span>
@@ -42,7 +42,7 @@
         </v-row>
         <v-row gutters style="height: 150px; ">
           <v-col>
-            <v-card class="mx-auto" color="#26c6da" dark max-width="400" shaped>
+            <v-card class="mx-auto" color="orange" dark max-width="400" shaped>
               <v-card-title>
                 <v-icon large left>mdi-twitter</v-icon>
                 <span class="font-weight-light">Users ({{users.length}})</span>
@@ -50,7 +50,7 @@
             </v-card>
           </v-col>
           <v-col>
-            <v-card class="mx-auto" color="#26c6da" dark max-width="400" shaped>
+            <v-card class="mx-auto" color="orange" dark max-width="400" shaped>
               <v-card-title>
                 <v-icon large left>mdi-twitter</v-icon>
                 <span class="font-weight-light">Sessions ({{sessions.length}})</span>

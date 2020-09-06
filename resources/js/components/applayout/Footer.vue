@@ -1,7 +1,7 @@
 <template>
   <v-footer dark padless>
     <v-card class="flex" flat tile>
-      <v-card-title flat class="cyan">
+      <v-card-title flat class="orange">
         <strong class="subheading">Get connected with us on social networks!</strong>
 
         <v-spacer></v-spacer>

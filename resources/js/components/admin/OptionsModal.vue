@@ -34,6 +34,24 @@
                   </v-row>
                   <v-row>
                     <v-col cols="12" md="4">
+                      <v-btn
+                        block
+                        :disabled="!isValid"
+                        color="orange white--text"
+                        @click="addOption($event)"
+                      >Save</v-btn>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-checkbox
+                        class="mx-auto"
+                        hide-details
+                        v-model="option.isCorrect"
+                        label="Correct?"
+                        :value="option.isCorrect"
+                        color="purple"
+                      ></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" md="4">
                       <v-text-field
                         dense
                         prepend-inner-icon="mdi-counter"
@@ -48,25 +66,8 @@
                         outlined
                         @input="checkIfSequenceisExist"
                         color="purple"
+                        tabindex="-1"
                       />
-                    </v-col>
-                    <v-col cols="12" md="4">
-                      <v-checkbox
-                        class="mx-auto"
-                        hide-details
-                        v-model="option.isCorrect"
-                        label="Correct?"
-                        :value="option.isCorrect"
-                        color="purple"
-                      ></v-checkbox>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                      <v-btn
-                        block
-                        :disabled="!isValid"
-                        color="orange white--text"
-                        @click="addOption($event)"
-                      >Save</v-btn>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -132,7 +133,7 @@ export default {
         id: "",
         question_id: "",
         name: "",
-        sequence: "",
+        sequence: 1,
         isCorrect: "",
         explaination: "",
       },
@@ -151,11 +152,14 @@ export default {
     data: function () {
       // alert(JSON.stringify(this.question));
       if (this.question != null) {
+        if (this.question.options.length < 4)
+          this.option.sequence = this.question.options.length + 1;
+        else this.option.sequence = "";
         return this.question;
       }
       return {
         name: "",
-        sequence: "",
+        sequence: 1,
         isCorrect: "",
         explaination: "",
         options: [],
@@ -173,6 +177,10 @@ export default {
         .post("/api/questions/qoptions/", { id })
         .then((response) => {
           this.data.options = response.data.options;
+          if (this.data.options.length == 0) this.option.sequence = 1;
+          if (this.data.options.length == 1) this.option.sequence = 2;
+          if (this.data.options.length == 2) this.option.sequence = 3;
+          if (this.data.options.length == 3) this.option.sequence = 4;
           this.$forceUpdate();
           // alert(JSON.stringify(this.data.options));
           // alert(this.question.options);

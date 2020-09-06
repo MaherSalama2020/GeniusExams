@@ -1,6 +1,6 @@
 <template >
   <div class="myFont">
-    <v-app-bar color="cyan" dark fixed hide-on-scroll shaped v-show="showParentContent">
+    <v-app-bar color="orange" dark fixed hide-on-scroll shaped v-show="showParentContent">
       <v-app-bar-nav-icon x-large @click="drawer = !drawer" v-if="isLoggedIn"></v-app-bar-nav-icon>
       <v-spacer />
       <v-toolbar-title class="mr-6">
@@ -10,14 +10,14 @@
       </v-toolbar-title>
       <v-container>
         <v-row justify="center" no-gutters>
-          <v-col cols="12" sm="3" dark color="cyan">
+          <v-col cols="12" sm="3" dark color="orange">
             <v-row justify="center" align="center">
               <v-divider class="mr-0 white" inset vertical></v-divider>
               <v-col cols="12" sm="2">
                 <v-icon class="pr-1" x-large>email</v-icon>
               </v-col>
               <v-col cols="12" sm="9">
-                <v-card dark color="cyan" flat>
+                <v-card dark color="orange" flat>
                   <v-list-item two-line>
                     <v-list-item-content>
                       <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
@@ -28,14 +28,14 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col cols="12" sm="3" dark color="cyan">
+          <v-col cols="12" sm="3" dark color="orange">
             <v-row justify="center" align="center">
               <v-divider class="mr-0 white" inset vertical></v-divider>
               <v-col cols="12" sm="2">
                 <v-icon class="pr-1" x-large>facebook</v-icon>
               </v-col>
               <v-col cols="12" sm="9">
-                <v-card dark color="cyan" flat>
+                <v-card dark color="orange" flat>
                   <v-list-item two-line>
                     <v-list-item-content>
                       <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
@@ -46,14 +46,14 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col cols="12" sm="3" dark color="cyan">
+          <v-col cols="12" sm="3" dark color="orange">
             <v-row justify="center" align="center">
               <v-divider class="mr-0 white" inset vertical></v-divider>
               <v-col cols="12" sm="2">
                 <v-icon class="pr-1" x-large>linkedin</v-icon>
               </v-col>
               <v-col cols="12" sm="9">
-                <v-card dark color="cyan" flat>
+                <v-card dark color="orange" flat>
                   <v-list-item two-line>
                     <v-list-item-content>
                       <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
@@ -173,8 +173,8 @@
                 background-color="white"
                 center-active
                 centered
-                color="cyan"
-                slider-color="cyan"
+                color="orange"
+                slider-color="orange"
                 slider-size="3"
               >
                 <v-tabs-slider></v-tabs-slider>
@@ -298,7 +298,7 @@
       style="background-color:#e7e8ea"
       v-model="drawer"
       app
-      color="cyan"
+      color="orange"
       dark
       flat
       v-show="showParentContent"
@@ -400,7 +400,7 @@
       style="background-color:#e7e8ea"
       v-model="drawer"
       app
-      color="cyan"
+      color="orange"
       dark
       flat
       v-show="showParentContent"
