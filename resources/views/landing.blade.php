@@ -26,6 +26,10 @@
         /* font-family: 'Shadows Into Light', cursive !important; */
         font-family: 'Karla', sans-serif !important;
     }
+    label{
+        display: inline;
+        margin-bottom: 0 !important;
+    }
     </style>
 </head>
 <body>

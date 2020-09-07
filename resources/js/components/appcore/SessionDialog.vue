@@ -78,13 +78,16 @@
               >
                 <v-card class="mb-12" color="orange lighten-5" height="auto">
                   <v-card-title>{{question.name}}</v-card-title>
-                  <v-img
-                    v-if="question.image"
-                    max-height="300"
-                    contain
-                    :aspect-ratio="16/9"
-                    :src="question.image"
-                  ></v-img>
+                  <v-row no-gutters justify="center">
+                    <img
+                      v-if="question.image"
+                      height="300"
+                      contain
+                      :aspect-ratio="16/9"
+                      :src="question.image"
+                      @click="alertImageDialog(question.image)"
+                    />
+                  </v-row>
                   <v-radio-group
                     column
                     height="2vh"
@@ -94,34 +97,34 @@
                     :key="option.id"
                     @change="checkSeclecedOption(option)"
                   >
-                    <span>
-                      <v-card-title>
-                        <v-radio :value="option" name="selectedOption" color="orange">
-                          <template v-slot:label>
-                            <div>
-                              <v-hover v-slot:default="{ hover }">
-                                <span
-                                  v-bind:class="{ 'success--text':option.isCorrect&&alertShowCorrectAnswer, 'error--text':!option.isCorrect&&alertShowCorrectAnswer&&selectedOption.id==option.id }"
-                                >
-                                  <!-- <strong class="info--text">{{optionsNames[index]}}.{{option.id}}.</strong> -->
-                                  <strong>
-                                    {{optionsNames[option.sequence-1]}}.
-                                    {{option.name}}
-                                  </strong>
-                                  <v-icon
-                                    v-if="option.isCorrect&&alertShowCorrectAnswer"
-                                    color="success"
-                                  >mdi-check-circle</v-icon>
-                                  <v-icon
-                                    v-if="!option.isCorrect&&alertShowCorrectAnswer&&selectedOption.id==option.id"
-                                    color="error"
-                                  >mdi-alert-circle</v-icon>
-                                  <!-- <v-img
-                                    max-height="300"
-                                    contain
-                                    :aspect-ratio="16/9"
-                                    :src="option.image"
-                                  ></v-img>-->
+                    <v-radio :value="option" name="selectedOption" color="orange">
+                      <template v-slot:label>
+                        <v-hover v-slot:default="{ hover }">
+                          <span
+                            v-bind:class="{ 'success--text':option.isCorrect&&alertShowCorrectAnswer, 'error--text':!option.isCorrect&&alertShowCorrectAnswer&&selectedOption.id==option.id }"
+                          >
+                            <strong>
+                              {{optionsNames[option.sequence-1]}}.
+                              {{option.name}}
+                            </strong>
+                            <v-icon
+                              v-if="option.isCorrect&&alertShowCorrectAnswer"
+                              color="success"
+                            >mdi-check-circle</v-icon>
+                            <v-icon
+                              v-if="!option.isCorrect&&alertShowCorrectAnswer&&selectedOption.id==option.id"
+                              color="error"
+                            >mdi-alert-circle</v-icon>
+                            <img
+                              height="35"
+                              contain
+                              :aspect-ratio="16/9"
+                              :src="option.image"
+                              v-if="option.image"
+                            />
+                            <v-row no-gutters>
+                              <v-col cols="12" md="12">
+                                <v-expand-transition>
                                   <div
                                     v-if="hover && option.image"
                                     style=" position: absolute; left: 50px; bottom: 15px; width: 700px;"
@@ -131,15 +134,17 @@
                                       contain
                                       :aspect-ratio="16/9"
                                       :src="option.image"
+                                      @click="alertImageDialog(option.image)"
                                     ></v-img>
                                   </div>
-                                </span>
-                              </v-hover>
-                            </div>
-                          </template>
-                        </v-radio>
-                      </v-card-title>
-                    </span>
+                                </v-expand-transition>
+                              </v-col>
+                            </v-row>
+                          </span>
+                        </v-hover>
+                        <span></span>
+                      </template>
+                    </v-radio>
                   </v-radio-group>
                 </v-card>
                 <!-- if type is pratical -->
@@ -379,6 +384,11 @@
           @Cancel="Cancel"
           control="closeSession"
         />
+        <ImageDialog
+          :showImageDialog="showImageDialog"
+          :image="selectedOptionImageToShow"
+          @closeImageDialog="closeImageDialog"
+        />
       </v-card>
     </v-dialog>
   </v-row>
@@ -390,6 +400,7 @@ import SubmitDialog from "./SubmitDialog";
 import PreviewDialog from "./PreviewDialog";
 import ConfirmDialog from "./ConfirmDialog";
 import ResultDialog from "./ResultDialog";
+import ImageDialog from "../appcore/ImageDialog";
 export default {
   props: [
     "certificate_id",
@@ -404,6 +415,8 @@ export default {
   ],
   data() {
     return {
+      showImageDialog: false,
+      selectedOptionImageToShow: "",
       notifications: false,
       sound: true,
       widgets: false,
@@ -446,6 +459,7 @@ export default {
     PreviewDialog,
     ConfirmDialog,
     ResultDialog,
+    ImageDialog,
   },
   mounted() {
     this.getUser();
@@ -467,6 +481,13 @@ export default {
     // },
   },
   methods: {
+    alertImageDialog(image) {
+      this.selectedOptionImageToShow = image;
+      this.showImageDialog = true;
+    },
+    closeImageDialog() {
+      this.showImageDialog = false;
+    },
     getUser() {
       let user = JSON.parse(localStorage.getItem("genius.user"));
       this.user_id = user.id;
