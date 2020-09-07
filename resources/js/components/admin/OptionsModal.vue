@@ -300,9 +300,9 @@ export default {
       let explaination = "";
       if (this.option.explaination) explaination = this.option.explaination;
       let image = "";
-      if (!this.imageChanged) image = "";
-      else image = this.option.image;
       if (this.edit == false) {
+        if (!this.imageChanged) image = "";
+        else image = this.option.image;
         axios
           .post("/api/options/", {
             question_id,
@@ -325,6 +325,7 @@ export default {
           })
           .catch((error) => alert(JSON.stringify(error)));
       } else {
+        image = this.option.image;
         axios
           .put(`/api/options/${this.option.id}`, {
             question_id,
@@ -361,6 +362,8 @@ export default {
       this.option.isCorrect = option.isCorrect;
       this.option.explaination = option.explaination;
       this.option.image = option.image;
+      if (option.image) this.isImageOption = true;
+      else this.isImageOption = false;
     },
     showConfirmDialog(id) {
       this.option_id = id;

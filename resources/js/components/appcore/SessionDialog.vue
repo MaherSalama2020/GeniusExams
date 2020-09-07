@@ -76,6 +76,13 @@
               >
                 <v-card class="mb-12" color="orange lighten-5" height="auto">
                   <v-card-title>{{question.name}}</v-card-title>
+                  <v-img
+                    v-if="question.image"
+                    max-height="500"
+                    contain
+                    :aspect-ratio="16/9"
+                    :src="question.image"
+                  ></v-img>
                   <v-radio-group
                     column
                     height="2vh"
@@ -90,23 +97,37 @@
                         <v-radio :value="option" name="selectedOption" color="orange">
                           <template v-slot:label>
                             <div>
-                              <span
-                                v-bind:class="{ 'success--text':option.isCorrect&&alertShowCorrectAnswer, 'error--text':!option.isCorrect&&alertShowCorrectAnswer&&selectedOption.id==option.id }"
-                              >
-                                <!-- <strong class="info--text">{{optionsNames[index]}}.{{option.id}}.</strong> -->
-                                <strong>
-                                  {{optionsNames[option.sequence-1]}}.
-                                  {{option.name}}
-                                </strong>
-                                <v-icon
-                                  v-if="option.isCorrect&&alertShowCorrectAnswer"
-                                  color="success"
-                                >mdi-check-circle</v-icon>
-                                <v-icon
-                                  v-if="!option.isCorrect&&alertShowCorrectAnswer&&selectedOption.id==option.id"
-                                  color="error"
-                                >mdi-alert-circle</v-icon>
-                              </span>
+                              <v-hover v-slot:default="{ hover }">
+                                <span
+                                  v-bind:class="{ 'success--text':option.isCorrect&&alertShowCorrectAnswer, 'error--text':!option.isCorrect&&alertShowCorrectAnswer&&selectedOption.id==option.id }"
+                                >
+                                  <!-- <strong class="info--text">{{optionsNames[index]}}.{{option.id}}.</strong> -->
+                                  <strong>
+                                    {{optionsNames[option.sequence-1]}}.
+                                    {{option.name}}
+                                  </strong>
+                                  <v-icon
+                                    v-if="option.isCorrect&&alertShowCorrectAnswer"
+                                    color="success"
+                                  >mdi-check-circle</v-icon>
+                                  <v-icon
+                                    v-if="!option.isCorrect&&alertShowCorrectAnswer&&selectedOption.id==option.id"
+                                    color="error"
+                                  >mdi-alert-circle</v-icon>
+                                  <div
+                                    v-if="hover && option.image"
+                                    class="d-flex v-card--reveal display-3 white--text"
+                                    style=" position: absolute; left: 50px; bottom: 15px;  1px;  width: 700px;"
+                                  >
+                                    <v-img
+                                      max-height="500"
+                                      contain
+                                      :aspect-ratio="16/9"
+                                      :src="option.image"
+                                    ></v-img>
+                                  </div>
+                                </span>
+                              </v-hover>
                             </div>
                           </template>
                         </v-radio>
