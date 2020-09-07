@@ -116,8 +116,7 @@
                                   >mdi-alert-circle</v-icon>
                                   <div
                                     v-if="hover && option.image"
-                                    class="d-flex v-card--reveal display-3 white--text"
-                                    style=" position: absolute; left: 50px; bottom: 15px;  1px;  width: 700px;"
+                                    style=" position: absolute; left: 50px; bottom: 15px; width: 700px;"
                                   >
                                     <v-img
                                       max-height="500"
