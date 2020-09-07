@@ -152,6 +152,7 @@ class QuestionController extends Controller
     {
         $question=Question::where('id',$request->question_id)->first();
         $question->name=$request->name;
+        $question->image=$request->image;
         $question->save();
   
         $exam_id=$request->exam_id;

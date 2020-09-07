@@ -22,64 +22,132 @@
             <v-icon class="close">mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>Options of question</v-toolbar-title>
+          <v-spacer />
+          <span v-if="data.pivot" class="mr-1">{{data.pivot.sequence}}</span>
+          of
+          <span v-if="examQuestions" class="ml-1">{{examQuestions.length}}</span>
+          <v-spacer />
+          <v-btn
+            v-if="data.pivot"
+            icon
+            dark
+            @click="previousQuestion"
+            class="mr-10 arrowprevious"
+            :disabled="data.pivot.sequence==1"
+          >
+            <v-icon class>skip_previous</v-icon>Prevoius
+          </v-btn>
+          <v-btn
+            v-if="data.pivot"
+            icon
+            dark
+            @click="nextQuestion"
+            class="mr-2 arrownext"
+            :disabled="data.pivot.sequence==examQuestions.length"
+          >
+            Next
+            <v-icon class>skip_next</v-icon>
+          </v-btn>
+          <v-btn dark @click="closeOptionsDialog" class="white orange--text ml-8 mr-2">Close</v-btn>
         </v-toolbar>
         <v-card-text>
-          <hr class="hr mt-0" />
-          <h6>{{data.name}}</h6>
-          <v-form dense v-model="isValid" ref="optionsForm">
+          <h5 class="mt-3 ml-3">
+            <span v-if="data.pivot">{{data.pivot.sequence}}.</span>
+            {{data.name}}
+          </h5>
+          <v-row no-gutters>
+            <v-col v-if="data.image">
+              <v-row no-gutters>Question Image</v-row>
+              <v-row no-gutters>
+                <img
+                  height="75px"
+                  width="75px"
+                  :src="data.image"
+                  class="mb-2"
+                  @click="alertQuestionImageDialog"
+                />
+              </v-row>
+            </v-col>
+            <v-col v-if="option.image">
+              <v-row no-gutters>Option Image</v-row>
+              <v-row no-gutters>
+                <img
+                  id="cImage"
+                  height="75px"
+                  width="75px"
+                  :src="option.image"
+                  @click="alertImageDialog"
+                  class="mb-2"
+                />
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-form dense v-model="isValid" ref="optionsForm" class="ml-3 mb-3">
             <v-row no-gutters>
-              <v-col cols="12">
-                <v-container class="inputs-container">
-                  <v-row no-gutters>
-                    <v-col cols="12" md="12">
-                      <v-text-field
-                        dense
-                        prepend-inner-icon="mdi-pencil"
-                        label="Option text"
-                        v-model="option.name"
-                        :rules="requiredRules"
-                        required
-                        outlined
-                        autofocus
-                        class="pa-0 ma-0"
-                        color="purple"
-                      />
-                    </v-col>
-                  </v-row>
-                  <v-row no-gutters v-if="isImageOption">
-                    <v-col cols="12" md="12">
-                      <img
-                        id="cImage"
-                        class="col-md-3"
-                        height="75px"
-                        width="75px"
-                        :src="option.image"
-                        v-show="option.image"
-                        @dblclick="alertImageDialog"
-                      />
-                      <v-text-field
-                        label="Select Image"
-                        @click="pickImage"
-                        v-model="option.image"
-                        prepend-inner-icon="image"
-                        color="purple"
-                        tabindex="-1"
-                        outlined
-                        dense
-                      ></v-text-field>
-
-                      <input
-                        class="form-control"
-                        type="file"
-                        id="file"
-                        @change="attachFile"
-                        style="display: none"
-                        accept="image/*"
-                        ref="image"
-                      />
-                    </v-col>
-                  </v-row>
-                  <v-row no-gutters>
+              <v-col cols="12" md="9">
+                <v-text-field
+                  dense
+                  prepend-inner-icon="mdi-help-circle"
+                  label="Option text"
+                  v-model="option.name"
+                  :rules="requiredRules"
+                  required
+                  outlined
+                  autofocus
+                  class="pa-0 ma-0"
+                  color="purple"
+                />
+              </v-col>
+              <v-col cols="12" md="2" class="ml-2">
+                <v-text-field
+                  dense
+                  prepend-inner-icon="mdi-counter"
+                  type="number"
+                  min="1"
+                  max="4"
+                  label="Sequence"
+                  v-model="option.sequence"
+                  :rules="numberRules"
+                  :error-messages="errors"
+                  required
+                  outlined
+                  @input="checkIfSequenceisExist"
+                  color="purple"
+                  tabindex="-1"
+                />
+              </v-col>
+            </v-row>
+            <v-row no-gutters>
+              <v-col cols="12" md="12">
+                <v-expand-transition>
+                  <v-text-field
+                    label="Select Image"
+                    @click="pickImage"
+                    v-model="option.image"
+                    prepend-inner-icon="image"
+                    color="purple"
+                    tabindex="-1"
+                    outlined
+                    dense
+                    v-if="isImageOption"
+                  ></v-text-field>
+                </v-expand-transition>
+              </v-col>
+            </v-row>
+            <v-row no-gutters style="display: none">
+              <v-col cols="12" md="12">
+                <input
+                  class="form-control"
+                  type="file"
+                  id="file"
+                  @change="attachFile"
+                  style="display: none"
+                  accept="image/*"
+                  ref="image"
+                />
+              </v-col>
+            </v-row>
+            <!-- <v-row no-gutters>
                     <v-col cols="12" md="4">
                       <v-text-field
                         dense
@@ -98,6 +166,7 @@
                         tabindex="-1"
                       />
                     </v-col>
+
                     <v-col cols="12" md="4">
                       <v-checkbox
                         dense
@@ -119,36 +188,67 @@
                         color="purple"
                       ></v-checkbox>
                     </v-col>
-                  </v-row>
-                  <v-row no-gutters>
-                    <v-col cols="12" md="12">
-                      <v-textarea
-                        dense
-                        v-if="option.isCorrect"
-                        label="Explaination"
-                        v-model="option.explaination"
-                        outlined
-                        no-resize
-                        rows="2"
-                        color="purple"
-                      />
-                    </v-col>
-                  </v-row>
-                  <v-row no-gutters>
-                    <v-col cols="12" md="4">
-                      <v-btn
-                        block
-                        :disabled="!isValid"
-                        color="orange white--text"
-                        @click="addOption($event)"
-                      >Save</v-btn>
-                    </v-col>
-                  </v-row>
-                </v-container>
+            </v-row>-->
+            <v-row no-gutters>
+              <v-col cols="12" md="12">
+                <v-expand-transition>
+                  <v-textarea
+                    dense
+                    v-if="option.isCorrect"
+                    label="Explaination"
+                    v-model="option.explaination"
+                    outlined
+                    no-resize
+                    rows="2"
+                    color="purple"
+                  />
+                </v-expand-transition>
+              </v-col>
+            </v-row>
+            <v-row no-gutters>
+              <v-col cols="12" md="4">
+                <v-btn
+                  v-if="!edit"
+                  block
+                  :disabled="!isValid"
+                  color="orange white--text"
+                  @click="addOption($event)"
+                >Add</v-btn>
+                <v-btn
+                  v-else
+                  block
+                  :disabled="!isValid"
+                  color="orange white--text"
+                  @click="addOption($event)"
+                >Save</v-btn>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-btn-toggle
+                  multiple
+                  dense
+                  class="ml-2"
+                  rounded
+                  background-color="orange"
+                  active-class="orange white--text"
+                >
+                  <v-btn v-model="option.isCorrect">
+                    Correct?
+                    <v-icon v-if="option.isCorrect" color="success">mdi-check</v-icon>
+                    <v-icon v-else color="error">mdi-close</v-icon>
+                  </v-btn>
+                  <v-btn v-model="isImageOption">
+                    Image?
+                    <v-icon v-if="isImageOption" color="white">mdi-image</v-icon>
+                    <v-icon v-else>mdi-image</v-icon>
+                  </v-btn>
+                </v-btn-toggle>
+              </v-col>
+              <v-col cols="12" md="2">
+                <v-btn color="orange white--text" @click="cancelEditOption">Reload</v-btn>
               </v-col>
             </v-row>
           </v-form>
-
+          <hr class="hr mt-0" />
           <draggable
             :animation="200"
             ghost-class="moving-card"
@@ -175,6 +275,14 @@
         :image="option.image"
         @closeImageDialog="closeImageDialog"
       />
+      <v-snackbar v-model="snackbar">
+        There is another option in editing, save it an try again.
+        <template
+          v-slot:action="{ attrs }"
+        >
+          <v-btn color="orange" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+        </template>
+      </v-snackbar>
     </v-dialog>
   </v-row>
 </template>
@@ -185,7 +293,7 @@ import OptionCard from "./OptionCard";
 import ConfirmDialog from "../appcore/ConfirmDialog";
 import ImageDialog from "../appcore/ImageDialog";
 export default {
-  props: ["question", "showOptionsDialog"],
+  props: ["question", "showOptionsDialog", "examQuestions"],
   components: {
     draggable,
     OptionCard,
@@ -194,6 +302,7 @@ export default {
   },
   data() {
     return {
+      snackbar: false,
       isImageOption: false,
       showImageDialog: false,
       spinner: false,
@@ -229,6 +338,24 @@ export default {
         else this.option.sequence = "";
         return this.question;
       }
+      // if (this.next && !this.previous) {
+      //   let currentSequence = this.question.pivot.sequence - 1;
+      //   let targetQuestion = this.examQuestions[currentSequence + 1];
+      //   if (targetQuestion.options.length < 4)
+      //     this.option.sequence = targetQuestion.options.length + 1;
+      //   else this.option.sequence = "";
+      //   this.next = false;
+      //   return targetQuestion;
+      // }
+      // if (!this.next && this.previous) {
+      //   let currentSequence = this.question.pivot.sequence - 1;
+      //   let targetQuestion = this.examQuestions[currentSequence - 1];
+      //   if (targetQuestion.options.length < 4)
+      //     this.option.sequence = targetQuestion.options.length + 1;
+      //   else this.option.sequence = "";
+      //   this.next = false;
+      //   return targetQuestion;
+      // }
       return {
         name: "",
         sequence: 1,
@@ -238,6 +365,7 @@ export default {
       };
     },
   },
+
   methods: {
     alertImageDialog() {
       this.showImageDialog = true;
@@ -317,7 +445,8 @@ export default {
             this.imageChanged = false;
             this.option.name = "";
             this.option.sequence = "";
-            this.option.isCorrect = null;
+            this.option.isCorrect = false;
+            this.isImageOption = false;
             this.option.explaination = "";
             this.$refs.optionsForm.reset();
             this.fetchOptions();
@@ -342,7 +471,8 @@ export default {
             this.imageChanged = false;
             this.option.name = "";
             this.option.sequence = "";
-            this.option.isCorrect = null;
+            this.option.isCorrect = false;
+            this.isImageOption = false;
             this.option.explaination = "";
             this.$refs.optionsForm.reset();
             this.fetchOptions();
@@ -353,6 +483,10 @@ export default {
       }
     },
     editOption(option) {
+      if (this.edit) {
+        this.snackbar = true;
+        return;
+      }
       this.errors = [];
       this.edit = true;
       this.option.id = option.id;
@@ -364,6 +498,17 @@ export default {
       this.option.image = option.image;
       if (option.image) this.isImageOption = true;
       else this.isImageOption = false;
+    },
+    cancelEditOption(option) {
+      this.edit = false;
+      this.imageChanged = false;
+      this.option.name = "";
+      this.option.sequence = "";
+      this.option.isCorrect = false;
+      this.isImageOption = false;
+      this.option.explaination = "";
+      this.$refs.optionsForm.reset();
+      this.fetchOptions();
     },
     showConfirmDialog(id) {
       this.option_id = id;
@@ -419,8 +564,28 @@ export default {
       });
     },
     closeOptionsDialog() {
+      this.edit = false;
+      this.imageChanged = false;
+      this.option.name = "";
+      this.option.sequence = "";
+      this.option.isCorrect = false;
+      this.isImageOption = false;
+      this.option.explaination = "";
       this.$refs.optionsForm.reset();
       this.$emit("closeOptionsDialog");
+    },
+    nextQuestion() {
+      let currentSequence = this.question.pivot.sequence - 1;
+      let targetQuestion = this.examQuestions[currentSequence + 1];
+      this.$emit("targetQuestion", targetQuestion);
+    },
+    previousQuestion() {
+      let currentSequence = this.question.pivot.sequence - 1;
+      let targetQuestion = this.examQuestions[currentSequence - 1];
+      this.$emit("targetQuestion", targetQuestion);
+    },
+    alertQuestionImageDialog() {
+      this.$emit("alertImageDialog");
     },
   },
 };
@@ -440,5 +605,39 @@ export default {
     rgba(0, 0, 0, 0.75),
     rgba(0, 0, 0, 0)
   );
+}
+.arrownext:hover {
+  animation: moveRightToLeft -2s 1s infinite linear;
+}
+@keyframes moveRightToLeft {
+  0% {
+    transform: translate(4px, 0);
+  }
+  50% {
+    transform: translate(-4px, 0);
+  }
+  50.1% {
+    transform: translate(4px, 0);
+  }
+  100% {
+    transform: translate(-4px, 0);
+  }
+}
+.arrowprevious:hover {
+  animation: moveLeftToRight -2s 1s infinite linear;
+}
+@keyframes moveLeftToRight {
+  0% {
+    transform: translate(-4px, 0);
+  }
+  50% {
+    transform: translate(4px, 0);
+  }
+  50.1% {
+    transform: translate(-4px, 0);
+  }
+  100% {
+    transform: translate(4px, 0);
+  }
 }
 </style>

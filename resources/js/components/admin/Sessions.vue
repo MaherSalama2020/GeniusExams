@@ -34,7 +34,7 @@
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <v-chip :color="getTypeColor(session.exam.type)" dark>{{ session.exam.type}}</v-chip>
-                    REsult: {{session.result}} %
+                    Result: {{session.result}} %
                     <SessionAnswers
                       :answers="session.answers"
                       :certificate_id="session.certificate_id"

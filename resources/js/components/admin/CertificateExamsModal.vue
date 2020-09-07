@@ -21,8 +21,9 @@
           </v-btn>
           <v-toolbar-title>Exams in {{data.name}}</v-toolbar-title>
           <v-spacer></v-spacer>
+          <v-btn dark @click="close" class="white orange--text ml-8 mr-2">Close</v-btn>
         </v-toolbar>
-        <v-form v-model="isValid">
+        <v-form v-model="isValid" class="ml-2">
           <div class="form-row">
             <div class="col-md-4">
               <v-select

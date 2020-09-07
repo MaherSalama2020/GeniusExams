@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center" no-gutters>
     <v-layout row justify-center>
       <v-dialog v-model="spinner" hide-overlay persistent width="300">
         <v-card color="orange" dark>
@@ -16,11 +16,15 @@
           <v-btn icon dark @click="closeAddingQuestions">
             <v-icon class="close">mdi-close</v-icon>
           </v-btn>
-          <v-toolbar-title>
-            {{data.name}}
-            <v-chip :color="getColor(data.type)" dark>{{ data.type }}</v-chip>
-          </v-toolbar-title>
+          <v-toolbar-title>{{data.name}}</v-toolbar-title>
           <v-spacer></v-spacer>
+          <v-chip :color="getColor(data.type)" dark>{{ data.type }}</v-chip>
+          <v-spacer></v-spacer>
+          <v-icon>mdi-clock</v-icon>
+          <span class="ml-1">{{data.duration}} Minutes</span>
+          <v-spacer></v-spacer>
+          <v-btn dark @click="closeAddingQuestions" class="white orange--text ml-8 mr-2">Close</v-btn>
+
           <!-- <v-toolbar-items>
             <v-btn dark text @click="close">Save</v-btn>
           </v-toolbar-items>-->
@@ -34,7 +38,35 @@
           @keyup.native.enter="(isValid && isNew=='New')? addQuestion($event):(isValid && isNew=='Exist')?joinQuestion($event):saveQuestion($event)"
           class="ml-3"
         >
-          <v-radio-group dese v-model="isNew" row @change="changeRadioButoon">
+          <v-row>
+            <v-btn-toggle
+              mandatory
+              dense
+              class="mt-3 ml-3 mb-3"
+              v-model="isNew"
+              background-color="orange"
+              active-class="orange white--text"
+              rounded
+              @change="changeRadioButoon"
+            >
+              <v-btn value="New">
+                New Question
+                <v-icon v-if="isNew=='New'" color="white">add</v-icon>
+                <v-icon v-else>add</v-icon>
+              </v-btn>
+              <v-btn value="Exist">
+                Exisiting Question
+                <v-icon v-if="isNew=='Exist'" color="white">add_box</v-icon>
+                <v-icon v-else>add_box</v-icon>
+              </v-btn>
+              <v-btn value="Edit" v-if="isNew=='Edit'">
+                Edit Question
+                <v-icon v-if="isNew=='Edit'" color="white">edit</v-icon>
+                <v-icon v-else>edit</v-icon>
+              </v-btn>
+            </v-btn-toggle>
+          </v-row>
+          <!-- <v-radio-group dese v-model="isNew" row @change="changeRadioButoon">
             <v-radio
               dense
               label="Edit Question"
@@ -44,9 +76,9 @@
             ></v-radio>
             <v-radio dense label="New Question" color="orange darken-2" value="New"></v-radio>
             <v-radio dense label="Exisiting Question" color="orange darken-2" value="Exist"></v-radio>
-          </v-radio-group>
-          <div class="form-row">
-            <div class="col-md-8">
+          </v-radio-group>-->
+          <v-row no-gutters>
+            <v-col cols="12" md="9">
               <v-select
                 v-if="isNew=='Exist'"
                 dense
@@ -75,8 +107,8 @@
                 :rules="requiredRules"
                 color="purple"
               />
-            </div>
-            <div class="col-md-2">
+            </v-col>
+            <v-col cols="12" md="2" class="ml-2">
               <v-text-field
                 dense
                 prepend-inner-icon="mdi-counter"
@@ -93,28 +125,65 @@
                 color="purple"
                 tabindex="-1"
               />
-            </div>
-            <div class="col-md-2">
+            </v-col>
+          </v-row>
+          <!-- <v-row no-gutters v-if="enteredImage" class="mb-2">
+            <img
+              id="cImage"
+              height="75px"
+              width="75px"
+              :src="enteredImage"
+              @click="alertImageDialog"
+            />
+          </v-row>-->
+          <v-row no-gutters>
+            <v-col cols="12" md="9">
+              <v-text-field
+                label="Select Image"
+                @click="pickImage"
+                v-model="enteredImage"
+                prepend-inner-icon="image"
+                color="purple"
+                tabindex="-1"
+                outlined
+                dense
+                :disabled="isNew=='Exist'"
+              ></v-text-field>
+
+              <input
+                class="form-control"
+                type="file"
+                id="file"
+                @change="attachFile"
+                style="display: none"
+                accept="image/*"
+                ref="image"
+              />
+            </v-col>
+            <v-col cols="12" md="2" class="ml-2">
               <v-btn
+                block
                 v-if="isNew=='Exist'"
                 :disabled="!isValid"
                 color="orange white--text"
                 @click="joinQuestion"
               >Join Question</v-btn>
               <v-btn
+                block
                 v-if="isNew=='New'"
                 :disabled="!isValid"
                 color="orange white--text"
                 @click="addQuestion"
               >Add Question</v-btn>
               <v-btn
+                block
                 v-if="isNew=='Edit'"
                 :disabled="!isValid"
                 color="orange white--text"
                 @click="saveQuestion"
               >Save Question</v-btn>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </v-form>
         <v-sheet class="mx-auto" max-width="auto">
           <v-slide-group
@@ -139,7 +208,7 @@
                     class="ma-4"
                     height="300"
                     width="300"
-                    @click="toggle"
+                    @click="editQuestion(toggle, question)"
                   >
                     <v-card-title v-if="active" class="black--text align-end">
                       {{question.pivot.sequence}}
@@ -222,6 +291,15 @@
                         Options
                       </v-tooltip>
                     </v-card-actions>
+                    <img
+                      v-if="question.image"
+                      height="75px"
+                      width="75px"
+                      :src="question.image"
+                      v-show="question.image"
+                      class="ml-1"
+                      @click="alertImageDialog"
+                    />
                   </v-card>
                 </v-row>
               </v-col>
@@ -249,11 +327,19 @@
       </v-card>
       <OptionsModal
         @closeOptionsDialog="closeOptionsDialog"
+        @targetQuestion="targetQuestion"
+        @alertImageDialog="alertImageDialog"
         :showOptionsDialog="showOptionsDialog"
+        :examQuestions="questions"
         :question="addingOptions"
         v-show="addingOptions != null"
       ></OptionsModal>
       <ConfirmDialog :confirmdialog="confirmdialog" @OK="OK" @Cancel="Cancel" />
+      <ImageDialog
+        :showImageDialog="showImageDialog"
+        :image="enteredImage"
+        @closeImageDialog="closeImageDialog"
+      />
     </v-dialog>
   </v-row>
 </template>
@@ -261,12 +347,17 @@
 <script>
 import OptionsModal from "./OptionsModal";
 import ConfirmDialog from "../appcore/ConfirmDialog";
+import ImageDialog from "../appcore/ImageDialog";
 
 export default {
   props: ["dialog", "exam", "exams"],
   data() {
     return {
+      isImageQuestion: false,
+      showImageDialog: false,
       spinner: false,
+      imageChanged: false,
+      attachment: null,
       questionsLoaded: false,
       confirmdialog: false,
       question_id: "",
@@ -280,6 +371,7 @@ export default {
       questions: [],
       question_not_in_exams: null,
       enteredsequence: null,
+      enteredImage: null,
       isValid: true,
       requiredRules: [(v) => !!v || "required!!"],
       numberRules: [
@@ -307,7 +399,7 @@ export default {
       }
     },
   },
-  components: { OptionsModal, ConfirmDialog },
+  components: { OptionsModal, ConfirmDialog, ImageDialog },
   computed: {
     data: function () {
       if (this.exam != null) {
@@ -319,6 +411,34 @@ export default {
     },
   },
   methods: {
+    alertImageDialog() {
+      this.showImageDialog = true;
+    },
+    closeImageDialog() {
+      this.showImageDialog = false;
+    },
+    pickImage() {
+      this.$refs.image.click();
+    },
+    attachFile(event) {
+      if (event.target.files[0]) {
+        this.spinner = true;
+        var formData = new FormData();
+        this.attachment = event.target.files[0];
+        formData.append("image", this.attachment);
+        let headers = { "Content-Type": "multipart/form-data" };
+        axios
+          .post("/api/upload-file", formData, { headers })
+          .then((response) => {
+            this.enteredImage = response.data;
+            this.imageChanged = true;
+            this.spinner = false;
+          })
+          .catch((error) => {
+            this.spinner = false;
+          });
+      }
+    },
     getColor(type) {
       if (type == "Exam") return "red";
       else return "green";
@@ -395,9 +515,11 @@ export default {
     addQuestion() {
       this.spinner = true;
       let name = this.enteredQuestion;
+      let image = this.enteredImage;
       axios
         .post("/api/questions/", {
           name,
+          image,
         })
         .then((response) => {
           let question_id = response.data.data.id;
@@ -412,6 +534,7 @@ export default {
             .then((res) => {
               // this.$refs.questionsForm.reset();
               this.enteredQuestion = "";
+              this.enteredImage = null;
               this.isNew = "New";
               this.fetchQuestions();
             })
@@ -432,6 +555,7 @@ export default {
       this.editingQuestion = question;
       this.enteredQuestion = question.name;
       this.enteredsequence = question.pivot.sequence;
+      this.enteredImage = question.image;
     },
     saveQuestion() {
       this.spinner = true;
@@ -439,6 +563,7 @@ export default {
 
       let name = this.enteredQuestion;
       let sequence = this.enteredsequence;
+      let image = this.enteredImage;
       let exam_id = this.exam.id;
       let question_id = this.editingQuestion.id;
       // alert(exam_id);
@@ -449,6 +574,7 @@ export default {
           exam_id,
           name,
           sequence,
+          image,
         })
         .then((response) => {
           this.$refs.questionsForm.reset();
@@ -467,6 +593,7 @@ export default {
         this.editingQuestion = null;
         this.enteredQuestion = "";
         this.enteredsequence = "";
+        this.enteredImage = "";
       }
       // alert(JSON.stringify(this.editingQuestion));
     },
@@ -476,6 +603,8 @@ export default {
     closeAddingQuestions() {
       this.questionsLoaded = false;
       this.questions = [];
+      this.$refs.questionsForm.reset();
+      this.isNew = "New";
       this.$emit("closeAddingQuestions");
     },
     checkIfSequenceisExist() {
@@ -504,6 +633,9 @@ export default {
     closeOptionsDialog(question) {
       this.showOptionsDialog = false;
       this.addingOptions = null;
+    },
+    targetQuestion(question) {
+      this.addingOptions = question;
     },
   },
 };

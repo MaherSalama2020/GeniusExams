@@ -24,6 +24,8 @@
               v-if="isLoading=='NO'&&showSessionDialog"
             />
           </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn dark @click="showConfirmDialog" class="white orange--text ml-8 mr-2">Close</v-btn>
           <!-- <v-toolbar-items>
             <v-btn dark text @click="closeSessionDialog">Save</v-btn>
           </v-toolbar-items>-->
@@ -78,7 +80,7 @@
                   <v-card-title>{{question.name}}</v-card-title>
                   <v-img
                     v-if="question.image"
-                    max-height="500"
+                    max-height="300"
                     contain
                     :aspect-ratio="16/9"
                     :src="question.image"
@@ -114,12 +116,18 @@
                                     v-if="!option.isCorrect&&alertShowCorrectAnswer&&selectedOption.id==option.id"
                                     color="error"
                                   >mdi-alert-circle</v-icon>
+                                  <!-- <v-img
+                                    max-height="300"
+                                    contain
+                                    :aspect-ratio="16/9"
+                                    :src="option.image"
+                                  ></v-img>-->
                                   <div
                                     v-if="hover && option.image"
                                     style=" position: absolute; left: 50px; bottom: 15px; width: 700px;"
                                   >
                                     <v-img
-                                      max-height="500"
+                                      max-height="300"
                                       contain
                                       :aspect-ratio="16/9"
                                       :src="option.image"

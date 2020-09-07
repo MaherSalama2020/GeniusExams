@@ -98,6 +98,7 @@
         </span>
       </v-card-text>
     </v-card>
+
     <ImageDialog
       :showImageDialog="showImageDialog"
       :image="option.image"

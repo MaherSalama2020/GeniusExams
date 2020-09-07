@@ -17,6 +17,8 @@
             <v-icon class="close">mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>Exams which include this question</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn dark @click="closeQuestionExams" class="white orange--text ml-8 mr-2">Close</v-btn>
         </v-toolbar>
         <h2>{{data.name}}</h2>
         <v-form ref="examForm" v-model="isValid" @keyup.native.enter="isValid && joinExam($event)">
