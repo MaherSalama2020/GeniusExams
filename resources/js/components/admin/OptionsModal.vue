@@ -134,16 +134,16 @@
                 </v-expand-transition>
               </v-col>
             </v-row>
-            <v-row no-gutters style="display: none">
+            <v-row no-gutters>
               <v-col cols="12" md="12">
                 <input
                   class="form-control"
                   type="file"
-                  id="file"
-                  @change="attachFile"
+                  id="fileOptionInput"
+                  @input="attachFile"
                   style="display: none"
                   accept="image/*"
-                  ref="image"
+                  ref="imageFile"
                 />
               </v-col>
             </v-row>
@@ -206,22 +206,7 @@
               </v-col>
             </v-row>
             <v-row no-gutters>
-              <v-col cols="12" md="4">
-                <v-btn
-                  v-if="!edit"
-                  block
-                  :disabled="!isValid"
-                  color="orange white--text"
-                  @click="addOption($event)"
-                >Add</v-btn>
-                <v-btn
-                  v-else
-                  block
-                  :disabled="!isValid"
-                  color="orange white--text"
-                  @click="addOption($event)"
-                >Save</v-btn>
-              </v-col>
+              <v-col cols="12" md="2"></v-col>
               <v-col cols="12" md="3">
                 <v-btn-toggle
                   multiple
@@ -244,7 +229,23 @@
                 </v-btn-toggle>
               </v-col>
               <v-col cols="12" md="2">
-                <v-btn color="orange white--text" @click="cancelEditOption">Reload</v-btn>
+                <v-btn color="orange white--text" @click="cancelEditOption">Cancel</v-btn>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-btn
+                  v-if="!edit"
+                  block
+                  :disabled="!isValid"
+                  color="orange white--text"
+                  @click="addOption($event)"
+                >Add</v-btn>
+                <v-btn
+                  v-else
+                  block
+                  :disabled="!isValid"
+                  color="orange white--text"
+                  @click="addOption($event)"
+                >Save</v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -276,7 +277,7 @@
         @closeImageDialog="closeImageDialog"
       />
       <v-snackbar v-model="snackbar">
-        There is another option in editing, save it an try again.
+        There is another option in editing, save it or cancel an try again.
         <template
           v-slot:action="{ attrs }"
         >
@@ -374,7 +375,7 @@ export default {
       this.showImageDialog = false;
     },
     pickImage() {
-      this.$refs.image.click();
+      this.$refs.imageFile.click();
     },
     attachFile(event) {
       if (event.target.files[0]) {
@@ -386,13 +387,19 @@ export default {
         axios
           .post("/api/upload-file", formData, { headers })
           .then((response) => {
+            this.attachment = null;
+            this.imageChanged = true;
             this.option.image = response.data;
             let image = response.data;
-            this.imageChanged = true;
             this.spinner = false;
+            document.getElementById("fileOptionInput").value = "";
           })
           .catch((error) => {
             this.spinner = false;
+            this.imageChanged = false;
+            this.attachment = null;
+            this.option.image = "";
+            document.getElementById("fileOptionInput").value = "";
           });
       }
     },
@@ -405,6 +412,8 @@ export default {
       axios
         .post("/api/questions/qoptions/", { id })
         .then((response) => {
+          this.$refs.optionsForm.reset();
+          this.edit = false;
           this.data.options = response.data.options;
           if (this.data.options.length == 0) this.option.sequence = 1;
           if (this.data.options.length == 1) this.option.sequence = 2;
@@ -448,9 +457,11 @@ export default {
             this.option.isCorrect = false;
             this.isImageOption = false;
             this.option.explaination = "";
-            this.$refs.optionsForm.reset();
+            this.option.image = "";
+            // this.$refs.optionsForm.reset();
             this.fetchOptions();
             // this.data.options.push(this.option);
+            // document.getElementById("file").value = "";
           })
           .catch((error) => alert(JSON.stringify(error)));
       } else {
@@ -474,8 +485,10 @@ export default {
             this.option.isCorrect = false;
             this.isImageOption = false;
             this.option.explaination = "";
-            this.$refs.optionsForm.reset();
+            this.option.image = "";
+            // this.$refs.optionsForm.reset();
             this.fetchOptions();
+            // document.getElementById("file").value = "";
           })
           .catch((error) => {
             console.log(error);
@@ -502,12 +515,15 @@ export default {
     cancelEditOption(option) {
       this.edit = false;
       this.imageChanged = false;
+      this.isImageOption = false;
+      document.getElementById("fileOptionInput").value = "";
       this.option.name = "";
       this.option.sequence = "";
       this.option.isCorrect = false;
       this.isImageOption = false;
       this.option.explaination = "";
-      this.$refs.optionsForm.reset();
+      this.option.image = "";
+      // this.$refs.optionsForm.reset();
       this.fetchOptions();
     },
     showConfirmDialog(id) {

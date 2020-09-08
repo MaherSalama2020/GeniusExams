@@ -6,6 +6,14 @@
       hide-overlay
       transition="dialog-bottom-transition"
     >
+      <v-snackbar v-model="snackbar">
+        Marked Question, you need to select the question number which you want to review
+        <template
+          v-slot:action="{ attrs }"
+        >
+          <v-btn color="orange" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+        </template>
+      </v-snackbar>
       <v-card>
         <v-toolbar dark color="orange">
           <v-btn icon light @click="showConfirmDialog">
@@ -45,6 +53,7 @@
             <!-- <p>is it answered correctly:{{ answeredCorrectly || 'null' }}</p> -->
             <!-- <p>Answers Explaination:{{ answersExplaination || 'null' }}</p> -->
             <!-- <p>Marked Answers:{{ markedAnswers || 'null' }}</p> -->
+            <!-- <p>Marked Diffrences Steps:{{ markedDifferencesSteps || 'null' }}</p> -->
             <!-- <p>Marked Steps:{{ markedSteps || 'null' }}</p> -->
             <!-- <p>Answers:{{ answers || 'null' }}</p> -->
             <!-- <v-stepper-header>
@@ -69,7 +78,25 @@
               total-visible="10"
               @input="handlePagination"
               :disabled="disablePagination"
+              prev-icon="mdi-menu-left"
+              next-icon="mdi-menu-right"
             ></v-pagination>
+            <v-row align="center" justify="center" v-if="markedSteps.length>0">
+              <v-btn-toggle
+                mandatory
+                dense
+                rounded
+                background-color="orange"
+                active-class="orange white--text"
+              >
+                <v-btn
+                  small
+                  v-for="(marked, index) in markedSteps"
+                  :key="`${index}-step`"
+                  @click="handleMarkedPagination(index)"
+                >{{markedSteps[index]}}</v-btn>
+              </v-btn-toggle>
+            </v-row>
             <v-stepper-items>
               <v-stepper-content
                 v-for="(question, index) in examQuestions"
@@ -125,18 +152,26 @@
                             <v-row no-gutters>
                               <v-col cols="12" md="12">
                                 <v-expand-transition>
-                                  <div
+                                  <v-card
+                                    rounded
                                     v-if="hover && option.image"
-                                    style=" position: absolute; left: 50px; bottom: 15px; width: 700px;"
+                                    class="popup"
+                                    max-width="700"
+                                    color="orange"
                                   >
-                                    <v-img
-                                      max-height="300"
-                                      contain
-                                      :aspect-ratio="16/9"
-                                      :src="option.image"
-                                      @click="alertImageDialog(option.image)"
-                                    ></v-img>
-                                  </div>
+                                    <v-card-text>
+                                      <div>
+                                        <v-img
+                                          max-width="700"
+                                          contain
+                                          :aspect-ratio="16/9"
+                                          :src="option.image"
+                                          @click="alertImageDialog(option.image)"
+                                        ></v-img>
+                                        <div class="desc">{{option.name}}</div>
+                                      </div>
+                                    </v-card-text>
+                                  </v-card>
                                 </v-expand-transition>
                               </v-col>
                             </v-row>
@@ -240,7 +275,7 @@
                       <v-btn
                         class="ml-5 mt-2 mb-2 text-center"
                         color="orange white--text"
-                        @click="markAnswer"
+                        @click="unMarkAnswer"
                         small
                         v-bind="attrs"
                         v-on="on"
@@ -333,12 +368,18 @@
             </v-stepper-items>
           </template>
         </v-stepper>
-        <v-alert
-          v-if="alertShowCorrectAnswer"
-          :value="true"
-          color="green accent-1"
-          icon="warning"
-        >{{showCorrectAnswerOptionName}}. {{showCorrectAnswerExplaination}}</v-alert>
+        <v-row no-gutters>
+          <v-col cols="12" md="12">
+            <v-expand-x-transition>
+              <v-alert
+                v-if="alertShowCorrectAnswer"
+                :value="true"
+                color="green accent-1"
+                icon="warning"
+              >{{showCorrectAnswerOptionName}}. {{showCorrectAnswerExplaination}}</v-alert>
+            </v-expand-x-transition>
+          </v-col>
+        </v-row>
 
         <TimeUpDialog
           :showTimeUpDialog="showTimeUpDialog"
@@ -415,6 +456,7 @@ export default {
   ],
   data() {
     return {
+      snackbar: false,
       showImageDialog: false,
       selectedOptionImageToShow: "",
       notifications: false,
@@ -426,7 +468,8 @@ export default {
       user_type: -1,
       arrivetostart: true,
       arrivetoend: false,
-      markedSteps: [],
+      markedDifferencesSteps: [],
+      markedSteps: ["Marked"],
       showTimeUpDialog: false,
       alertShowCorrectAnswer: false,
       alertShowMark: false,
@@ -506,10 +549,11 @@ export default {
         }
       } else {
         // alert(this.clicksAfterRewind);
-        this.currentStep = n + this.markedSteps[this.clicksAfterRewind];
+        this.currentStep =
+          n + this.markedDifferencesSteps[this.clicksAfterRewind];
         this.currentQuestionID = this.examQuestions[this.currentStep - 1].id;
         // alert(this.currentQuestionID);
-        if (this.clicksAfterRewind === this.markedSteps.length - 1) {
+        if (this.clicksAfterRewind === this.markedDifferencesSteps.length - 1) {
           this.arrivetoend = true;
         }
         this.clicksAfterRewind++;
@@ -528,7 +572,8 @@ export default {
       } else {
         this.clicksAfterRewind--;
         // alert(this.clicksAfterRewind);
-        this.currentStep = n - this.markedSteps[this.clicksAfterRewind];
+        this.currentStep =
+          n - this.markedDifferencesSteps[this.clicksAfterRewind];
         this.currentQuestionID = this.examQuestions[this.currentStep - 1].id;
         // alert(this.currentQuestionID);
         if (n === this.markedAnswers[1].currentStep) {
@@ -605,6 +650,11 @@ export default {
       this.selectedOption = {};
       this.alertShowCorrectAnswer = false;
       this.alertShowMark = false;
+      this.markedDifferencesSteps = [];
+      this.markedSteps = ["Marked"];
+      this.ViewMarkedAnswers = false;
+      this.disablePagination = false;
+      this.markedAnswers = [];
       // this.$emit("closeSessionDialog");
     },
     checkSeclecedOption(option) {
@@ -636,7 +686,7 @@ export default {
       // )
     },
     markAnswer(n) {
-      this.alertShowMark = !this.alertShowMark;
+      this.alertShowMark = true;
       let answerMarked = {
         currentStep: this.currentStep,
         question_id: this.currentQuestionID,
@@ -647,7 +697,39 @@ export default {
         alertShowMark: this.alertShowMark,
       };
       this.answers[this.currentStep - 1] = answerMarked;
+      if (
+        this.alertShowMark &&
+        this.markedSteps.indexOf(this.currentStep == -1)
+      )
+        this.markedSteps.push(this.currentStep);
+      this.markedSteps.sort(function (a, b) {
+        if (a == "Marked") return;
+        if (a > b) return 1;
+        if (a < b) return -1;
+        return 0;
+      });
       // alert(JSON.stringify(this.answers[this.currentStep - 1]));
+    },
+    unMarkAnswer() {
+      this.alertShowMark = false;
+      let answerMarked = {
+        currentStep: this.currentStep,
+        question_id: this.currentQuestionID,
+        user_id: this.user_id,
+        certificate_id: this.certificate_id,
+        exam_id: this.exam_id,
+        selectedOption: this.selectedOption,
+        alertShowMark: this.alertShowMark,
+      };
+      this.answers[this.currentStep - 1] = answerMarked;
+      let index = this.markedSteps.indexOf(this.currentStep);
+      this.markedSteps.splice(index, 1);
+      this.markedSteps.sort(function (a, b) {
+        if (a == "Marked") return;
+        if (a > b) return 1;
+        if (a < b) return -1;
+        return 0;
+      });
     },
     closeTimeUpDialog() {
       if (this.alertPreviewDialog) this.alertPreviewDialog = false;
@@ -712,13 +794,13 @@ export default {
     // },
     viewMarkedAnswers() {
       this.ViewMarkedAnswers = !this.ViewMarkedAnswers;
-      this.disablePagination = this.ViewMarkedAnswers;
+      // this.disablePagination = this.ViewMarkedAnswers;
       // alert(this.ViewMarkedAnswers);
       if (this.ViewMarkedAnswers) {
         this.markedAnswers = this.answers.filter(function (answer) {
           return answer.alertShowMark == true;
         });
-        this.markedSteps = this.markedAnswers.map(
+        this.markedDifferencesSteps = this.markedAnswers.map(
           (currentAnswer, index, array) => {
             // alert(index);
             // alert(JSON.stringify(array[index]));
@@ -727,8 +809,8 @@ export default {
           }
         );
         //to remove null entry
-        this.markedSteps.pop();
-        // alert(JSON.stringify(this.markedSteps));
+        this.markedDifferencesSteps.pop();
+        // alert(JSON.stringify(this.markedDifferencesSteps));
         // alert(this.markedAnswers[0].currentStep);
         this.currentStep = this.markedAnswers[0].currentStep;
         this.selectedOption = this.markedAnswers[0].selectedOption;
@@ -784,18 +866,45 @@ export default {
         this.arrivetostart = false;
         this.arrivetoend = false;
       }
-      if (this.answers[this.currentStep - 1] == null)
-        this.alertShowMark = false;
-      else if (
-        this.answers[this.currentStep - 1] != null &&
-        this.answers[this.currentStep - 1].alertShowMark
-      )
-        this.alertShowMark = true;
-      else if (
-        this.answers[this.currentStep - 1] != null &&
-        !this.answers[this.currentStep - 1].alertShowMark
-      )
-        this.alertShowMark = false;
+      this.resetQuestion();
+      // if (this.answers[this.currentStep - 1] == null)
+      //   this.alertShowMark = false;
+      // else if (
+      //   this.answers[this.currentStep - 1] != null &&
+      //   this.answers[this.currentStep - 1].alertShowMark
+      // )
+      //   this.alertShowMark = true;
+      // else if (
+      //   this.answers[this.currentStep - 1] != null &&
+      //   !this.answers[this.currentStep - 1].alertShowMark
+      // )
+      //   this.alertShowMark = false;
+
+      // // to get the state of explaination
+      // if (
+      //   typeof this.answersExplaination[this.currentStep - 1] === "undefined"
+      // ) {
+      //   this.alertShowCorrectAnswer = false;
+      // } else {
+      //   this.alertShowCorrectAnswer = this.answersExplaination[
+      //     this.currentStep - 1
+      //   ].alertShowCorrectAnswer;
+      //   this.showCorrectAnswerOptionName = this.answersExplaination[
+      //     this.currentStep - 1
+      //   ].showCorrectAnswerOptionName;
+      //   this.showCorrectAnswerExplaination = this.answersExplaination[
+      //     this.currentStep - 1
+      //   ].showCorrectAnswerExplaination;
+      // }
+    },
+    handleMarkedPagination(index) {
+      // alert(index);
+      if (index == 0) {
+        this.snackbar = true;
+        return;
+      }
+      this.currentStep = this.markedSteps[index];
+      this.handlePagination();
     },
   },
 };
@@ -805,5 +914,22 @@ export default {
   color: white;
   cursor: pointer;
   transform: rotate(90deg);
+}
+.popup {
+  background-color: orange;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  width: 700px;
+  box-shadow: 4px 8px 16px 4px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+.desc {
+  padding: 15px;
+  text-align: center;
+  background-color: orange;
+  color: white;
 }
 </style>

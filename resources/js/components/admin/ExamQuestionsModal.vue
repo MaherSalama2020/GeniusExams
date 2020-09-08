@@ -153,11 +153,11 @@
               <input
                 class="form-control"
                 type="file"
-                id="file"
-                @change="attachFile"
+                id="fileQuestionInput"
+                @input="attachFile"
                 style="display: none"
                 accept="image/*"
-                ref="image"
+                ref="imageFile"
               />
             </v-col>
             <v-col cols="12" md="2" class="ml-2">
@@ -418,7 +418,7 @@ export default {
       this.showImageDialog = false;
     },
     pickImage() {
-      this.$refs.image.click();
+      this.$refs.imageFile.click();
     },
     attachFile(event) {
       if (event.target.files[0]) {
@@ -430,12 +430,19 @@ export default {
         axios
           .post("/api/upload-file", formData, { headers })
           .then((response) => {
-            this.enteredImage = response.data;
+            this.attachment = null;
             this.imageChanged = true;
+            this.enteredImage = response.data;
             this.spinner = false;
+            document.getElementById("fileQuestionInput").value = "";
           })
           .catch((error) => {
+            console.log(error);
             this.spinner = false;
+            this.imageChanged = false;
+            this.attachment = null;
+            this.enteredImage = "";
+            document.getElementById("fileQuestionInput").value = "";
           });
       }
     },
@@ -454,9 +461,11 @@ export default {
             this.enteredsequence = this.questions.length + 1;
             this.exams[index].questions = response.data;
             this.spinner = false;
+            this.$refs.questionsForm.reset();
           })
           .catch((error) => {
             this.spinner = false;
+            this.$refs.questionsForm.reset();
           });
         axios.post("/api/exams/nequestions/", { id }).then((response) => {
           this.question_not_in_exams = response.data;
