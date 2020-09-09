@@ -5,12 +5,23 @@
         <v-card-title>
           <span>Review your answers</span>
           <v-spacer />
+          <span>{{examName}}</span>&nbsp;
+          <span>
+            <v-chip :color="getTypeColor(type)" dark>{{ type}}</v-chip>
+          </span>
+          <v-spacer />
           <span @click="closePreviewDialog">
             <v-icon class="close" medium>close</v-icon>
           </span>
         </v-card-title>
+        <hr class="hr mt-0 mb-0" />
         <v-card-title>
-          <v-btn @click="toggle">toggle</v-btn>
+          <v-btn fab @click="all" v-if="!openall" dark small color="orange white--text">
+            <v-icon>add</v-icon>
+          </v-btn>
+          <v-btn fab @click="none" v-if="openall" dark small color="orange white--text">
+            <v-icon>mdi-minus</v-icon>
+          </v-btn>
         </v-card-title>
         <v-card-text>
           <v-treeview
@@ -24,7 +35,7 @@
             transition
             shaped
             color="warning"
-            selected-color="indigo"
+            selected-color="orange"
             open-on-click
             expand-icon="mdi-chevron-down"
             selection-type="leaf"
@@ -39,17 +50,52 @@
               <!-- <span
                 v-bind:class="{ 'success--text':item.isCorrect, 'orange--text':item.selectedOption==item.id}"
               >{{item.name}}</span>-->
-              <strong
-                class="text-wrap"
+              <v-row
+                no-gutters
                 v-if="!item.children&&item.selectedOption==item.id"
-              >{{headers[item.sequence-1]}}.{{item.name}}</strong>
-              <span
+                align="center"
+                justify="start"
+              >
+                <u>
+                  <strong class="text-wrap">{{headers[item.sequence-1]}}.&nbsp;{{item.name}}</strong>
+                </u>
+                <v-img
+                  v-if="!item.children&&item.image"
+                  max-width="45"
+                  contain
+                  :aspect-ratio="16/9"
+                  :src="item.image"
+                  @click="alertImageDialog(item.image)"
+                ></v-img>
+              </v-row>
+              <v-row
+                no-gutters
                 class="text-wrap"
                 v-if="!item.children&&item.selectedOption!=item.id"
-              >{{headers[item.sequence-1]}}.{{item.name}}</span>
-              <span v-if="item.children">
-                <h6 class="text-wrap">{{item.sequence}}.{{item.name}}</h6>
-              </span>
+                align="center"
+                justify="start"
+              >
+                <span>{{headers[item.sequence-1]}}.&nbsp;{{item.name}}</span>
+                <v-img
+                  v-if="!item.children&&item.image"
+                  max-width="45"
+                  contain
+                  :aspect-ratio="16/9"
+                  :src="item.image"
+                  @click="alertImageDialog(item.image)"
+                ></v-img>
+              </v-row>
+              <v-row no-gutters v-if="item.children" align="center" justify="start">
+                <h5 class="text-wrap">{{item.sequence}}.&nbsp;{{item.name}}</h5>
+                <v-img
+                  v-if="item.children&&item.image"
+                  max-width="45"
+                  contain
+                  :aspect-ratio="16/9"
+                  :src="item.image"
+                  @click="alertImageDialog(item.image)"
+                ></v-img>
+              </v-row>
             </template>
           </v-treeview>
         </v-card-text>
@@ -58,21 +104,32 @@
           <v-btn color="orange white--text" @click="closePreviewDialog">OK</v-btn>
         </v-card-actions>
       </v-card>
+      <ImageDialog
+        :showImageDialog="showImageDialog"
+        :image="selectedImageToShow"
+        @closeImageDialog="closeImageDialog"
+      />
     </v-dialog>
   </v-row>
 </template>
 <script>
+import ImageDialog from "./ImageDialog";
 export default {
   props: [
     "alertPreviewDialog",
     "certificate_id",
     "exam_id",
+    "type",
+    "examName",
     "examQuestions",
     "answers",
     "optionChanged",
   ],
+  components: { ImageDialog },
   data() {
     return {
+      selectedImageToShow: "",
+      showImageDialog: false,
       selection: [],
       items: [],
       headers: ["A", "B", "C", "D", "E", "F"],
@@ -80,11 +137,26 @@ export default {
     };
   },
   methods: {
+    getTypeColor(type) {
+      if (type == "Exam") return "red";
+      else return "green";
+    },
+    alertImageDialog(image) {
+      this.selectedImageToShow = image;
+      this.showImageDialog = true;
+    },
+    closeImageDialog() {
+      this.showImageDialog = false;
+      this.selectedImageToShow = "";
+    },
     closePreviewDialog() {
       this.$emit("closePreviewDialog");
     },
-    toggle() {
-      this.openall = !this.openall;
+    all() {
+      this.openall = true;
+    },
+    none() {
+      this.openall = false;
     },
   },
   watch: {
@@ -96,8 +168,10 @@ export default {
           id: question.id,
           name: question.name,
           sequence: question.pivot.sequence,
+          image: question.image,
           locked: this.answers.find(
-            (answer) => answer.question_id == question.id
+            (answer) =>
+              typeof answer != "undefined" && answer.question_id == question.id
           )
             ? false
             : true,
@@ -107,11 +181,17 @@ export default {
             isCorrect: option.isCorrect,
             explaination: option.explaination,
             sequence: option.sequence,
+            image: option.image,
             selectedOption: this.answers.find(
-              (answer) => answer.question_id == question.id
+              (answer) =>
+                typeof answer != "undefined" &&
+                answer.question_id == question.id
             )
-              ? this.answers.find((answer) => answer.question_id == question.id)
-                  .selectedOption.id
+              ? this.answers.find(
+                  (answer) =>
+                    typeof answer != "undefined" &&
+                    answer.question_id == question.id
+                ).selectedOption.id
               : 0,
           })),
         }));
@@ -157,5 +237,15 @@ export default {
   color: orange;
   cursor: pointer;
   transform: rotate(90deg);
+}
+.hr {
+  border: 0;
+  height: 3px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  );
 }
 </style>

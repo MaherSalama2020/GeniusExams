@@ -104,17 +104,36 @@
       </v-container>-->
     </template>
     <!-- for exam session done -->
+    <!-- <hr class="hr mt-0 mb-0" /> -->
     <template>
       <v-card flat>
         <v-card-title>
-          <v-btn @click="all" v-if="panel.length==0&&sessions.length>0">all</v-btn>
-          <v-btn @click="none" v-if="panel.length>0&&sessions.length>0">none</v-btn>
+          <v-btn
+            fab
+            @click="all"
+            v-if="panel.length==0&&sessions.length>0"
+            dark
+            small
+            color="orange white--text"
+          >
+            <v-icon>add</v-icon>
+          </v-btn>
+          <v-btn
+            fab
+            @click="none"
+            v-if="panel.length>0&&sessions.length>0"
+            dark
+            small
+            color="orange white--text"
+          >
+            <v-icon>mdi-minus</v-icon>
+          </v-btn>
         </v-card-title>
         <v-card-text>
           <v-expansion-panels ocusable color="warning" v-model="panel" multiple popout>
             <v-expansion-panel v-for="session in sessions" :key="session.id">
               <v-expansion-panel-header disable-icon-rotate>
-                "{{session.exam.name}}" {{session.exam.type}}
+                {{session.exam.name}}&nbsp;{{session.exam.type}}
                 <v-spacer />
                 {{new Date(session.created_at).toLocaleDateString()}}
                 <template
@@ -297,5 +316,15 @@ export default {
   100% {
     transform: translate(4px, 0);
   }
+}
+.hr {
+  border: 0;
+  height: 3px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  );
 }
 </style>

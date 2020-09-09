@@ -25,10 +25,24 @@
           <v-icon v-else>book</v-icon>
         </template>
         <template slot="label" slot-scope="{ item}">
-          <span
-            v-if="!item.children"
-            v-bind:class="{ 'success--text':item.isCorrect, 'error--text':item.selectedOption==item.id}"
-          >{{headers[item.sequence-1]}}.{{item.name}}</span>
+          <v-row no-gutters align="center" justify="start">
+            <span
+              v-if="!item.children"
+              v-bind:class="{ 'success--text':item.isCorrect, 'error--text text-decoration-line-through font-weight-bold':item.selectedOption==item.id && !item.isCorrect}"
+            >{{headers[item.sequence-1]}}.&nbsp;{{item.name}}</span>
+            <span>
+              <v-icon color="success" v-if="item.selectedOption==item.id && item.isCorrect">check</v-icon>
+              <v-icon color="error" v-if="item.selectedOption==item.id && !item.isCorrect">close</v-icon>
+            </span>
+            <v-img
+              v-if="!item.children&&item.image"
+              max-width="45"
+              contain
+              :aspect-ratio="16/9"
+              :src="item.image"
+              @click="alertImageDialog(item.image)"
+            ></v-img>
+          </v-row>
           <!-- <strong
             class="text-wrap succes--text"
             v-if="!item.children&&item.selectedOption==item.id&&item.isCorrect"
@@ -45,9 +59,19 @@
             class="text-wrap error--text"
             v-if="!item.children&&item.selectedOption!=item.id&&!item.isCorrect"
           >{{headers[item.sequence-1]}}.{{item.name}}</span>-->
-          <span v-if="item.children">
-            <h6 class="text-wrap">{{item.sequence}}.{{item.name}}</h6>
-          </span>
+          <v-row v-if="item.children" no-gutters align="center" justify="start">
+            <span>
+              <h6 class="text-wrap">{{item.sequence}}.&nbsp;{{item.name}}</h6>
+            </span>
+            <v-img
+              v-if="item.children&&item.image"
+              max-width="45"
+              contain
+              :aspect-ratio="16/9"
+              :src="item.image"
+              @click="alertImageDialog(item.image)"
+            ></v-img>
+          </v-row>
         </template>
       </v-treeview>
     </v-col>
@@ -62,7 +86,7 @@
         <div v-for="(node, i) in selection" :key="i">
           <div v-if="node.explaination" color="grey" dark small class="my-1">
             <v-icon left small>book</v-icon>
-            Correct Answer: {{ node.name }}
+            Correct Answer: {{headers[node.sequence-1]}}.&nbsp;{{ node.name }}
           </div>
           <div v-if="node.explaination" color="grey" dark small class="my-1">
             <v-icon left small>book</v-icon>
@@ -71,20 +95,29 @@
         </div>
       </v-scroll-x-transition>
     </v-col>
+    <ImageDialog
+      :showImageDialog="showImageDialog"
+      :image="selectedImageToShow"
+      @closeImageDialog="closeImageDialog"
+    />
   </v-row>
 </template>
 
 <script>
+import ImageDialog from "./ImageDialog";
 export default {
   props: ["certificate_id", "exam_id", "answers"],
 
   data() {
     return {
+      selectedImageToShow: "",
+      showImageDialog: false,
       selection: [],
       questions: [],
       headers: ["A", "B", "C", "D", "E", "F"],
     };
   },
+  components: { ImageDialog },
   beforeMount() {
     let id = this.exam_id;
     axios.post("/api/exams/equestions", { id }).then((response) => {
@@ -115,6 +148,7 @@ export default {
         id: question.id,
         name: question.name,
         sequence: question.pivot.sequence,
+        image: question.image,
         locked: this.answers.find((answer) => answer.question_id == question.id)
           ? false
           : true,
@@ -124,6 +158,7 @@ export default {
           isCorrect: option.isCorrect,
           explaination: option.explaination,
           sequence: option.sequence,
+          image: option.image,
           selectedOption: this.answers.find(
             (answer) => answer.question_id == question.id
           )
@@ -134,6 +169,16 @@ export default {
       }));
       //   alert(JSON.stringify(Questions));
       return Questions;
+    },
+  },
+  methods: {
+    alertImageDialog(image) {
+      this.selectedImageToShow = image;
+      this.showImageDialog = true;
+    },
+    closeImageDialog() {
+      this.showImageDialog = false;
+      this.selectedImageToShow = "";
     },
   },
 };

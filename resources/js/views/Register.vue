@@ -91,7 +91,15 @@
                     :disabled="!isValid"
                     color="orange white--text"
                     @click="handleSubmit"
-                  >Sign up</v-btn>
+                    :loading="loading"
+                  >
+                    Sign up
+                    <template v-slot:loader>
+                      <span class="custom-loader">
+                        <v-icon light class="white--text">cached</v-icon>
+                      </span>
+                    </template>
+                  </v-btn>
                 </v-card-actions>
               </v-form>
             </v-card-text>

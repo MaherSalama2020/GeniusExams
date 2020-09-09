@@ -38,13 +38,16 @@ class AnswerController extends Controller
         //
         $answers=json_decode($request->answers);
         $count = count($answers);
+        $ans=false;
         if($count > 0){
         foreach ( $answers as $answer) {
-            $ans = Answer::create([
-                'session_id' => $request->session_id,
-                'question_id' => $answer->question_id,
-                'option_id' => $answer->selectedOption->id
-            ]);
+            if(isset($answer->selectedOption->id)){
+                $ans = Answer::create([
+                    'session_id' => $request->session_id,
+                    'question_id' => $answer->question_id,
+                    'option_id' => $answer->selectedOption->id
+                ]);
+            }
         }
         return response()->json([
             'status' => (bool) $ans,

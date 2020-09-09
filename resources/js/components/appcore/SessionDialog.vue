@@ -19,7 +19,7 @@
           <v-btn icon light @click="showConfirmDialog">
             <v-icon color="white" class="close">mdi-close</v-icon>
           </v-btn>
-          <v-toolbar-title>"{{examName}}" {{type}}</v-toolbar-title>
+          <v-toolbar-title>{{examName}}&nbsp;{{type}}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-title>{{currentStep}} of {{examQuestions.length}}</v-toolbar-title>
           <v-spacer></v-spacer>
@@ -40,6 +40,9 @@
         </v-toolbar>
         <v-stepper v-model="currentStep" non-linear alt-labels>
           <template>
+            <!-- correctNO:{{ correctNO || 'null' }} -->
+            <!-- markedNO:{{ markedSteps.length-1 || 'null' }} -->
+            <!-- wrongNO:{{ wrongNO || 'null' }} -->
             <!-- selectedOption:{{ selectedOption || 'null' }} -->
             <!-- <p>Exam Questions:{{ examQuestions || 'null' }}</p> -->
             <!-- <p>Current User ID:{{ user_id || 'null' }}</p> -->
@@ -83,6 +86,7 @@
             ></v-pagination>
             <v-row align="center" justify="center" v-if="markedSteps.length>0">
               <v-btn-toggle
+                v-model="currentMarkedStep"
                 mandatory
                 dense
                 rounded
@@ -236,7 +240,7 @@
                   </v-tooltip>
                 </v-row>
                 <v-row>
-                  <v-tooltip bottom>
+                  <v-tooltip bottom v-if="!alertShowCorrectAnswer">
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         class="ml-5 mt-2 mb-2 text-center"
@@ -247,14 +251,31 @@
                         v-bind="attrs"
                         v-on="on"
                       >
-                        Show Correct Answer
-                        <v-icon v-if="!alertShowCorrectAnswer" color="grey" class="ml-2">mdi-eye-off</v-icon>
-                        <v-icon v-else class="ml-2">mdi-eye</v-icon>
+                        View Correct
+                        <v-icon color="grey" class="ml-2">mdi-eye-off</v-icon>
                       </v-btn>
                     </template>
-                    Show Correct Answer
+                    View Correct Answer
                   </v-tooltip>
-                  <v-tooltip bottom v-if="!ViewMarkedAnswers && !alertShowMark">
+                  <v-tooltip bottom v-else>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        class="ml-5 mt-2 mb-2 text-center"
+                        color="orange white--text"
+                        @click="hideCorrectAnswer"
+                        v-if="type=='Practical Test'"
+                        small
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        Hide Correct
+                        <v-icon class="ml-2">mdi-eye</v-icon>
+                      </v-btn>
+                    </template>
+                    Hide Correct Answer
+                  </v-tooltip>
+                  <!-- <v-tooltip bottom v-if="!ViewMarkedAnswers && !alertShowMark"> -->
+                  <v-tooltip bottom v-if=" !alertShowMark">
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         class="ml-5 mt-2 mb-2 text-center"
@@ -264,13 +285,14 @@
                         v-bind="attrs"
                         v-on="on"
                       >
-                        Mark Question
+                        Mark
                         <v-icon color="grey" class="ml-2">mdi-star</v-icon>
                       </v-btn>
                     </template>
                     Mark Question
                   </v-tooltip>
-                  <v-tooltip bottom v-if="!ViewMarkedAnswers && alertShowMark">
+                  <!-- <v-tooltip bottom v-if="!ViewMarkedAnswers && alertShowMark"> -->
+                  <v-tooltip bottom v-if="alertShowMark">
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         class="ml-5 mt-2 mb-2 text-center"
@@ -280,39 +302,20 @@
                         v-bind="attrs"
                         v-on="on"
                       >
-                        Unmark Question
+                        Unmark
                         <v-icon class="ml-2">mdi-star</v-icon>
                       </v-btn>
                     </template>
                     Unmark Question
                   </v-tooltip>
-                  <v-tooltip
-                    bottom
-                    v-if="ViewMarkedAnswers&&arrivetoend && answers.filter(function (answer) {
-                      return answer.alertShowMark == true;
-                    }).length>0"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        class="ml-5 mt-2 mb-2 text-center"
-                        color="orange white--text"
-                        small
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="viewMarkedAnswers"
-                      >
-                        Return to start
-                        <v-icon class="ml-2">replay</v-icon>
-                      </v-btn>
-                    </template>
-                    Return to start
-                  </v-tooltip>
-                  <v-tooltip
+
+                  <!-- <v-tooltip
                     bottom
                     v-if="!ViewMarkedAnswers&&arrivetoend && answers.filter(function (answer) {
                       return answer.alertShowMark == true;
                     }).length>0"
-                  >
+                  >-->
+                  <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         class="ml-2 mt-2 mb-2 text-center"
@@ -321,12 +324,34 @@
                         v-bind="attrs"
                         v-on="on"
                         @click="viewMarkedAnswers"
+                        :disabled="ViewMarkedAnswers || markedSteps.length==1"
                       >
-                        View marked answers
-                        <v-icon class="ml-2">fast_rewind</v-icon>
+                        <v-icon class="ml-2">fast_rewind</v-icon>marked answers
                       </v-btn>
                     </template>
                     View marked answers
+                  </v-tooltip>
+                  <!-- <v-tooltip
+                    bottom
+                    v-if="ViewMarkedAnswers&&arrivetoend && answers.filter(function (answer) {
+                      return answer.alertShowMark == true;
+                    }).length>0"
+                  >-->
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        class="ml-5 mt-2 mb-2 text-center"
+                        color="orange white--text"
+                        small
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="viewMarkedAnswers"
+                        :disabled="!ViewMarkedAnswers || !arrivetoend"
+                      >
+                        <v-icon class="ml-2">replay</v-icon>Restart
+                      </v-btn>
+                    </template>
+                    Go to first question
                   </v-tooltip>
                   <v-spacer />
                   <v-tooltip bottom>
@@ -339,6 +364,7 @@
                         @click="showPreviewDialog"
                         v-bind="attrs"
                         v-on="on"
+                        :disabled="answers.length==0"
                       >
                         Review
                         <v-icon right>preview</v-icon>
@@ -356,9 +382,16 @@
                         @click="showSubmitDialog"
                         v-bind="attrs"
                         v-on="on"
+                        :disabled="answers.length==0"
+                        :loading="submitLoader"
                       >
                         Submit
                         <v-icon right>mdi-send</v-icon>
+                        <template v-slot:loader>
+                          <span class="custom-loader">
+                            <v-icon light class="white--text">cached</v-icon>
+                          </span>
+                        </template>
                       </v-btn>
                     </template>
                     Submit your Answers
@@ -385,13 +418,10 @@
           :showTimeUpDialog="showTimeUpDialog"
           @closeTimeUpDialog="closeTimeUpDialog"
           title="Time is up!"
+          :examName="examName"
           :type="type"
+          :result="result"
           :passing_rate="passing_rate"
-          :text1="`Total questions: ${examQuestions.length}`"
-          :text2="`Marked questions:${markedNO}`"
-          :text3="`Correct answers:${correctNO}`"
-          :text4="`Wrong answers:${wrongNO}`"
-          :result="(correctNO/examQuestions.length)*100"
         />
         <SubmitDialog
           :optionChanged="optionChanged"
@@ -402,13 +432,19 @@
           :answers="answers"
           :certificate_id="certificate_id"
           :exam_id="exam_id"
-          :result="(correctNO/examQuestions.length)*100"
+          :result="result"
         />
         <ResultDialog
+          :examName="examName"
+          :type="type"
           :alertResultDialog="alertResultDialog"
           @closeResultDialog="closeResultDialog"
-          :result="(correctNO/examQuestions.length)*100"
+          :result="result"
           :passing_rate="passing_rate"
+          :text1="`Total questions: ${examQuestions.length}`"
+          :text2="`Marked questions: ${markedSteps.length-1}`"
+          :text3="`Correct answers: ${correctNO}`"
+          :text4="`Wrong answers: ${wrongNO}`"
         />
         <PreviewDialog
           :optionChanged="optionChanged"
@@ -418,6 +454,8 @@
           :answers="answers"
           :certificate_id="certificate_id"
           :exam_id="exam_id"
+          :type="type"
+          :examName="examName"
         />
         <ConfirmDialog
           :confirmdialog="confirmdialog"
@@ -456,6 +494,7 @@ export default {
   ],
   data() {
     return {
+      currentMarkedStep: 0,
       snackbar: false,
       showImageDialog: false,
       selectedOptionImageToShow: "",
@@ -479,7 +518,6 @@ export default {
       currentStep: 0,
       wrongNO: 0,
       correctNO: 0,
-      markedNO: 0,
       optionsNames: ["A", "B", "C", "D", "E", "F"],
       answers: [],
       markedAnswers: [],
@@ -493,6 +531,8 @@ export default {
       optionChanged: false,
       confirmdialog: false,
       disablePagination: false,
+      result: 0,
+      submitLoader: false,
     };
   },
   components: {
@@ -530,6 +570,7 @@ export default {
     },
     closeImageDialog() {
       this.showImageDialog = false;
+      this.selectedOptionImageToShow = "";
     },
     getUser() {
       let user = JSON.parse(localStorage.getItem("genius.user"));
@@ -585,7 +626,7 @@ export default {
     },
 
     showCorrectAnswer() {
-      this.alertShowCorrectAnswer = !this.alertShowCorrectAnswer;
+      this.alertShowCorrectAnswer = true;
       let options = this.examQuestions[this.currentStep - 1].options;
       options.forEach((o) => {
         if (o.isCorrect) {
@@ -601,6 +642,48 @@ export default {
         showCorrectAnswerExplaination: this.showCorrectAnswerExplaination,
       };
       this.answersExplaination[this.currentStep - 1] = answerExplaination;
+      //to insert show correct answer
+      let answerMarked = {
+        currentStep: this.currentStep,
+        question_id: this.currentQuestionID,
+        user_id: this.user_id,
+        certificate_id: this.certificate_id,
+        exam_id: this.exam_id,
+        selectedOption: this.selectedOption,
+        alertShowMark: this.alertShowMark,
+        alertShowCorrectAnswer: this.alertShowCorrectAnswer,
+      };
+      this.answers[this.currentStep - 1] = answerMarked;
+    },
+    hideCorrectAnswer() {
+      this.alertShowCorrectAnswer = false;
+      let options = this.examQuestions[this.currentStep - 1].options;
+      options.forEach((o) => {
+        if (o.isCorrect) {
+          this.showCorrectAnswerOptionName = this.optionsNames[o.sequence - 1];
+          this.showCorrectAnswerExplaination = o.explaination;
+        }
+      });
+      let answerExplaination = {
+        currentStep: this.currentStep,
+        question_id: this.currentQuestionID,
+        alertShowCorrectAnswer: this.alertShowCorrectAnswer,
+        showCorrectAnswerOptionName: this.showCorrectAnswerOptionName,
+        showCorrectAnswerExplaination: this.showCorrectAnswerExplaination,
+      };
+      this.answersExplaination[this.currentStep - 1] = answerExplaination;
+      //to insert show correct answer
+      let answerMarked = {
+        currentStep: this.currentStep,
+        question_id: this.currentQuestionID,
+        user_id: this.user_id,
+        certificate_id: this.certificate_id,
+        exam_id: this.exam_id,
+        selectedOption: this.selectedOption,
+        alertShowMark: this.alertShowMark,
+        alertShowCorrectAnswer: this.alertShowCorrectAnswer,
+      };
+      this.answers[this.currentStep - 1] = answerMarked;
     },
     resetQuestion() {
       this.alertShowCorrectAnswer = false;
@@ -640,7 +723,6 @@ export default {
       this.currentStep = 1;
       this.wrongNO = 0;
       this.correctNO = 0;
-      this.markedNO = 0;
       this.showTimeUpDialog = false;
       this.arrivetoend = false;
       this.arrivetostart = true;
@@ -655,7 +737,9 @@ export default {
       this.ViewMarkedAnswers = false;
       this.disablePagination = false;
       this.markedAnswers = [];
+      this.answers = [];
       // this.$emit("closeSessionDialog");
+      this.submitLoader = false;
     },
     checkSeclecedOption(option) {
       this.optionChanged = !this.optionChanged;
@@ -675,11 +759,9 @@ export default {
       this.answers.forEach((ans) => {
         if (ans.selectedOption.isCorrect) correct = correct + 1;
         if (!ans.selectedOption.isCorrect) wrong = wrong + 1;
-        if (ans.alertShowMark) marked = marked + 1;
       });
       this.correctNO = correct;
       this.wrongNO = wrong;
-      this.markedNO = marked;
       // if (
       //   this.answers.some((ans) => ans.question_id === answer.question_id) &&
       //   this.selectedOption.isCorrect
@@ -695,6 +777,7 @@ export default {
         exam_id: this.exam_id,
         selectedOption: this.selectedOption,
         alertShowMark: this.alertShowMark,
+        alertShowCorrectAnswer: this.alertShowCorrectAnswer,
       };
       this.answers[this.currentStep - 1] = answerMarked;
       if (
@@ -720,6 +803,7 @@ export default {
         exam_id: this.exam_id,
         selectedOption: this.selectedOption,
         alertShowMark: this.alertShowMark,
+        alertShowCorrectAnswer: this.alertShowCorrectAnswer,
       };
       this.answers[this.currentStep - 1] = answerMarked;
       let index = this.markedSteps.indexOf(this.currentStep);
@@ -730,6 +814,9 @@ export default {
         if (a < b) return -1;
         return 0;
       });
+      if (this.markedSteps.length == 0) {
+        this.disablePagination = true;
+      }
     },
     closeTimeUpDialog() {
       if (this.alertPreviewDialog) this.alertPreviewDialog = false;
@@ -738,8 +825,8 @@ export default {
       if (this.confirmdialog) this.confirmdialog = false;
       this.submit();
       this.showTimeUpDialog = false;
-      this.resetExam();
-      this.closeSessionDialog();
+      // this.resetExam();
+      // this.closeSessionDialog();
     },
     showSubmitDialog() {
       this.alertSubmitDialog = true;
@@ -767,11 +854,13 @@ export default {
       this.$emit("closeSessionDialog");
     },
     submit() {
+      this.submitLoader = true;
       this.alertSubmitDialog = false;
       let user_id = this.user_id;
       let exam_id = this.exam_id;
       let certificate_id = this.certificate_id;
       let result = (this.correctNO / this.examQuestions.length) * 100;
+      this.result = result;
       let answers = JSON.stringify(this.answers);
 
       axios
@@ -782,19 +871,27 @@ export default {
           axios
             .post("/api/answers/", { answers, session_id })
             .then((res) => {
+              this.submitLoader = false;
               this.alertSubmitDialog = false;
               this.alertResultDialog = true;
+              // this.resetExam();
             })
-            .catch((error) => console.log(error));
+            .catch((error) => {
+              console.log(error);
+              this.submitLoader = false;
+            });
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          this.submitLoader = false;
+        });
     },
     // preview() {
     //   this.alertpreviewDialog = false;
     // },
     viewMarkedAnswers() {
       this.ViewMarkedAnswers = !this.ViewMarkedAnswers;
-      // this.disablePagination = this.ViewMarkedAnswers;
+      this.disablePagination = this.ViewMarkedAnswers;
       // alert(this.ViewMarkedAnswers);
       if (this.ViewMarkedAnswers) {
         this.markedAnswers = this.answers.filter(function (answer) {
@@ -813,8 +910,12 @@ export default {
         // alert(JSON.stringify(this.markedDifferencesSteps));
         // alert(this.markedAnswers[0].currentStep);
         this.currentStep = this.markedAnswers[0].currentStep;
+        this.alertShowMark = this.markedAnswers[0].alertShowMark;
+        this.alertShowCorrectAnswer = this.markedAnswers[0].alertShowCorrectAnswer;
         this.selectedOption = this.markedAnswers[0].selectedOption;
         this.currentQuestionID = this.markedAnswers[0].question_id;
+        if (this.alertShowCorrectAnswer) this.showCorrectAnswer();
+        else this.hideCorrectAnswer();
         if (this.markedAnswers.length > 1) {
           this.arrivetoend = false;
           this.arrivetostart = true;
@@ -828,9 +929,13 @@ export default {
         if (this.answers[0]) {
           this.alertShowMark = this.answers[0].alertShowMark;
           this.selectedOption = this.answers[0].selectedOption;
+          this.alertShowCorrectAnswer = this.answers[0].alertShowCorrectAnswer;
+          if (this.alertShowCorrectAnswer) this.showCorrectAnswer();
+          else this.hideCorrectAnswer();
         } else {
           this.alertShowMark = false;
           this.selectedOption = null;
+          this.alertShowCorrectAnswer = false;
         }
         // this.markedAnswers = [];
         // this.answers.forEach((answer) => {
@@ -853,6 +958,8 @@ export default {
       this.confirmdialog = false;
     },
     handlePagination() {
+      this.currentMarkedStep = 0;
+      this.currentQuestionID = this.examQuestions[this.currentStep - 1].id;
       if (this.currentStep == 1 && this.examQuestions.length > 1) {
         this.arrivetostart = true;
         this.arrivetoend = false;
@@ -909,7 +1016,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style >
 .close:hover {
   color: white;
   cursor: pointer;
@@ -931,5 +1038,41 @@ export default {
   text-align: center;
   background-color: orange;
   color: white;
+}
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

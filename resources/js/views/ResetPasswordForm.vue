@@ -73,7 +73,15 @@
                     :disabled="!isValid"
                     color="orange white--text"
                     @click="handleSubmit"
-                  >Reset Password</v-btn>
+                    :loading="loading"
+                  >
+                    Reset Password
+                    <template v-slot:loader>
+                      <span class="custom-loader">
+                        <v-icon light class="white--text">cached</v-icon>
+                      </span>
+                    </template>
+                  </v-btn>
                 </v-card-actions>
               </v-form>
             </v-card-text>

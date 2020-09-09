@@ -49,7 +49,15 @@
                     :disabled="!isValid"
                     color="orange white--text"
                     @click="handleSubmit"
-                  >Send Email</v-btn>
+                    :loading="loading"
+                  >
+                    Send Email
+                    <template v-slot:loader>
+                      <span class="custom-loader">
+                        <v-icon light class="white--text">cached</v-icon>
+                      </span>
+                    </template>
+                  </v-btn>
                 </v-card-actions>
               </v-form>
             </v-card-text>
@@ -104,7 +112,6 @@ export default {
     handleSubmit(e) {
       e.preventDefault();
       this.loading = true;
-      this.isValid = false;
       let email = this.email;
       let password = this.password;
       axios
