@@ -62,7 +62,7 @@
                     <template v-slot:loader>
                       <span>Send Email</span>
                       <span class="custom-loader">
-                        <v-icon light color="white" right>autorenew</v-icon>
+                        <v-icon light color="white">autorenew</v-icon>
                       </span>
                     </template>
                   </v-btn>
@@ -79,19 +79,26 @@
           <v-footer color="white" app padless>
             <v-col class="text-center" cols="12">
               <v-btn text @click="linkToHome">&copy;{{ new Date().getFullYear() }} —Genius</v-btn>
-              <v-btn text>Contact</v-btn>
+              <v-btn text @click="alertContactUsDialog">Contact</v-btn>
               <v-btn text>Privacy&terms</v-btn>
             </v-col>
           </v-footer>
         </v-col>
+        <ContactUsDialog
+          :showContactUsDialog="showContactUsDialog"
+          @closeContactUsDialog="closeContactUsDialog"
+        />
       </v-container>
     </v-main>
   </div>
 </template>
 <script>
+import ContactUsDialog from "../components/appcore/ContactUsDialog";
 export default {
+  components: { ContactUsDialog },
   data() {
     return {
+      showContactUsDialog: false,
       loading: false,
       isValid: true,
       email: "",
@@ -130,9 +137,11 @@ export default {
         .then((response) => {
           // console.log(JSON.stringify(response));
           if (response.data === "no") {
-            this.errors = ["Email not in use"];
+            // this.errors = ["Email not in use"];
+            this.responseMessage = "Email not in use";
+            this.responseMessageStatus = false;
+            this.responseReady = true;
             this.loading = false;
-
             return;
           }
           axios.post("/api/reset-password", { email: this.email }).then(
@@ -161,6 +170,12 @@ export default {
     },
     linkToHome() {
       this.$emit("linkToHome");
+    },
+    alertContactUsDialog() {
+      this.showContactUsDialog = true;
+    },
+    closeContactUsDialog() {
+      this.showContactUsDialog = false;
     },
   },
 };

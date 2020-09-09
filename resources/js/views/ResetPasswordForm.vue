@@ -91,19 +91,26 @@
           <v-footer color="white" app padless>
             <v-col class="text-center" cols="12">
               <v-btn text @click="linkToHome">&copy;{{ new Date().getFullYear() }} —Genius</v-btn>
-              <v-btn text>Contact</v-btn>
+              <v-btn text @click="alertContactUsDialog">Contact</v-btn>
               <v-btn text>Privacy&terms</v-btn>
             </v-col>
           </v-footer>
         </v-col>
+        <ContactUsDialog
+          :showContactUsDialog="showContactUsDialog"
+          @closeContactUsDialog="closeContactUsDialog"
+        />
       </v-container>
     </v-main>
   </div>
 </template>
 <script>
+import ContactUsDialog from "../components/appcore/ContactUsDialog";
 export default {
+  components: { ContactUsDialog },
   data() {
     return {
+      showContactUsDialog: false,
       loading: false,
       token: null,
       isValid: true,
@@ -186,6 +193,12 @@ export default {
     viewCPassword() {
       this.showCPassword = true;
       setTimeout(() => (this.showCPassword = false), 1000);
+    },
+    alertContactUsDialog() {
+      this.showContactUsDialog = true;
+    },
+    closeContactUsDialog() {
+      this.showContactUsDialog = false;
     },
   },
 };

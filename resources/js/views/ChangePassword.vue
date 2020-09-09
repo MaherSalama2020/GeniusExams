@@ -109,7 +109,7 @@
                     <template v-slot:loader>
                       <span>Change Password</span>
                       <span class="custom-loader">
-                        <v-icon light color="white" right>autorenew</v-icon>
+                        <v-icon light color="white">autorenew</v-icon>
                       </span>
                     </template>
                   </v-btn>
@@ -120,21 +120,28 @@
           <v-footer color="white" app padless>
             <v-col class="text-center" cols="12">
               <v-btn text @click="linkToHome">&copy;{{ new Date().getFullYear() }} —Genius</v-btn>
-              <v-btn text>Contact</v-btn>
+              <v-btn text @click="alertContactUsDialog">Contact</v-btn>
               <v-btn text>Privacy&terms</v-btn>
             </v-col>
           </v-footer>
         </v-col>
+        <ContactUsDialog
+          :showContactUsDialog="showContactUsDialog"
+          @closeContactUsDialog="closeContactUsDialog"
+        />
       </v-container>
     </v-main>
   </div>
 </template>
 
 <script>
+import ContactUsDialog from "../components/appcore/ContactUsDialog";
 export default {
   props: ["nextUrl"],
+  components: { ContactUsDialog },
   data() {
     return {
+      showContactUsDialog: false,
       loading: false,
       isValid: true,
       showOldPassword: false,
@@ -220,6 +227,12 @@ export default {
     viewCPassword() {
       this.showCPassword = true;
       setTimeout(() => (this.showCPassword = false), 1000);
+    },
+    alertContactUsDialog() {
+      this.showContactUsDialog = true;
+    },
+    closeContactUsDialog() {
+      this.showContactUsDialog = false;
     },
   },
 };

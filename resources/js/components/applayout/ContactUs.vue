@@ -56,22 +56,27 @@
             </h5>
           </v-card-title>
           <v-card-text>
-            <v-alert
-              v-if="response_show"
-              color="success lighten-4"
-              icon="check"
-            >{{response_message}}</v-alert>
-            <v-alert v-if="error_show" color="error lighten-4" icon="alert">{{response_message}}</v-alert>
-            <v-form
-              ref="form"
-              v-model="valid"
-              @keyup.native.enter="valid && send($event)"
-              lazy-validation
-              class="pa-2"
-            >
+            <v-row justify="center" align="center">
+              <v-col>
+                <v-slide-y-transition>
+                  <v-alert
+                    v-if="response_show"
+                    color="success lighten-4"
+                    icon="check"
+                  >{{response_message}}</v-alert>
+                  <v-alert
+                    v-if="error_show"
+                    color="error lighten-4"
+                    icon="warning"
+                  >{{response_message}}</v-alert>
+                </v-slide-y-transition>
+              </v-col>
+            </v-row>
+            <v-form ref="contactusForm" v-model="valid" class="pa-2">
               <v-text-field
+                prepend-inner-icon="mdi-email"
                 background-color="white"
-                color="white"
+                color="purple"
                 v-model="email"
                 :rules="emailRules"
                 placeholder="E-mail"
@@ -80,8 +85,9 @@
                 required
               ></v-text-field>
               <v-text-field
+                prepend-inner-icon="subject"
                 background-color="white"
-                color="white"
+                color="purple"
                 v-model="subject"
                 :counter="10"
                 :rules="subjectRules"
@@ -93,7 +99,7 @@
               <v-textarea
                 background-color="white"
                 no-resize
-                color="white"
+                color="purple"
                 v-model="message"
                 :rules="messageRules"
                 placeholder="Message"
@@ -101,8 +107,24 @@
                 shaped
                 required
               ></v-textarea>
-              <v-spacer></v-spacer>
-              <v-btn :disabled="!valid" color="info" @click="send">Send</v-btn>
+              <v-row>
+                <v-spacer></v-spacer>
+                <v-btn
+                  :disabled="!valid"
+                  color="orange white--text"
+                  @click="send"
+                  :loading="loading"
+                >
+                  Send
+                  <v-icon right>send</v-icon>
+                  <template v-slot:loader>
+                    <span>Send</span>
+                    <span class="custom-loader">
+                      <v-icon light color="white">autorenew</v-icon>
+                    </span>
+                  </template>
+                </v-btn>
+              </v-row>
             </v-form>
           </v-card-text>
         </v-card>
@@ -164,10 +186,11 @@ export default {
           this.email = "";
           this.subject = "";
           this.message = "";
+          this.$refs.contactusForm.reset();
         })
         .catch((error) => {
           this.loading = false;
-          this.response_message = "Tehre is something goes wrong";
+          this.response_message = "Something went wrong";
           this.error_show = true;
         });
       // this.$refs.form.validate();
