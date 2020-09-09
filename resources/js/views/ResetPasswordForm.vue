@@ -8,7 +8,7 @@
               <h4>Genius</h4>
             </v-btn>
           </v-row>
-          <v-card width="500" class="mx-auto mt-5" :loading="loading">
+          <v-card width="500" class="mx-auto mt-0" :loading="loading">
             <template slot="progress">
               <v-progress-linear color="#ff7700" indeterminate></v-progress-linear>
             </template>
@@ -43,7 +43,7 @@
                   color="purple lightn-2"
                 >
                   <template v-slot:append>
-                    <v-btn icon @click="showPassword=!showPassword" tabindex="-1">
+                    <v-btn icon @click="viewPassword" tabindex="-1" :disabled="showPassword">
                       <v-icon v-if="showPassword">mdi-eye</v-icon>
                       <v-icon v-if="!showPassword">mdi-eye-off</v-icon>
                     </v-btn>
@@ -61,7 +61,7 @@
                   color="purple lightn-2"
                 >
                   <template v-slot:append>
-                    <v-btn icon @click="showCPassword=!showCPassword" tabindex="-1">
+                    <v-btn icon @click="viewCPassword" tabindex="-1" :disabled="showCPassword">
                       <v-icon v-if="showCPassword">mdi-eye</v-icon>
                       <v-icon v-if="!showCPassword">mdi-eye-off</v-icon>
                     </v-btn>
@@ -76,9 +76,11 @@
                     :loading="loading"
                   >
                     Reset Password
+                    <v-icon right>autorenew</v-icon>
                     <template v-slot:loader>
+                      <span>Reset Password</span>
                       <span class="custom-loader">
-                        <v-icon light class="white--text">cached</v-icon>
+                        <v-icon light color="white" right>autorenew</v-icon>
                       </span>
                     </template>
                   </v-btn>
@@ -169,13 +171,21 @@ export default {
           },
           (error) => {
             this.loading = false;
-            this.isValid = true;
+            // this.isValid = true;
             console.error(error);
           }
         );
     },
     linkToHome() {
       this.$emit("linkToHome");
+    },
+    viewPassword() {
+      this.showPassword = true;
+      setTimeout(() => (this.showPassword = false), 1000);
+    },
+    viewCPassword() {
+      this.showCPassword = true;
+      setTimeout(() => (this.showCPassword = false), 1000);
     },
   },
 };

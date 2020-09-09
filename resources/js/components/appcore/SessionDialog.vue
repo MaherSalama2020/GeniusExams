@@ -388,8 +388,9 @@
                         Submit
                         <v-icon right>mdi-send</v-icon>
                         <template v-slot:loader>
+                          <span>submit</span>
                           <span class="custom-loader">
-                            <v-icon light class="white--text">cached</v-icon>
+                            <v-icon light color="orange" right>autorenew</v-icon>
                           </span>
                         </template>
                       </v-btn>
@@ -1041,7 +1042,7 @@ export default {
 }
 .custom-loader {
   animation: loader 1s infinite;
-  display: flex;
+  display: inline-flex;
 }
 @-moz-keyframes loader {
   from {

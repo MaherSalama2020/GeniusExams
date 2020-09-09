@@ -16,11 +16,27 @@
               <h5>Create your Genius account</h5>
             </v-card-title>
             <v-card-text>
-              <v-alert
-                v-if="register_result"
-                color="success lighten-4"
-                icon="check"
-              >{{register_message}}</v-alert>
+              <v-row align="center" justify="center">
+                <v-col>
+                  <v-slide-y-transition>
+                    <v-alert
+                      v-if="register_result"
+                      color="success lighten-4"
+                      icon="check"
+                    >{{register_message}}</v-alert>
+                    <v-alert
+                      color="success lighten-4"
+                      icon="check"
+                      v-if="responseReady&&responseMessageStatus"
+                    >{{responseMessage}}</v-alert>
+                    <v-alert
+                      color="error lighten-4"
+                      icon="warning"
+                      v-if="responseReady&&!responseMessageStatus"
+                    >{{responseMessage}}</v-alert>
+                  </v-slide-y-transition>
+                </v-col>
+              </v-row>
               <v-form
                 ref="registerForm"
                 v-model="isValid"
@@ -61,7 +77,7 @@
                   color="purple lightn-2"
                 >
                   <template v-slot:append>
-                    <v-btn icon @click="showPassword=!showPassword" tabindex="-1">
+                    <v-btn icon @click="viewPassword" tabindex="-1" :disabled="showPassword">
                       <v-icon v-if="showPassword">mdi-eye</v-icon>
                       <v-icon v-if="!showPassword">mdi-eye-off</v-icon>
                     </v-btn>
@@ -79,7 +95,7 @@
                   color="purple lightn-2"
                 >
                   <template v-slot:append>
-                    <v-btn icon @click="showCPassword=!showCPassword" tabindex="-1">
+                    <v-btn icon @click="viewCPassword" tabindex="-1" :disabled="showCPassword">
                       <v-icon v-if="showCPassword">mdi-eye</v-icon>
                       <v-icon v-if="!showCPassword">mdi-eye-off</v-icon>
                     </v-btn>
@@ -94,9 +110,11 @@
                     :loading="loading"
                   >
                     Sign up
+                    <v-icon right>person_add_alt_1</v-icon>
                     <template v-slot:loader>
+                      <span>Sign up</span>
                       <span class="custom-loader">
-                        <v-icon light class="white--text">cached</v-icon>
+                        <v-icon light color="white" right>autorenew</v-icon>
                       </span>
                     </template>
                   </v-btn>
@@ -139,6 +157,9 @@ export default {
       password: "",
       password_confirmation: "",
       errors: [],
+      responseMessage: "",
+      responseMessageStatus: false,
+      responseReady: false,
       nameRules: [
         (v) => !!v || "Name is required",
         (v) => (v && v.length >= 5) || "Name must have 5+ characters",
@@ -172,6 +193,10 @@ export default {
     },
     handleSubmit(e) {
       e.preventDefault();
+      this.responseReady = false;
+      this.responseMessageStatus = false;
+      this.responseMessage = "";
+      this.register_result = false;
       // if (
       //   this.password !== this.password_confirmation ||
       //   this.password.length <= 0
@@ -188,7 +213,9 @@ export default {
       axios.post("api/checkemail", { email }).then((response) => {
         // console.log(JSON.stringify(response));
         if (response.data === "yes") {
-          this.errors = ["Email in use"];
+          this.responseMessage = "Email in use.";
+          this.responseMessageStatus = false;
+          this.responseReady = true;
           this.loading = false;
           this.isValid = true;
           return;
@@ -217,9 +244,11 @@ export default {
           })
           .catch((error) => {
             this.loading = false;
-            this.isValid = true;
+            // this.isValid = true;
             console.log(error);
-            this.errors = ["Check your credentials"];
+            this.responseMessage = "Check your password";
+            this.responseMessageStatus = false;
+            this.responseReady = true;
           });
       });
     },
@@ -228,6 +257,14 @@ export default {
     },
     linkToLogin() {
       this.$emit("linkToLogin");
+    },
+    viewPassword() {
+      this.showPassword = true;
+      setTimeout(() => (this.showPassword = false), 1000);
+    },
+    viewCPassword() {
+      this.showCPassword = true;
+      setTimeout(() => (this.showCPassword = false), 1000);
     },
   },
 };

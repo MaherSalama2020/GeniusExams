@@ -465,6 +465,7 @@
             @showSingleCertificate="showSingleCertificate"
             @loggedIn="change"
             @StartSession="StartSession"
+            @verification_result_hide="verification_result_hide"
             :is="activeComponent"
           ></component>
         </v-flex>
@@ -961,6 +962,10 @@ export default {
     },
     linkToRegister() {
       this.setComponent("register");
+    },
+    verification_result_hide() {
+      this.verification_message = "";
+      this.verification_result = false;
     },
   },
 };

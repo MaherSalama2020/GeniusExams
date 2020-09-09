@@ -8,7 +8,7 @@
               <h4>Genius</h4>
             </v-btn>
           </v-row>
-          <v-card width="500" class="mx-auto mt-5" :loading="loading">
+          <v-card width="500" class="mx-auto mt-0" :loading="loading">
             <template slot="progress">
               <v-progress-linear color="#ff7700" indeterminate></v-progress-linear>
             </template>
@@ -16,16 +16,22 @@
               <h5>Forgot your password</h5>
             </v-card-title>
             <v-card-text>
-              <v-alert
-                v-if="responseReady&&responseMessageStatus"
-                color="success lighten-4"
-                icon="check"
-              >{{responseMessage}}</v-alert>
-              <v-alert
-                v-if="responseReady&&!responseMessageStatus"
-                color="error lighten-4"
-                icon="warning"
-              >{{responseMessage}}</v-alert>
+              <v-row align="center" justify="center">
+                <v-col>
+                  <v-slide-y-transition>
+                    <v-alert
+                      v-if="responseReady&&responseMessageStatus"
+                      color="success lighten-4"
+                      icon="check"
+                    >{{responseMessage}}</v-alert>
+                    <v-alert
+                      v-if="responseReady&&!responseMessageStatus"
+                      color="error lighten-4"
+                      icon="warning"
+                    >{{responseMessage}}</v-alert>
+                  </v-slide-y-transition>
+                </v-col>
+              </v-row>
               <v-form
                 ref="forgotForm"
                 v-model="isValid"
@@ -52,9 +58,11 @@
                     :loading="loading"
                   >
                     Send Email
+                    <v-icon right medium>mdi-send</v-icon>
                     <template v-slot:loader>
+                      <span>Send Email</span>
                       <span class="custom-loader">
-                        <v-icon light class="white--text">cached</v-icon>
+                        <v-icon light color="white" right>autorenew</v-icon>
                       </span>
                     </template>
                   </v-btn>
@@ -111,6 +119,9 @@ export default {
     },
     handleSubmit(e) {
       e.preventDefault();
+      this.responseReady = false;
+      this.responseMessageStatus = false;
+      this.responseMessage = "";
       this.loading = true;
       let email = this.email;
       let password = this.password;
@@ -136,6 +147,7 @@ export default {
             (error) => {
               console.error(error);
               this.loading = false;
+              this.isValid = false;
               this.responseMessage = "Something went wrong.";
               this.responseMessageStatus = false;
               this.responseReady = true;

@@ -16,11 +16,27 @@
               <h5>Sign in to your account</h5>
             </v-card-title>
             <v-card-text>
-              <v-alert
-                v-if="verification_result"
-                color="success lighten-4"
-                icon="check"
-              >{{verification_message}}</v-alert>
+              <v-row align="center" justify="center">
+                <v-col>
+                  <v-slide-y-transition>
+                    <v-alert
+                      color="success lighten-4"
+                      icon="check"
+                      v-if="verification_result && !verification_result_hide"
+                    >{{verification_message}}</v-alert>
+                    <v-alert
+                      color="success lighten-4"
+                      icon="check"
+                      v-if="responseReady&&responseMessageStatus"
+                    >{{responseMessage}}</v-alert>
+                    <v-alert
+                      color="error lighten-4"
+                      icon="warning"
+                      v-if="responseReady&&!responseMessageStatus"
+                    >{{responseMessage}}</v-alert>
+                  </v-slide-y-transition>
+                </v-col>
+              </v-row>
               <v-form v-model="isValid" @keyup.native.enter="isValid && handleSubmit($event)">
                 <v-text-field
                   prepend-icon="mdi-email"
@@ -45,7 +61,7 @@
                   color="purple lightn-2"
                 >
                   <template v-slot:append>
-                    <v-btn icon @click="showPassword=!showPassword" tabindex="-1">
+                    <v-btn icon @click="viewPassword" tabindex="-1" :disabled="showPassword">
                       <v-icon v-if="showPassword">mdi-eye</v-icon>
                       <v-icon v-if="!showPassword">mdi-eye-off</v-icon>
                     </v-btn>
@@ -61,9 +77,11 @@
                     :loading="loading"
                   >
                     Sign in
+                    <v-icon right>login</v-icon>
                     <template v-slot:loader>
+                      <span>Sign in</span>
                       <span class="custom-loader">
-                        <v-icon light class="white--text">cached</v-icon>
+                        <v-icon light color="white" right>autorenew</v-icon>
                       </span>
                     </template>
                   </v-btn>
@@ -101,6 +119,10 @@ export default {
       email: "",
       password: "",
       errors: [],
+      responseMessage: "",
+      responseMessageStatus: false,
+      responseReady: false,
+      verification_result_hide: false,
       emailRules: [
         (v) => !!v || "Email is required",
         (v) =>
@@ -134,14 +156,21 @@ export default {
     },
     handleSubmit(e) {
       e.preventDefault();
-
+      this.verification_result_hide = true;
+      this.$emit("verification_result_hide");
+      this.responseReady = false;
+      this.responseMessageStatus = false;
+      this.responseMessage = "";
       let email = this.email;
       let password = this.password;
       this.loading = true;
       axios.post("api/checkemail", { email }).then((response) => {
         console.log(JSON.stringify(response));
         if (response.data === "no") {
-          this.errors = ["Email not in use"];
+          // this.errors = ["Email not in use"];
+          this.responseMessage = "Email not in use.";
+          this.responseMessageStatus = false;
+          this.responseReady = true;
           this.loading = false;
           this.isValid = true;
           return;
@@ -171,8 +200,10 @@ export default {
           })
           .catch((error) => {
             this.loading = false;
-            this.isValid = true;
-            this.errors = ["Check your credentials"];
+            // this.isValid = false;
+            this.responseMessage = "Check your password";
+            this.responseMessageStatus = false;
+            this.responseReady = true;
           });
       });
     },
@@ -181,6 +212,10 @@ export default {
     },
     linkToRegister() {
       this.$emit("linkToRegister");
+    },
+    viewPassword() {
+      this.showPassword = true;
+      setTimeout(() => (this.showPassword = false), 1000);
     },
   },
 };

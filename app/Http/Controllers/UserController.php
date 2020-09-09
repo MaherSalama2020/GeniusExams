@@ -148,12 +148,12 @@ class UserController extends Controller
         } else {
             try {
                 if ((Hash::check(request('old_password'), Auth::user()->password)) == false) {
-                    $arr = array("status" => 400, "message" => "Check your old password.", "data" => array());
+                    $arr = array("status" => false, "message" => "Check your old password.", "data" => array());
                 } else if ((Hash::check(request('new_password'), Auth::user()->password)) == true) {
-                    $arr = array("status" => 400, "message" => "Please enter a password which is not similar then current password.", "data" => array());
+                    $arr = array("status" => false, "message" => "Please enter a password which is not similar then current password.", "data" => array());
                 } else {
                     User::where('id', $userid)->update(['password' => Hash::make($input['new_password'])]);
-                    $arr = array("status" => 200, "message" => "Password updated successfully.", "data" => array());
+                    $arr = array("status" => true, "message" => "Password updated successfully.", "data" => array());
                 }
             } catch (\Exception $ex) {
                 if (isset($ex->errorInfo[2])) {
