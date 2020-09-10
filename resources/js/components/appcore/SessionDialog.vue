@@ -6,6 +6,16 @@
       hide-overlay
       transition="dialog-bottom-transition"
     >
+      <v-layout row justify-center>
+        <v-dialog v-model="spinner" hide-overlay persistent width="300">
+          <v-card color="orange" dark>
+            <v-card-text>
+              Processing
+              <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </v-layout>
       <v-snackbar v-model="snackbar">
         Marked Question, you need to select the question number which you want to review
         <template
@@ -534,6 +544,7 @@ export default {
       disablePagination: false,
       result: 0,
       submitLoader: false,
+      spinner: false,
     };
   },
   components: {
@@ -826,7 +837,7 @@ export default {
       if (this.confirmdialog) this.confirmdialog = false;
       this.submit();
       this.showTimeUpDialog = false;
-      // this.resetExam();
+      this.resetExam();
       // this.closeSessionDialog();
     },
     showSubmitDialog() {
@@ -855,6 +866,7 @@ export default {
       this.$emit("closeSessionDialog");
     },
     submit() {
+      this.spinner = true;
       this.submitLoader = true;
       this.alertSubmitDialog = false;
       let user_id = this.user_id;
@@ -872,6 +884,7 @@ export default {
           axios
             .post("/api/answers/", { answers, session_id })
             .then((res) => {
+              this.spinner = false;
               this.submitLoader = false;
               this.alertSubmitDialog = false;
               this.alertResultDialog = true;
@@ -879,12 +892,14 @@ export default {
             })
             .catch((error) => {
               console.log(error);
+              this.spinner = false;
               this.submitLoader = false;
             });
         })
         .catch((error) => {
           console.log(error);
           this.submitLoader = false;
+          this.spinner = false;
         });
     },
     // preview() {

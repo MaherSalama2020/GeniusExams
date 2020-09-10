@@ -30,50 +30,52 @@
           <v-slide-item v-for="exam in exams " :key="exam.id" v-slot:default="{ active, toggle}">
             <v-col>
               <v-row class="mb-0" no-gutters>
-                <v-card
-                  :color="active ? 'orange lighten-5' : 'white'"
-                  rounded
-                  class="ma-1"
-                  height="175"
-                  width="300"
-                  @click="toggle"
-                >
-                  <v-card-title>
-                    <v-chip :color="getTypeColor(exam.type)" dark>{{ exam.type}}</v-chip>
-                    <v-chip
-                      color="orange"
-                      dark
-                      v-if="exam.passing_rate"
-                      class="ml-1"
-                    >Passing rate: {{ exam.passing_rate}}%</v-chip>
-                  </v-card-title>
-                  <!-- <v-card-text v-if="active" class="white--text align-end textover">{{exam.name}}</v-card-text> -->
-                  <v-card-text class="textover">{{exam.name}}</v-card-text>
-                  <!-- <v-card-subtitle
+                <transition appear name="slide-in">
+                  <v-card
+                    :color="active ? 'orange lighten-5' : 'white'"
+                    rounded
+                    class="ma-1"
+                    height="175"
+                    width="300"
+                    @click="toggle"
+                  >
+                    <v-card-title>
+                      <v-chip :color="getTypeColor(exam.type)" dark>{{ exam.type}}</v-chip>
+                      <v-chip
+                        color="orange"
+                        dark
+                        v-if="exam.passing_rate"
+                        class="ml-1"
+                      >Passing rate: {{ exam.passing_rate}}%</v-chip>
+                    </v-card-title>
+                    <!-- <v-card-text v-if="active" class="white--text align-end textover">{{exam.name}}</v-card-text> -->
+                    <v-card-text class="textover">{{exam.name}}</v-card-text>
+                    <!-- <v-card-subtitle
                     v-if="active"
                     class="white--text align-end"
-                  >Passing rate: {{exam.passing_rate}} %</v-card-subtitle>-->
+                    >Passing rate: {{exam.passing_rate}} %</v-card-subtitle>-->
 
-                  <v-card-actions class="mb-0 mt-0">
-                    <v-spacer />
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          fab
-                          small
-                          :color="active ? 'orange' : 'orange'"
-                          dark
-                          @click="ExamSelected(exam.id)"
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon class="arrow">double_arrow</v-icon>
-                        </v-btn>
-                      </template>
-                      Start Session
-                    </v-tooltip>
-                  </v-card-actions>
-                </v-card>
+                    <v-card-actions class="mb-0 mt-0">
+                      <v-spacer />
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            fab
+                            small
+                            :color="active ? 'orange' : 'orange'"
+                            dark
+                            @click="ExamSelected(exam.id)"
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            <v-icon class="arrow">double_arrow</v-icon>
+                          </v-btn>
+                        </template>
+                        Start Session
+                      </v-tooltip>
+                    </v-card-actions>
+                  </v-card>
+                </transition>
               </v-row>
             </v-col>
           </v-slide-item>
@@ -326,5 +328,25 @@ export default {
     rgba(0, 0, 0, 0.75),
     rgba(0, 0, 0, 0)
   );
+}
+/*
+    This class would be automatically added to the element 
+    before the element is inserted and removed one frame 
+    after the element is inserted. 
+    Basically it’s the initial state from the element.
+  */
+.slide-in-enter {
+  opacity: 0;
+  transform: scale(0.5);
+}
+/*
+    This class can be used to define the duration, 
+    delay and easing curve for the entering transition.
+    --i is the CSS variable from the Card Component (current index)
+    With this you have a staggered delay.
+  */
+.slide-in-enter-active {
+  transition: all 0.4s ease;
+  transition-delay: calc(0.1s * var(--i));
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <PageLoader />
     <Navbar id="navbar" />
     <!-- <Services id="services" /> -->
 
@@ -52,7 +53,7 @@
 
 <script>
 import Navbar from "../components/applayout/Navbar";
-
+import PageLoader from "../components/appcore/PageLoader";
 export default {
   data() {
     return {
@@ -63,6 +64,7 @@ export default {
   },
   components: {
     Navbar,
+    PageLoader,
   },
   mounted() {
     this.setDefaults();

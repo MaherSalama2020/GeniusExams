@@ -271,21 +271,25 @@
         </v-container>
       </template>
     </v-app-bar>
-    <span v-show="showParentContent">
-      <v-btn
-        v-scroll="onScroll"
-        v-show="fab"
-        fab
-        dark
-        fixed
-        bottom
-        right
-        color="orange"
-        @click="toTop"
-      >
-        <v-icon large class="arrow">keyboard_arrow_up</v-icon>
-      </v-btn>
-    </span>
+    <v-row v-show="showParentContent">
+      <v-col>
+        <v-slide-y-reverse-transition>
+          <v-btn
+            v-scroll="onScroll"
+            v-show="fab"
+            fab
+            dark
+            fixed
+            bottom
+            right
+            color="orange"
+            @click="toTop"
+          >
+            <v-icon large class="arrow">keyboard_arrow_up</v-icon>
+          </v-btn>
+        </v-slide-y-reverse-transition>
+      </v-col>
+    </v-row>
     <v-navigation-drawer
       v-if="user_type == 1 && isLoggedIn"
       :clipped="true"
@@ -470,18 +474,20 @@
           ></component>
         </v-flex>
         <Services
+          v-scrollanimation
           v-show="showParentContent"
           class="myFont"
           id="tab_services"
           v-intersect="handleServicesIntersect"
         />
         <ContactUs
+          v-scrollanimation
           v-show="showParentContent"
           class="myFont"
           id="tab_contactus"
           v-intersect="handleContactUsIntersect"
         />
-        <Footer v-show="showParentContent" class="myFont" id="footer" />
+        <Footer v-scrollanimation v-show="showParentContent" class="myFont" id="footer" />
       </v-app>
     </v-main>
   </div>
@@ -509,9 +515,12 @@ import Confirmation from "../../views/Confirmation";
 import StartSession from "../../views/StartSession";
 import * as easings from "vuetify/es5/services/goto/easing-patterns";
 
+import ScrollAnimation from "../../directives/scrollanimation";
+
 import Services from "./Services";
 import ContactUs from "./ContactUs";
 import Footer from "./Footer";
+Vue.directive("scrollanimation", ScrollAnimation);
 
 export default {
   data() {
@@ -1014,5 +1023,21 @@ a.v-tab {
   100% {
     transform: translate(0, -4px);
   }
+}
+/*
+    This classes are for the directive. 
+    For each element observed by our directive, the before-enter class is added.
+  */
+.before-enter {
+  opacity: 0;
+  transform: translateY(100px);
+  transition: all 1s cubic-bezier(0.41, 0.01, 0.57, 1.61);
+}
+/* 
+    If the element intersects with the viewport, the before-enter class is added.
+  */
+.enter {
+  opacity: 1;
+  transform: translateY(0px);
 }
 </style>
