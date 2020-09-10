@@ -3,9 +3,9 @@
     <v-app-bar color="orange" dark fixed hide-on-scroll shaped v-show="showParentContent">
       <v-app-bar-nav-icon x-large @click="drawer = !drawer" v-if="isLoggedIn"></v-app-bar-nav-icon>
       <v-spacer />
-      <v-toolbar-title class="mr-6">
+      <v-toolbar-title class="ml-6 mt-6">
         <span @click="setComponent('home')" class="pointer">
-          <v-img class="mx-2" :src="'/images/logo.png'" max-height="40" max-width="40" contain></v-img>
+          <v-img class="mx-2" :src="'/images/logo.png'" max-width="75" contain></v-img>
         </span>
       </v-toolbar-title>
       <v-container>
@@ -299,19 +299,20 @@
       mini-variant
       expand-on-hover
       width="250"
-      style="background-color:#e7e8ea"
+      style="z-index:1000"
       v-model="drawer"
       app
       color="orange"
       dark
       flat
       v-show="showParentContent"
+      class="drawer"
     >
-      <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
+      <v-img :aspect-ratio="16/9" src="images/header.jpg">
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
           <v-col>
-            <div class="subheading">maher Salama</div>
-            <div class="body-1">mahern@gmail.com</div>
+            <div class="subheading">{{user.name}}</div>
+            <div class="body-1">{{user.email}}</div>
           </v-col>
         </v-row>
       </v-img>
@@ -408,12 +409,13 @@
       dark
       flat
       v-show="showParentContent"
+      class="drawer"
     >
-      <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
+      <v-img :aspect-ratio="16/9" src="images/header.jpg">
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
           <v-col>
-            <div class="subheading">Jonathan Lee</div>
-            <div class="body-1">heyfromjonathan@gmail.com</div>
+            <div class="subheading">{{user.name}}</div>
+            <div class="body-1">{{user.email}}</div>
           </v-col>
         </v-row>
       </v-img>
@@ -536,6 +538,7 @@ export default {
       user: null,
       activeComponent: null,
       name: null,
+      email: null,
       user_type: -1,
       isLoggedIn: localStorage.getItem("genius.jwt") != null,
       verification_message: "",
@@ -689,7 +692,9 @@ export default {
     setDefaults() {
       if (this.isLoggedIn) {
         let user = JSON.parse(localStorage.getItem("genius.user"));
+        this.user = user;
         this.name = user.name;
+        this.email = user.email;
         this.user_type = user.is_admin;
       }
     },
@@ -1039,5 +1044,8 @@ a.v-tab {
 .enter {
   opacity: 1;
   transform: translateY(0px);
+}
+.drawer {
+  /* z-index: 1000; */
 }
 </style>

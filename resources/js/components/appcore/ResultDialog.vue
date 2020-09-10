@@ -24,9 +24,9 @@
         </v-card-title>
         <v-card-text>Your result: {{result.toFixed(2)}}%</v-card-text>
         <v-card-text v-if="text1">{{text1}}</v-card-text>
-        <v-card-text v-if="text2">{{text2}}</v-card-text>
-        <v-card-text v-if="text3">{{text3}}</v-card-text>
-        <v-card-text v-if="text4">{{text4}}</v-card-text>
+        <v-card-text v-if="text2 && type!='Exam'">{{text2}}</v-card-text>
+        <v-card-text v-if="text3 && type!='Exam'">{{text3}}</v-card-text>
+        <v-card-text v-if="text4 && type!='Exam'">{{text4}}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="orange white--text" @click="closeResultDialog">OK</v-btn>

@@ -68,7 +68,7 @@
             <!-- <p>Marked Answers:{{ markedAnswers || 'null' }}</p> -->
             <!-- <p>Marked Diffrences Steps:{{ markedDifferencesSteps || 'null' }}</p> -->
             <!-- <p>Marked Steps:{{ markedSteps || 'null' }}</p> -->
-            <!-- <p>Answers:{{ answers || 'null' }}</p> -->
+            <p>Answers:{{ answers || 'null' }}</p>
             <!-- <v-stepper-header>
               <template v-for="(question, index) in examQuestions">
                 <v-stepper-step
@@ -171,7 +171,7 @@
                                     v-if="hover && option.image"
                                     class="popup"
                                     max-width="700"
-                                    color="orange"
+                                    color="white"
                                   >
                                     <v-card-text>
                                       <div>
@@ -592,6 +592,21 @@ export default {
       this.user_type = user.is_admin;
     },
     nextStep(n) {
+      //if current Answer not answer we will insert an empty object
+      if (!this.answers[this.currentStep - 1]) {
+        let answer = {
+          currentStep: this.currentStep,
+          question_id: this.currentQuestionID,
+          user_id: this.user_id,
+          certificate_id: this.certificate_id,
+          exam_id: this.exam_id,
+          selectedOption: {},
+          alertShowMark: this.alertShowMark,
+          alertShowCorrectAnswer: this.alertShowCorrectAnswer,
+        };
+        this.answers[this.currentStep - 1] = answer;
+      }
+      ///////////////////
       this.arrivetostart = false;
       if (!this.ViewMarkedAnswers) {
         this.currentStep = n + 1;
@@ -614,6 +629,21 @@ export default {
       this.resetQuestion();
     },
     prevStep(n) {
+      //if current Answer not answer we will insert an empty object
+      if (!this.answers[this.currentStep - 1]) {
+        let answer = {
+          currentStep: this.currentStep,
+          question_id: this.currentQuestionID,
+          user_id: this.user_id,
+          certificate_id: this.certificate_id,
+          exam_id: this.exam_id,
+          selectedOption: {},
+          alertShowMark: this.alertShowMark,
+          alertShowCorrectAnswer: this.alertShowCorrectAnswer,
+        };
+        this.answers[this.currentStep - 1] = answer;
+      }
+      ///////////////////
       this.arrivetoend = false;
       if (!this.ViewMarkedAnswers) {
         this.currentStep = n - 1;
@@ -750,6 +780,7 @@ export default {
       this.disablePagination = false;
       this.markedAnswers = [];
       this.answers = [];
+      this.clicksAfterRewind = 0;
       // this.$emit("closeSessionDialog");
       this.submitLoader = false;
     },
@@ -763,6 +794,7 @@ export default {
         exam_id: this.exam_id,
         selectedOption: this.selectedOption,
         alertShowMark: this.alertShowMark,
+        alertShowCorrectAnswer: this.alertShowCorrectAnswer,
       };
       this.answers[this.currentStep - 1] = answer;
       let correct = 0;
@@ -888,7 +920,7 @@ export default {
               this.submitLoader = false;
               this.alertSubmitDialog = false;
               this.alertResultDialog = true;
-              // this.resetExam();
+              this.resetExam();
             })
             .catch((error) => {
               console.log(error);
@@ -908,23 +940,18 @@ export default {
     viewMarkedAnswers() {
       this.ViewMarkedAnswers = !this.ViewMarkedAnswers;
       this.disablePagination = this.ViewMarkedAnswers;
-      // alert(this.ViewMarkedAnswers);
       if (this.ViewMarkedAnswers) {
         this.markedAnswers = this.answers.filter(function (answer) {
           return answer.alertShowMark == true;
         });
         this.markedDifferencesSteps = this.markedAnswers.map(
           (currentAnswer, index, array) => {
-            // alert(index);
-            // alert(JSON.stringify(array[index]));
             if (typeof array[index + 1] != "undefined")
               return array[index + 1].currentStep - array[index].currentStep;
           }
         );
         //to remove null entry
         this.markedDifferencesSteps.pop();
-        // alert(JSON.stringify(this.markedDifferencesSteps));
-        // alert(this.markedAnswers[0].currentStep);
         this.currentStep = this.markedAnswers[0].currentStep;
         this.alertShowMark = this.markedAnswers[0].alertShowMark;
         this.alertShowCorrectAnswer = this.markedAnswers[0].alertShowCorrectAnswer;
@@ -940,26 +967,16 @@ export default {
           this.arrivetostart = true;
         }
       } else {
-        this.alertShowMark = false;
-        this.currentStep = 1;
-        if (this.answers[0]) {
-          this.alertShowMark = this.answers[0].alertShowMark;
-          this.selectedOption = this.answers[0].selectedOption;
-          this.alertShowCorrectAnswer = this.answers[0].alertShowCorrectAnswer;
-          if (this.alertShowCorrectAnswer) this.showCorrectAnswer();
-          else this.hideCorrectAnswer();
-        } else {
-          this.alertShowMark = false;
-          this.selectedOption = null;
-          this.alertShowCorrectAnswer = false;
-        }
-        // this.markedAnswers = [];
-        // this.answers.forEach((answer) => {
-        //   answer.alertShowMark = false;
-        // });
-        this.currentQuestionID = this.examQuestions[0].id;
+        this.currentStep = this.answers[0].currentStep;
+        this.alertShowMark = this.answers[0].alertShowMark;
+        this.alertShowCorrectAnswer = this.answers[0].alertShowCorrectAnswer;
+        this.selectedOption = this.answers[0].selectedOption;
+        this.currentQuestionID = this.answers[0].question_id;
+        if (this.alertShowCorrectAnswer) this.showCorrectAnswer();
+        else this.hideCorrectAnswer();
         this.arrivetostart = true;
         this.arrivetoend = false;
+        this.markedDifferencesSteps = [];
         this.clicksAfterRewind = 0;
       }
     },
@@ -1032,7 +1049,7 @@ export default {
   },
 };
 </script>
-<style >
+<style scoped>
 .close:hover {
   color: white;
   cursor: pointer;
@@ -1052,8 +1069,8 @@ export default {
 .desc {
   padding: 15px;
   text-align: center;
-  background-color: orange;
-  color: white;
+  background-color: white;
+  color: black;
 }
 .custom-loader {
   animation: loader 1s infinite;
