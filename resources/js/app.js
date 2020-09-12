@@ -13,6 +13,7 @@ import SingleCertificate from './views/SingleCertificate'
 import Checkout from './views/Checkout'
 import Confirmation from './views/Confirmation'
 import UserBoard from './views/UserBoard'
+import Cart from './views/Cart'
 import StartSession from './views/StartSession'
 import Admin from './views/Admin'
 import $ from 'jquery'
@@ -20,6 +21,7 @@ import Vuetify from "vuetify";
 import 'vuetify/dist/vuetify.min.css'
 import ForgotPassword from './views/ForgotPassword'
 import ResetPasswordForm from './views/ResetPasswordForm'
+import store from './store';
 Vue.use(Vuetify);
 
 const router = new VueRouter({
@@ -42,6 +44,11 @@ const router = new VueRouter({
             path: '/register',
             name: 'register',
             component: Register
+        },
+        {
+            path: '/cart',
+            name: 'cart',
+            component: Cart,
         },
         {
             path: '/certificates/:id',
@@ -68,6 +75,7 @@ const router = new VueRouter({
                 is_user: true
             }
         },
+
         {
             path: '/startsession/:id',
             name: 'start-session',
@@ -156,6 +164,10 @@ router.beforeEach((to, from, next) => {
 
 const app = new Vue({
     el: '#app',
+    store,
+    beforeCreate() {
+        this.$store.commit('initialiseStore');
+    },
     components: { App },
     router,
     vuetify: new Vuetify({
@@ -180,3 +192,8 @@ const app = new Vue({
 //         close: 'far fa-times-circle'
 //     }
 // });
+// Subscribe to store updates
+store.subscribe((mutation, state) => {
+    // Store the state object as a JSON string
+    localStorage.setItem('store', JSON.stringify(state));
+});

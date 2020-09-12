@@ -21,4 +21,11 @@ class Certificate extends Model
     public function exams(){
         return $this->hasMany(Exam::class);
     }
+    public function presentPrice(){
+        return money_format('$%i', $this->price/100);
+    }
+    public function scopeMightAlsoLike($query)
+    {
+        return $query->inRandomOrder()->take(4);
+    }
 }

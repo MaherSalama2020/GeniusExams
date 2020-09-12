@@ -31,7 +31,7 @@
               </v-expand-transition>
             </v-img>
             <v-card-text class="pt-6" style="position: relative;">
-              <!-- <v-btn
+              <v-btn
                 absolute
                 color="orange"
                 class="white--text"
@@ -39,11 +39,24 @@
                 large
                 right
                 top
-                @click="placeOrder"
-                v-if="isLoggedIn && canOrder=='yes'"
+                v-if="inCart.find((item)=> item== certificate.id)>-1?false:true"
+                @click="addToCart(certificate.id)"
               >
-                <v-icon>mdi-cart</v-icon>
-              </v-btn>-->
+                <v-icon>add_shopping_cart</v-icon>
+              </v-btn>
+              <v-btn
+                absolute
+                color="orange"
+                class="white--text"
+                fab
+                large
+                right
+                top
+                v-if="inCart.find((item)=> item== certificate.id)>-1?true:false"
+                @click="removeFromCart(certificate.id)"
+              >
+                <v-icon>remove_shopping_cart</v-icon>
+              </v-btn>
               <h3 class="font-weight-light orange--text mb-2">{{certificate.name}}</h3>
               <v-row align="center" class="mx-0">
                 <v-rating :value="4.5" color="amber" dense half-increments readonly size="14"></v-rating>
@@ -115,6 +128,14 @@ export default {
       spinner: false,
     };
   },
+  computed: {
+    inCart() {
+      return this.$store.getters.inCart;
+    },
+    numInCart() {
+      return this.inCart.length;
+    },
+  },
   components: {},
   mounted() {
     this.isLoggedIn = localStorage.getItem("genius.jwt") != null;
@@ -135,7 +156,7 @@ export default {
           } else {
             this.canOrder = "no";
           }
-          this.spinner = false;
+          // this.spinner = false;
         });
     }
   },
@@ -153,6 +174,12 @@ export default {
     }
   },
   methods: {
+    addToCart(certificate_id) {
+      this.$store.dispatch("addToCart", certificate_id);
+    },
+    removeFromCart(certificate_id) {
+      this.$store.dispatch("removeFromCart", certificate_id);
+    },
     setLoaded: function (resp) {
       let description = this.certificate.description;
       let price = this.certificate.price;

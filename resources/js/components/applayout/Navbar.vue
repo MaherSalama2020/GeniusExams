@@ -67,6 +67,51 @@
         </v-row>
       </v-container>
       <v-spacer />
+      <!-- Shopping Cart -->
+      <v-badge color="green" :content="numInCart" v-if="numInCart >0 " overlap class="ml-4 mr-4">
+        <v-menu
+          :nudge-width="200"
+          offset-y
+          nudge-left
+          open-on-hover
+          rounded
+          transition="slide-y-transition"
+          bottom
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon dark medium v-bind="attrs" v-on="on">shopping_cart</v-icon>
+          </template>
+          <v-card>
+            <v-list dense v-if="shoppingcart">
+              <v-list-item-group color="primary" active-class="pink--text ">
+                <v-list-item v-for="(item) in shoppingcart" :key="item.id+'-certificatesNavBar'">
+                  <v-list-item-avatar tile>
+                    <v-img :src="item.image" alt="item.name" />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{item.name}}</v-list-item-title>
+                    <v-list-item-subtitle>{{item.price | dollars}}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider class="mt-1 mb-1" />
+                <v-list-item inactive :selectable="false">
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      <p class="font-weight-black ma-0 pa-0">Total{{total | dollars}}</p>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+              <v-divider class="mt-1 mb-1" />
+              <v-row class="ml-2 mr-2 mt-2">
+                <v-btn color="orange white--text" block @click="setComponent('cart')">Go to cart</v-btn>
+              </v-row>
+            </v-list>
+          </v-card>
+        </v-menu>
+      </v-badge>
+
+      <!-- Profile -->
       <v-menu
         :nudge-width="200"
         offset-y
@@ -75,15 +120,20 @@
         rounded
         transition="slide-y-transition"
         bottom
+        class="mr-4 ml-4"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-icon light medium dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+          <!-- <v-avatar color="purple" v-bind="attrs" v-on="on" size="32px">
+            <span class="white--text font-weight-bold">{{abreviatedName}}</span>
+            <v-badge color="error" v-if="numInCart >0" dot></v-badge>
+          </v-avatar>-->
         </template>
         <v-card>
           <v-list dense v-if="!isLoggedIn">
             <v-subheader>Account</v-subheader>
-            <v-list-item-group color="indigo" active-class="pink--text ">
-              <v-list-item @click="setComponent('login')">
+            <v-list-item-group color="indigo" active-class="pink--text " v-model="NotLoggedInMenu">
+              <v-list-item @click="setComponent('login')" value="NotLoggedInMenu_login">
                 <v-list-item-icon>
                   <v-icon>mdi-login</v-icon>
                 </v-list-item-icon>
@@ -92,7 +142,7 @@
                 </v-list-item-content>
               </v-list-item>
               <!-- <v-divider></v-divider> -->
-              <v-list-item @click="setComponent('register')">
+              <v-list-item @click="setComponent('register')" value="NotLoggedInMenu_register">
                 <v-list-item-icon>
                   <v-icon>mdi-account-plus</v-icon>
                 </v-list-item-icon>
@@ -104,8 +154,33 @@
           </v-list>
           <v-list dense v-else>
             <v-subheader>Account</v-subheader>
-            <v-list-item-group color="primary" active-class="pink--text ">
-              <v-list-item v-if="user_type == 0 && isLoggedIn" @click="setComponent('userboard')">
+            <v-list-item-group color="primary" active-class="pink--text " v-model="LoggedInMenu">
+              <v-list-item
+                v-if="user_type == 0 && isLoggedIn"
+                @click="setComponent('userboard')"
+                value="LoggedInMenu_userboard"
+              >
+                <v-list-item-avatar>
+                  <v-avatar color="purple" size="48px">
+                    <span class="white--text font-weight-bold">{{abreviatedName}}</span>
+                  </v-avatar>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>Hi, {{name}}</v-list-item-title>
+                  <v-list-item-subtitle>Genius Exams Website</v-list-item-subtitle>
+                </v-list-item-content>
+                <!-- <v-list-item-action>
+                  <v-btn :class="fav ? 'red--text' : ''" icon @click="fav = !fav">
+                    <v-icon>mdi-heart</v-icon>
+                  </v-btn>
+                </v-list-item-action>-->
+              </v-list-item>
+              <v-divider class="mt-1 mb-1" />
+              <v-list-item
+                v-if="user_type == 1 && isLoggedIn"
+                @click="setComponent('main')"
+                value="LoggedInMenu_main"
+              >
                 <v-list-item-avatar>
                   <v-img src="./images/logo.png" alt="Genius Exams" />
                 </v-list-item-avatar>
@@ -119,22 +194,80 @@
                   </v-btn>
                 </v-list-item-action>-->
               </v-list-item>
-              <v-list-item v-if="user_type == 1 && isLoggedIn" @click="setComponent('main')">
-                <v-list-item-avatar>
-                  <v-img src="./images/logo.png" alt="Genius Exams" />
-                </v-list-item-avatar>
+              <v-list-item
+                v-if="user_type == 0 && isLoggedIn"
+                @click="alertShoppingCartDialog "
+                value="LoggedInMenu_cart"
+              >
+                <v-list-item-icon>
+                  <v-icon color="error" v-if="numInCart>0">shopping_cart</v-icon>
+                  <v-icon v-else>shopping_cart</v-icon>
+                </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>Hi, {{name}}</v-list-item-title>
-                  <v-list-item-subtitle>Genius Exams Website</v-list-item-subtitle>
+                  <v-list-item-title>My cart</v-list-item-title>
                 </v-list-item-content>
-                <!-- <v-list-item-action>
-                  <v-btn :class="fav ? 'red--text' : ''" icon @click="fav = !fav">
-                    <v-icon>mdi-heart</v-icon>
-                  </v-btn>
-                </v-list-item-action>-->
+                <v-list-item-action>
+                  <v-badge
+                    color="error"
+                    :content="numInCart"
+                    v-if="numInCart >0 && isLoggedIn"
+                    overlap
+                    class="ml-4 mr-4"
+                  ></v-badge>
+                </v-list-item-action>
               </v-list-item>
-              <!-- <v-divider></v-divider> -->
-              <v-list-item @click="setComponent('changepassword'); ">
+
+              <v-list-item
+                v-if="user_type == 0 && isLoggedIn"
+                @click="alertWhishlistDialog "
+                value="LoggedInMenu_whish"
+              >
+                <v-list-item-icon>
+                  <v-icon color="error" v-if="numInWhishlist>0">mdi-heart</v-icon>
+                  <v-icon v-else>mdi-heart</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Whishlist</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-badge
+                    color="error"
+                    :content="numInWhishlist"
+                    v-if="numInWhishlist >0 && isLoggedIn"
+                    overlap
+                    class="ml-4 mr-4"
+                  ></v-badge>
+                </v-list-item-action>
+              </v-list-item>
+
+              <v-list-item
+                v-if="user_type == 0 && isLoggedIn"
+                @click="alertSavedlistDialog "
+                value="LoggedInMenu_saved"
+              >
+                <v-list-item-icon>
+                  <v-icon color="error" v-if="numInSavedlist>0">watch_later</v-icon>
+                  <v-icon v-else>watch_later</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Savedlist</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-badge
+                    color="error"
+                    :content="numInSavedlist"
+                    v-if="numInSavedlist >0 && isLoggedIn"
+                    overlap
+                    class="ml-4 mr-4"
+                  ></v-badge>
+                </v-list-item-action>
+              </v-list-item>
+              <v-divider class="mt-1 mb-1" v-if="user_type == 0 && isLoggedIn" />
+
+              <v-list-item
+                @click="setComponent('changepassword'); "
+                value="LoggedInMenu_changepassword"
+              >
                 <v-list-item-icon>
                   <v-icon>mdi-key-change</v-icon>
                 </v-list-item-icon>
@@ -143,7 +276,7 @@
                 </v-list-item-content>
               </v-list-item>
               <!-- <v-divider></v-divider> -->
-              <v-list-item @click="logout">
+              <v-list-item @click="logout" value="LoggedInMenu_logout">
                 <v-list-item-icon>
                   <v-icon>mdi-logout</v-icon>
                 </v-list-item-icon>
@@ -211,6 +344,11 @@
                   v-if="user_type == 0 && isLoggedIn"
                   key="userboard"
                 >Orders</v-tab>
+                <!-- <v-tab
+                  :href="`#tab_cart`"
+                  @click="setComponent('cart')"
+                  key="cart"
+                >Cart({{numInCart}})</v-tab>-->
                 <v-tab
                   :href="`#tab_main`"
                   @click="setComponent('main')"
@@ -438,6 +576,14 @@
               <v-list-item-title class="white--text">Orders</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item @click="setComponent('cart')" value="user_drawer_cart">
+            <v-list-item-action>
+              <v-icon class="white--text">mdi-cart</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="white--text">Cart</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <!-- <v-divider></v-divider> -->
         </v-list-item-group>
       </v-list>
@@ -456,6 +602,7 @@
             :verification_message="verification_message"
             :verification_result="verification_result"
             :isLoggedIn="isLoggedIn"
+            :certificates="certificates"
             @linkToHome="linkToHome"
             @linkToRegister="linkToRegister"
             @linkToLogin="linkToLogin"
@@ -490,6 +637,22 @@
           v-intersect="handleContactUsIntersect"
         />
         <Footer v-scrollanimation v-show="showParentContent" class="myFont" id="footer" />
+        <ShoppingCartDialog
+          :showShoppingCartDialog="showShoppingCartDialog"
+          @closeShoppingCartDialog="closeShoppingCartDialog"
+          @checkout="checkout"
+          :certificates="certificates"
+        />
+        <WhishlistDialog
+          :showWhishlistDialog="showWhishlistDialog"
+          @closeWhishlistDialog="closeWhishlistDialog"
+          :certificates="certificates"
+        />
+        <SavedlistDialog
+          :showSavedlistDialog="showSavedlistDialog"
+          @closeSavedlistDialog="closeSavedlistDialog"
+          :certificates="certificates"
+        />
       </v-app>
     </v-main>
   </div>
@@ -511,6 +674,10 @@ import ForgotPassword from "../../views/ForgotPassword";
 import ResetPasswordForm from "../../views/ResetPasswordForm";
 import Admin from "../../views/Admin";
 import UserBoard from "../../views/UserBoard";
+import ShoppingCartDialog from "../appcore/ShoppingCartDialog";
+import Cart from "../../views/Cart";
+import WhishlistDialog from "../appcore/WhishlistDialog";
+import SavedlistDialog from "../appcore/SavedlistDialog";
 import Home from "../../views/Home";
 import SingleCertificate from "../../views/SingleCertificate";
 import Confirmation from "../../views/Confirmation";
@@ -525,8 +692,16 @@ import Footer from "./Footer";
 Vue.directive("scrollanimation", ScrollAnimation);
 
 export default {
+  filters: {
+    dollars: (num) => `$${num}`,
+  },
   data() {
     return {
+      abreviatedName: "",
+      showShoppingCartDialog: false,
+      showWhishlistDialog: false,
+      showSavedlistDialog: false,
+      certificates: [],
       showParentContent: true,
       fav: false,
       fab: false,
@@ -543,6 +718,8 @@ export default {
       isLoggedIn: localStorage.getItem("genius.jwt") != null,
       verification_message: "",
       verification_result: false,
+      NotLoggedInMenu: "",
+      LoggedInMenu: "",
       // links: [
       //   { icon: "home", text: "Home", route: "/" },
       //   { icon: "dashboard", text: "Dashboard", route: "/dashboard" },
@@ -565,15 +742,61 @@ export default {
     Services,
     ContactUs,
     Footer,
+    Cart,
+    ShoppingCartDialog,
+    WhishlistDialog,
+    SavedlistDialog,
+  },
+  computed: {
+    inCart() {
+      return this.$store.getters.inCart;
+    },
+    numInCart() {
+      return this.inCart.length;
+    },
+    inWhishlist() {
+      return this.$store.getters.inWhishlist;
+    },
+    numInWhishlist() {
+      return this.inWhishlist.length;
+    },
+    inSavedlist() {
+      return this.$store.getters.inSavedlist;
+    },
+    numInSavedlist() {
+      return this.inSavedlist.length;
+    },
+    total() {
+      return this.shoppingcart.reduce((acc, cur) => acc + cur.price, 0);
+    },
+    /* snip */
+    shoppingcart() {
+      return this.$store.getters.inCart.map((cartItem) => {
+        return this.certificates.find((certificate) => {
+          return cartItem === certificate.id;
+        });
+      });
+    },
   },
   mounted() {
+    this.mounted = true;
     this.setDefaults();
   },
   beforeMount() {
+    axios
+      .get("/api/certificates")
+      .then((response) => {
+        this.certificates = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     // alert(JSON.stringify(this.$route.query.token));
     if (this.$route.query.token) {
       this.showParentContent = false;
       this.active_tab = "tab_home";
+      this.LoggedInMenu = "";
+      this.NotLoggedInMenu = "";
       this.activeComponent = ResetPasswordForm;
       this.$router.push({
         name: "reset-password",
@@ -589,6 +812,8 @@ export default {
           this.verification_result = true;
         });
       this.active_tab = "tab_home";
+      this.LoggedInMenu = "";
+      this.NotLoggedInMenu = "";
       this.activeComponent = Login;
       this.$router.push({
         name: "verify",
@@ -606,6 +831,8 @@ export default {
     loginForgotPassword() {
       this.showParentContent = false;
       this.active_tab = "tab_home";
+      this.NotLoggedInMenu = "";
+      this.LoggedInMenu = "";
       this.activeComponent = ForgotPassword;
       this.$router.push({
         name: "reset-password",
@@ -614,6 +841,8 @@ export default {
     PasswordWasReset() {
       this.showParentContent = false;
       this.active_tab = "tab_home";
+      this.NotLoggedInMenu = "";
+      this.LoggedInMenu = "";
       this.activeComponent = Login;
       this.$router.push({
         name: "login",
@@ -630,11 +859,15 @@ export default {
     passwordChanged() {
       this.showParentContent = true;
       this.active_tab = "tab_home";
+      this.NotLoggedInMenu = "";
+      this.LoggedInMenu = "";
       this.activeComponent = Home;
     },
     showSingleCertificate(id) {
       this.showParentContent = true;
       this.active_tab = "tab_requests";
+      this.NotLoggedInMenu = "";
+      this.LoggedInMenu = "";
       this.active_user_drawer = "user_drawer_requests";
       this.activeComponent = SingleCertificate;
       this.$router.push({
@@ -645,6 +878,8 @@ export default {
     showConfirmation() {
       this.showParentContent = true;
       this.active_tab = "tab_requests";
+      this.NotLoggedInMenu = "";
+      this.LoggedInMenu = "";
       this.active_user_drawer = "user_drawer_requests";
       this.activeComponent = Confirmation;
       this.$router.push({
@@ -654,6 +889,8 @@ export default {
     StartSession(certificate_id) {
       this.showParentContent = true;
       this.active_tab = "tab_requests";
+      this.LoggedInMenu = "";
+      this.NotLoggedInMenu = "";
       this.activeComponent = StartSession;
       this.$router.push({
         name: "start-session",
@@ -663,6 +900,8 @@ export default {
     showExams() {
       this.showParentContent = true;
       this.active_tab = "tab_requests";
+      this.LoggedInMenu = "";
+      this.NotLoggedInMenu = "";
       this.activeComponent = UserBoard;
       this.$router.push({ name: "userboard" }).catch((err) => {});
     },
@@ -670,6 +909,8 @@ export default {
       // alert(next);
       this.showParentContent = false;
       this.active_tab = "tab_home";
+      this.LoggedInMenu = "";
+      this.NotLoggedInMenu = "";
       this.activeComponent = Login;
       this.$router
         .push({
@@ -681,6 +922,8 @@ export default {
     enrollRegister(next) {
       this.showParentContent = false;
       this.active_tab = "tab_home";
+      this.NotLoggedInMenu = "";
+      this.LoggedInMenu = "";
       this.activeComponent = Register;
       this.$router
         .push({
@@ -696,10 +939,18 @@ export default {
         this.name = user.name;
         this.email = user.email;
         this.user_type = user.is_admin;
+        let nameParts = this.user.name.split(" ");
+        let f = "";
+        let l = "";
+        f = nameParts[0][0];
+        if (nameParts[1]) l = nameParts[1][0];
+        this.abreviatedName = f.toUpperCase() + l.toUpperCase();
       }
     },
     change() {
       this.isLoggedIn = localStorage.getItem("genius.jwt") != null;
+      this.NotLoggedInMenu = "";
+      this.LoggedInMenu = "";
       this.setDefaults();
     },
     hasNext(url) {
@@ -711,7 +962,9 @@ export default {
       if (page === "certificates") {
         this.showParentContent = true;
         this.active_tab = "tab_requests";
+        this.LoggedInMenu = "LoggedInMenu_userboard";
         this.activeComponent = SingleCertificate;
+        this.NotLoggedInMenu = "";
         this.$router.push({
           name: "single-certificates",
           params: { id: id },
@@ -722,12 +975,16 @@ export default {
       if (this.user_type == 1) {
         this.showParentContent = true;
         this.active_tab = "tab_main";
+        this.NotLoggedInMenu = "";
+        this.LoggedInMenu = "LoggedInMenu_main";
         this.active_admin_drawer = "admin_drawer_main";
         this.activeComponent = Main;
       } else if (this.user_type == 0) {
         this.showParentContent = true;
         this.active_tab = "tab_requests";
-        this.active_user_drawer = "user_drawer_requests";
+        this.LoggedInMenu = "LoggedInMenu_userboard";
+        this.NotLoggedInMenu = "";
+        this.active_user_drawer = 0;
         this.activeComponent = UserBoard;
       }
     },
@@ -738,6 +995,8 @@ export default {
       this.user_type = -1;
       this.change();
       this.active_tab = "tab_home";
+      this.NotLoggedInMenu = "";
+      this.LoggedInMenu = "";
       this.activeComponent = Home;
       this.$router.push("/").catch((err) => {});
     },
@@ -747,6 +1006,8 @@ export default {
           case "main":
             this.showParentContent = true;
             this.active_tab = "tab_main";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "LoggedInMenu_main";
             this.active_admin_drawer = "admin_drawer_main";
             this.activeComponent = Main;
             this.$router.push({
@@ -757,6 +1018,8 @@ export default {
           case "home":
             this.showParentContent = true;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_admin_drawer = "admin_drawer_home";
             this.activeComponent = Home;
             this.$router.push({ name: "home" }).catch((err) => {});
@@ -768,6 +1031,8 @@ export default {
           case "userboard":
             this.showParentContent = true;
             this.active_tab = "tab_requests";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "LoggedInMenu_userboard";
             this.active_admin_drawer = "admin_drawer_requests";
             this.activeComponent = UserBoard;
             this.$router.push({ name: "userboard" }).catch((err) => {});
@@ -775,6 +1040,8 @@ export default {
           case "register":
             this.showParentContent = false;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_admin_drawer = "admin_drawer_home";
             this.activeComponent = Register;
             this.$router.push({ name: "register" }).catch((err) => {});
@@ -782,6 +1049,8 @@ export default {
           case "login":
             this.showParentContent = false;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_admin_drawer = "admin_drawer_home";
             this.activeComponent = Login;
             this.$router.push({ name: "login" }).catch((err) => {});
@@ -789,6 +1058,8 @@ export default {
           case "users":
             this.showParentContent = true;
             this.active_tab = "tab_users";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_admin_drawer = "admin_drawer_users";
             this.activeComponent = Users;
             this.$router
@@ -798,6 +1069,8 @@ export default {
           case "sessions":
             this.showParentContent = true;
             this.active_tab = "tab_sessions";
+            this.LoggedInMenu = "";
+            this.NotLoggedInMenu = "";
             this.active_admin_drawer = "admin_drawer_sessions";
             this.activeComponent = Sessions;
             this.$router
@@ -807,6 +1080,8 @@ export default {
           case "certificates":
             this.showParentContent = true;
             this.active_tab = "tab_certificates";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_admin_drawer = "admin_drawer_certificates";
             this.activeComponent = Certificates;
             this.$router
@@ -819,6 +1094,8 @@ export default {
           case "orders":
             this.showParentContent = true;
             this.active_tab = "tab_orders";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_admin_drawer = "admin_drawer_requests";
             this.activeComponent = Orders;
             this.$router
@@ -831,6 +1108,8 @@ export default {
           case "exams":
             this.showParentContent = true;
             this.active_tab = "tab_exams";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_admin_drawer = "admin_drawer_exams";
             this.activeComponent = Exams;
             this.$router
@@ -843,6 +1122,8 @@ export default {
           case "questions":
             this.showParentContent = true;
             this.active_tab = "tab_questions";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_admin_drawer = "admin_drawer_questions";
             this.activeComponent = Questions;
             this.$router
@@ -855,6 +1136,8 @@ export default {
           case "changepassword":
             this.showParentContent = false;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "LoggedInMenu_changepassword";
             this.active_admin_drawer = "admin_drawer_home";
             this.activeComponent = ChangePassword;
             this.$router.push({ name: "changepassword" }).catch((err) => {});
@@ -862,6 +1145,8 @@ export default {
           default:
             this.showParentContent = true;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_admin_drawer = "admin_drawer_home";
             this.activeComponent = Home;
             this.$router.push({ name: "home" }).catch((err) => {});
@@ -872,6 +1157,8 @@ export default {
           case "home":
             this.showParentContent = true;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_user_drawer = "user_drawer_home";
             this.activeComponent = Home;
             this.$router.push({ name: "home" }).catch((err) => {});
@@ -879,13 +1166,26 @@ export default {
           case "userboard":
             this.showParentContent = true;
             this.active_tab = "tab_requests";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "LoggedInMenu_userboard";
             this.active_user_drawer = "user_drawer_requests";
             this.activeComponent = UserBoard;
             this.$router.push({ name: "userboard" }).catch((err) => {});
             break;
+          case "cart":
+            this.showParentContent = true;
+            this.active_tab = "tab_cart";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "LoggedInMenu_cart";
+            this.active_user_drawer = "user_drawer_cart";
+            this.activeComponent = Cart;
+            this.$router.push({ name: "cart" }).catch((err) => {});
+            break;
           case "register":
             this.showParentContent = false;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_user_drawer = "user_drawer_home";
             this.activeComponent = Register;
             this.$router.push({ name: "register" }).catch((err) => {});
@@ -893,6 +1193,8 @@ export default {
           case "login":
             this.showParentContent = false;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_user_drawer = "user_drawer_home";
             this.activeComponent = Login;
             this.$router.push({ name: "login" }).catch((err) => {});
@@ -900,6 +1202,8 @@ export default {
           case "changepassword":
             this.showParentContent = false;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "LoggedInMenu_changepassword";
             this.active_user_drawer = "user_drawer_home";
             this.activeComponent = ChangePassword;
             this.$router.push({ name: "changepassword" }).catch((err) => {});
@@ -907,6 +1211,8 @@ export default {
           default:
             this.showParentContent = true;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.active_user_drawer = "user_drawer_home";
             this.activeComponent = Home;
             this.$router.push({ name: "home" }).catch((err) => {});
@@ -917,18 +1223,24 @@ export default {
           case "home":
             this.showParentContent = true;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.activeComponent = Home;
             this.$router.push({ name: "home" }).catch((err) => {});
             break;
           case "register":
             this.showParentContent = false;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.activeComponent = Register;
             this.$router.push({ name: "register" }).catch((err) => {});
             break;
           case "login":
             this.showParentContent = false;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.activeComponent = Login;
             this.$router.push({ name: "login" }).catch((err) => {});
             break;
@@ -941,9 +1253,20 @@ export default {
           //     })
           //     .catch((err) => {});
           //   break;
+          case "cart":
+            this.showParentContent = true;
+            this.active_tab = "tab_cart";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
+            // this.active_user_drawer = "user_drawer_cart";
+            this.activeComponent = Cart;
+            this.$router.push({ name: "cart" }).catch((err) => {});
+            break;
           default:
             this.showParentContent = true;
             this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.LoggedInMenu = "";
             this.activeComponent = Home;
             this.$router.push({ name: "home" }).catch((err) => {});
             break;
@@ -972,15 +1295,39 @@ export default {
       this.setComponent("home");
     },
     linkToLogin() {
+      this.NotLoggedInMenu = "NotLoggedInMenu_login";
       this.setComponent("login");
     },
     linkToRegister() {
+      this.NotLoggedInMenu = "NotLoggedInMenu_register";
       this.setComponent("register");
     },
     verification_result_hide() {
       this.verification_message = "";
       this.verification_result = false;
     },
+    alertShoppingCartDialog() {
+      this.showShoppingCartDialog = true;
+    },
+    closeShoppingCartDialog() {
+      this.LoggedInMenu = "";
+      this.showShoppingCartDialog = false;
+    },
+    alertWhishlistDialog() {
+      this.showWhishlistDialog = true;
+    },
+    closeWhishlistDialog() {
+      this.LoggedInMenu = "";
+      this.showWhishlistDialog = false;
+    },
+    alertSavedlistDialog() {
+      this.showSavedlistDialog = true;
+    },
+    closeSavedlistDialog() {
+      this.LoggedInMenu = "";
+      this.showSavedlistDialog = false;
+    },
+    checkout() {},
   },
 };
 </script>

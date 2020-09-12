@@ -34,8 +34,11 @@ Route::post('/user/verify', 'UserController@verifyUser');
 Route::post('reset-password', 'Auth\AuthController@sendPasswordResetLink');
 // handle reset password form process
 Route::post('reset/password', 'Auth\AuthController@callResetPassword');
+Route::resource('/cart', 'CartController');
 
 Route::group(['middleware' => 'auth:api'], function(){
+    Route::post('/coupons', 'CouponController@store');
+    Route::delete('/coupons', 'CouponController@destroy');
     Route::post('change_password', 'UserController@change_password');
     Route::get('/users','UserController@index');
     Route::get('users/{user}','UserController@show');

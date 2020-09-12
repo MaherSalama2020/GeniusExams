@@ -162,7 +162,7 @@ export default {
         // console.log(this.orders);
       })
       .catch((error) => {
-        this.spinner = fasle;
+        this.spinner = false;
       });
   },
   methods: {
@@ -180,7 +180,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style >
 .small-text {
   font-size: 14px;
 }

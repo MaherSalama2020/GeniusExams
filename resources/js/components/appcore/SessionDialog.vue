@@ -1049,7 +1049,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style >
 .close:hover {
   color: white;
   cursor: pointer;

@@ -11,6 +11,14 @@
         </v-card>
       </v-dialog>
     </v-layout>
+    <!-- <v-row>
+      <v-spacer />
+      <v-btn
+        class="mt-5 mr-5"
+        @click="alertShoppingCartDialog"
+        color="orange white--text"
+      >Cart ({{ numInCart }})</v-btn>
+    </v-row>-->
     <div class="row mx-15 justify-center" v-if="certificates.length>0">
       <v-hover
         v-slot:default="{ hover }"
@@ -25,12 +33,12 @@
                 v-if="hover"
                 class="d-flex transition-fast-in-fast-out orange darken-2 v-card--reveal display-3 white--text"
                 style="height: 100%;"
-              >$. {{certificate.price}}</div>
+              >{{certificate.price | dollars}}</div>
             </v-expand-transition>
           </v-img>
           <!-- sdsdsds -->
           <v-card-text class="pt-6" style="position: relative;">
-            <v-btn
+            <!-- <v-btn
               absolute
               color="orange"
               class="white--text"
@@ -40,7 +48,34 @@
               top
               @click="showSingleCertificate(certificate.id)"
             >
-              <v-icon>mdi-cart</v-icon>
+              <v-icon>add_shopping_cart</v-icon>
+            </v-btn>-->
+
+            <v-btn
+              absolute
+              color="orange"
+              class="white--text"
+              fab
+              large
+              right
+              top
+              v-if="inCart.find((item)=> item== certificate.id)>-1?false:true"
+              @click="addToCart(certificate.id)"
+            >
+              <v-icon>add_shopping_cart</v-icon>
+            </v-btn>
+            <v-btn
+              absolute
+              color="orange"
+              class="white--text"
+              fab
+              large
+              right
+              top
+              v-if="inCart.find((item)=> item== certificate.id)>-1?true:false"
+              @click="removeFromCart(certificate.id)"
+            >
+              <v-icon>remove_shopping_cart</v-icon>
             </v-btn>
             <h3 class="font-weight-light orange--text mb-2">{{certificate.name}}</h3>
             <v-row align="center" class="mx-0">
@@ -49,6 +84,18 @@
             </v-row>
             <div class="font-weight-light grey--text mb-2">{{certificate.description}}</div>
           </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn @click="showSingleCertificate(certificate.id)">Buy Certificate</v-btn>
+            <!-- <v-btn
+              @click="addToCart(certificate.id)"
+              v-if="inCart.find((item)=> item== certificate.id)>-1?false:true"
+            >Add to cart</v-btn>-->
+            <!-- <v-btn
+              @click="removeFromCart(certificate.id)"
+              v-if="inCart.find((item)=> item== certificate.id)>-1?true:false"
+            >Remove from cart</v-btn>-->
+          </v-card-actions>
         </v-card>
       </v-hover>
     </div>
@@ -57,15 +104,24 @@
         <v-card-title class="justify-center">No certificates to book</v-card-title>
       </v-card>
     </div>
+    <ShoppingCartDialog
+      :showShoppingCartDialog="showShoppingCartDialog"
+      @closeShoppingCartDialog="closeShoppingCartDialog"
+      @checkout="checkout"
+      :certificates="certificates"
+    />
   </div>
 </template>
 
 <script>
 import Parallax from "../components/applayout/Parallax";
 import * as easings from "vuetify/es5/services/goto/easing-patterns";
-
+import ShoppingCartDialog from "../components/appcore/ShoppingCartDialog";
 export default {
   props: ["isLoggedIn"],
+  filters: {
+    dollars: (num) => `$${num}`,
+  },
   data() {
     return {
       loading: false,
@@ -73,9 +129,19 @@ export default {
       certificates: [],
       user: null,
       spinner: false,
+      showShoppingCartDialog: false,
     };
   },
-  components: { Parallax },
+  components: { Parallax, ShoppingCartDialog },
+  computed: {
+    inCart() {
+      return this.$store.getters.inCart;
+    },
+    numInCart() {
+      return this.inCart.length;
+    },
+  },
+
   mounted() {
     this.spinner = true;
     axios
@@ -134,6 +200,19 @@ export default {
       setTimeout(() => (this.loading = false), 2000);
       this.$emit("showSingleCertificate", id);
     },
+    addToCart(certificate_id) {
+      this.$store.dispatch("addToCart", certificate_id);
+    },
+    removeFromCart(certificate_id) {
+      this.$store.dispatch("removeFromCart", certificate_id);
+    },
+    alertShoppingCartDialog() {
+      this.showShoppingCartDialog = true;
+    },
+    closeShoppingCartDialog() {
+      this.showShoppingCartDialog = false;
+    },
+    checkout() {},
   },
 };
 </script>

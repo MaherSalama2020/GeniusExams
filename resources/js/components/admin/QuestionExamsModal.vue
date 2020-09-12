@@ -255,7 +255,7 @@ export default {
           this.fetchExams();
         })
         .catch((error) => {
-          this.spinner = fasle;
+          this.spinner = false;
           console.log(error);
         });
     },
