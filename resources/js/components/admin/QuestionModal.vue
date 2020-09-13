@@ -10,7 +10,7 @@
         </v-card>
       </v-dialog>
     </v-layout>
-    <v-dialog v-model="showQuestionDialog" width="600px">
+    <v-dialog v-model="showQuestionDialog" width="600px" persistent>
       <v-card>
         <v-card-title>
           <span v-if="edit" class="headline">Edit Question</span>

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 use App\Order;
+use App\Coupon;
 class User extends Authenticatable
 {
     use Notifiable, SoftDeletes, HasApiTokens;
@@ -22,6 +23,10 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+    public function coupons()
+    {
+        return $this->hasMany(Coupon::class);
     }
     /**
     * Override the mail body for reset password notification mail.

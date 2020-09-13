@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Certificate;
 use Auth;
 use Illuminate\Http\Request;
 use App\Http\Resources\OrderResource;
+use App\Notifications\MailOrderNotification;
 
 class OrderController extends Controller
 {
@@ -61,6 +63,38 @@ class OrderController extends Controller
             'data'   => $order,
             'message' => $order ? 'Order Created!' : 'Error Creating Order'
         ]);
+    }
+    public function placeshoppingcart(Request $request)
+    {
+        $inCart=json_decode($request->inCart);
+        $total= $request->total;
+        $subtotal=$request->subtotal;
+        $count = count($inCart);
+        $order=false;
+        
+        $certificates="";
+        $orderDate="";
+        $i=0;
+        if($count > 0){
+        foreach (  $inCart as $cid) {
+            $i++;
+            $certificate=Certificate::where('id',$cid)->first();
+            $certificates.=$i.'. '.$certificate->name.'     ' ;
+                $order = Order::create([
+                    'certificate_id' => $cid,
+                    'user_id' => Auth::id(),
+                ]);
+                $orderDate=$order->created_at;
+        }
+       
+        $user=Auth::user();
+        $user->notify(new MailOrderNotification($certificates,$total, $subtotal, $orderDate));
+        return response()->json([
+            'status' => (bool) $order,
+            'data'   => $order,
+            'message' => $order ? 'Order Created!' : 'Error Creating Order'
+        ]);
+        }
     }
     public function adminStore(Request $request)
     {

@@ -24,6 +24,9 @@
             <h4 v-if="numInCart==1">. Certificate in Cart</h4>
             <h4 v-if="numInCart>1">. Certificates in Cart</h4>
           </v-row>
+          <v-row v-if="numInCart===0" no-gutters>
+            <p>You haven't added any certificates to your cart.</p>
+          </v-row>
           <v-row no-gutters>
             <v-col class="col-md-12">
               <v-card v-for="item in shoppingcart" :key="item.id+'-forsaleInCart'" class="mb-1">
@@ -45,7 +48,6 @@
                             <v-btn
                               icon
                               small
-                              color="error"
                               @click="removeFromCart(item.id)"
                               v-bind="attrs"
                               v-on="on"
@@ -53,7 +55,7 @@
                               <v-icon>delete_outline</v-icon>
                             </v-btn>
                           </template>
-                          <span>Remove from cart</span>
+                          <span>Remove from Cart</span>
                         </v-tooltip>
                       </v-row>
                       <v-row justify="end" no-gutters>
@@ -69,7 +71,7 @@
                               <v-icon>mdi-heart</v-icon>
                             </v-btn>
                           </template>
-                          <span>Move to whishlist</span>
+                          <span>Move to Whish List</span>
                         </v-tooltip>
                       </v-row>
                       <v-row justify="end" no-gutters>
@@ -101,31 +103,65 @@
           </v-row>
         </v-col>
         <v-col class="col-md-3 ml-2">
-          <v-row class="mb-1 mt-0" no-gutters>Total:</v-row>
-          <v-row class="mt-1 mb-1" no-gutters>
-            <h2 class="font-weight-bold">{{total | dollars}}</h2>
+          <v-row class="mb-1 mt-0" no-gutters>
+            <span v-bind:class="{'text-decoration-line-through error--text': subtotal!=0}">Total:</span>
           </v-row>
           <v-row class="mt-1 mb-1" no-gutters>
-            <v-btn large block color="orange white--text">checkout</v-btn>
+            <h2
+              class="font-weight-bold"
+              v-bind:class="{'text-decoration-line-through error--text': subtotal!=0}"
+            >{{total | dollars}}</h2>
+          </v-row>
+          <v-row class="mb-1 mt-0" no-gutters v-if="subtotal!=0">SubTotal:</v-row>
+          <v-row class="mt-1 mb-1" no-gutters v-if="subtotal!=0">
+            <h2 class="font-weight-bold">{{subtotal | dollars}}</h2>
+          </v-row>
+          <v-row class="mt-1 mb-1" no-gutters>
+            <v-btn large block color="orange white--text" @click="showCheckout">checkout</v-btn>
           </v-row>
           <v-divider class="mt-2 mb-2" />
           <v-row class="mt-1 mb-1" no-gutters>
-            <v-form v-model="isValid">
-              <v-row no-gutters>
-                <v-col class="col-md-9">
-                  <v-text-field
-                    label="Enter Coupon"
-                    outlined
-                    required
-                    dense
-                    :rules="requiredRules"
-                  />
-                </v-col>
-                <v-col class="col-md-3 ml-0">
-                  <v-btn depressed color="orange white--text" :disabled="!isValid">Apply</v-btn>
-                </v-col>
-              </v-row>
-            </v-form>
+            <v-row align="center" justify="center">
+              <v-col>
+                <v-slide-y-transition>
+                  <v-alert
+                    color="success lighten-4"
+                    icon="check"
+                    v-if="responseReady&&responseMessageStatus"
+                  >{{responseMessage}}</v-alert>
+                  <v-alert
+                    color="error lighten-4"
+                    icon="warning"
+                    v-if="responseReady&&!responseMessageStatus"
+                  >{{responseMessage}}</v-alert>
+                </v-slide-y-transition>
+              </v-col>
+            </v-row>
+            <v-row align="center" justify="center">
+              <v-form v-model="isValid" ref="couponForm">
+                <v-row no-gutters>
+                  <v-col class="col-md-9" style="background-color:'red'">
+                    <v-text-field
+                      label="Enter Coupon"
+                      outlined
+                      required
+                      dense
+                      v-model="couponCode"
+                      :rules="requiredRules"
+                      color="purple"
+                    />
+                  </v-col>
+                  <v-col class="col-md-3 ml-0">
+                    <v-btn
+                      depressed
+                      @click="applyCoupon"
+                      color="orange white--text"
+                      :disabled="!isValid"
+                    >Apply</v-btn>
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-row>
           </v-row>
         </v-col>
       </v-row>
@@ -136,7 +172,7 @@
             <h4>Saved for later</h4>
           </v-row>
           <v-row v-if="numInSavedlist===0" no-gutters>
-            <p>You haven't saved any courses for later.</p>
+            <p>You haven't saved any certificatesfor later.</p>
           </v-row>
           <v-row v-if="numInSavedlist>0" no-gutters>
             <v-col class="col-md-12">
@@ -159,7 +195,6 @@
                             <v-btn
                               icon
                               small
-                              color="error"
                               @click="removeFromSavedlist(item.id)"
                               v-bind="attrs"
                               v-on="on"
@@ -167,7 +202,7 @@
                               <v-icon>delete_outline</v-icon>
                             </v-btn>
                           </template>
-                          <span>Remove from Saved list</span>
+                          <span>Remove from Saved List</span>
                         </v-tooltip>
                       </v-row>
                       <v-row justify="end" no-gutters>
@@ -200,7 +235,7 @@
             <h4>Recently wishlisted</h4>
           </v-row>
           <v-row v-if="numInWhishlist===0" no-gutters>
-            <p>You haven't added any courses to your wishlist.</p>
+            <p>You haven't added any certificates to your wishlist.</p>
           </v-row>
           <v-row v-if="numInWhishlist>0" no-gutters>
             <v-col class="col-md-12">
@@ -223,7 +258,6 @@
                             <v-btn
                               icon
                               small
-                              color="error"
                               @click="removeFromWhishlist(item.id)"
                               v-bind="attrs"
                               v-on="on"
@@ -231,7 +265,7 @@
                               <v-icon>delete_outline</v-icon>
                             </v-btn>
                           </template>
-                          <span>Remove from Whishlist</span>
+                          <span>Remove from Whish List</span>
                         </v-tooltip>
                       </v-row>
                       <v-row justify="end" no-gutters>
@@ -264,13 +298,18 @@
 export default {
   props: ["certificates"],
   filters: {
-    dollars: (num) => `$${num}`,
+    dollars: (num) => `$${num ? num.toFixed(2) : num}`,
   },
 
   data() {
     return {
       isValid: false,
+      couponCode: "",
       requiredRules: [(v) => !!v || "required!!"],
+      responseMessageStatus: "",
+      responseReady: false,
+      responseMessage: "",
+      couponsubtotal: 0,
     };
   },
   computed: {
@@ -293,7 +332,12 @@ export default {
       return this.inWhishlist.length;
     },
     total() {
-      return this.shoppingcart.reduce((acc, cur) => acc + cur.price, 0);
+      let total = this.shoppingcart.reduce((acc, cur) => acc + cur.price, 0);
+      return total;
+    },
+    subtotal() {
+      let subtotal = this.couponsubtotal;
+      return subtotal;
     },
     /* snip */
     shoppingcart() {
@@ -324,8 +368,13 @@ export default {
     linkToHome() {
       this.$emit("linkToHome");
     },
-    checkout() {
-      this.$emit("checkout");
+    showCheckout() {
+      this.addTotal(this.total);
+      this.addSubTotal(this.subtotal);
+
+      this.$emit("showCheckout");
+      // if (this.subtotal === 0) this.$emit("showCheckout", this.total);
+      // else if (this.subtotal > 0) this.$emit("showCheckout", this.subtotal);
     },
     addToCart(certificate_id) {
       this.$store.dispatch("addToCart", certificate_id);
@@ -344,6 +393,34 @@ export default {
     },
     removeFromSaveslist(certificate_id) {
       this.$store.dispatch("removeFromSavedlist", certificate_id);
+    },
+    applyCoupon() {
+      this.responseReady = false;
+      this.responseMessage = "";
+      this.responseMessageStatus = false;
+      let couponCode = this.couponCode;
+      let total = this.total;
+      axios
+        .post("/api/coupons/apply", { couponCode, total })
+        .then((response) => {
+          this.responseReady = true;
+          this.responseMessageStatus = response.data.status;
+          this.responseMessage = response.data.message;
+          if (this.responseMessageStatus)
+            this.couponsubtotal = response.data.subtotal;
+          this.$refs.couponForm.reset();
+        })
+        .catch((error) => {
+          this.responseReady = true;
+          this.responseMessageStatus = false;
+          this.responseMessage = "Something went wrong.";
+        });
+    },
+    addTotal(total) {
+      this.$store.dispatch("addTotal", total);
+    },
+    addSubTotal(subtotal) {
+      this.$store.dispatch("addSubTotal", subtotal);
     },
   },
 };

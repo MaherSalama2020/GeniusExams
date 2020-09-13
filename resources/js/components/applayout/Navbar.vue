@@ -1,6 +1,14 @@
 <template >
   <div class="myFont">
-    <v-app-bar color="orange" dark fixed hide-on-scroll shaped v-show="showParentContent">
+    <v-app-bar
+      color="orange"
+      dark
+      fixed
+      hide-on-scroll
+      shaped
+      v-show="showParentContent"
+      class="navBar"
+    >
       <v-app-bar-nav-icon x-large @click="drawer = !drawer" v-if="isLoggedIn"></v-app-bar-nav-icon>
       <v-spacer />
       <v-toolbar-title class="ml-6 mt-6">
@@ -67,227 +75,329 @@
         </v-row>
       </v-container>
       <v-spacer />
-      <!-- Shopping Cart -->
-      <v-badge color="green" :content="numInCart" v-if="numInCart >0 " overlap class="ml-4 mr-4">
-        <v-menu
-          :nudge-width="200"
-          offset-y
-          nudge-left
-          open-on-hover
-          rounded
-          transition="slide-y-transition"
-          bottom
-        >
+      <!-- Not Empty Whishllist  -->
+      <v-badge
+        color="green"
+        :content="numInWhishlist"
+        v-if="numInWhishlist >0 "
+        overlap
+        class="ml-4 mr-4"
+      >
+        <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-icon dark medium v-bind="attrs" v-on="on">shopping_cart</v-icon>
+            <v-icon dark medium v-bind="attrs" v-on="on">mdi-heart</v-icon>
           </template>
           <v-card>
-            <v-list dense v-if="shoppingcart">
-              <v-list-item-group color="primary" active-class="pink--text ">
-                <v-list-item v-for="(item) in shoppingcart" :key="item.id+'-certificatesNavBar'">
+            <v-list dense v-if="Whishlist">
+              <v-list-item-group color="primary" active-class="pink--text " v-model="WhishListMenu">
+                <v-list-item
+                  v-for="(item) in Whishlist"
+                  :key="item.id+'-certificatesNavBar'"
+                  :selectable="activeComponentName=='whishlist'"
+                  :inactive="activeComponentName=='whishlist'"
+                  @click="showSingleCertificate(item.id)"
+                >
                   <v-list-item-avatar tile>
                     <v-img :src="item.image" alt="item.name" />
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>{{item.name}}</v-list-item-title>
-                    <v-list-item-subtitle>{{item.price | dollars}}</v-list-item-subtitle>
+                    <v-list-item-subtitle class="font-weight-bold">{{item.price | dollars}}</v-list-item-subtitle>
                   </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn icon color="orange" @click="addToCart(item.id)">
+                      <v-icon>add_shopping_cart</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
                 </v-list-item>
-                <v-divider class="mt-1 mb-1" />
+                <!-- <v-divider class="mt-1 mb-1" />
                 <v-list-item inactive :selectable="false">
                   <v-list-item-content>
                     <v-list-item-title>
                       <p class="font-weight-black ma-0 pa-0">Total{{total | dollars}}</p>
                     </v-list-item-title>
                   </v-list-item-content>
+                </v-list-item>-->
+              </v-list-item-group>
+              <v-divider class="mt-1 mb-1" />
+              <v-row class="ml-2 mr-2 mt-2" v-if="activeComponentName!='whishlist'">
+                <v-btn
+                  color="orange white--text"
+                  block
+                  @click="setComponent('whishlist')"
+                >Go to Whishlist</v-btn>
+              </v-row>
+            </v-list>
+          </v-card>
+        </v-menu>
+      </v-badge>
+      <!-- Empty Whishlist -->
+      <div class="ml-4 mr-4" v-show="numInWhishlist==0">
+        <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon dark medium v-bind="attrs" v-on="on">mdi-heart</v-icon>
+          </template>
+          <v-card>
+            <v-list dense>
+              <v-list-item-group color="primary" active-class="black--text ">
+                <v-list-item :selectable="true" :inactive="true">
+                  <v-list-item-avatar tile>
+                    <v-icon>mdi-heart</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>Whish List is Empty</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-card>
+        </v-menu>
+      </div>
+      <!-- end of Whishllist -->
+      <v-spacer />
+      <!-- Not Empty Shopping Cart  -->
+      <v-badge color="green" :content="numInCart" v-show="numInCart >0 " overlap class="ml-4 mr-4">
+        <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon dark medium v-bind="attrs" v-on="on">shopping_cart</v-icon>
+          </template>
+          <v-card>
+            <v-list dense v-if="shoppingcart">
+              <v-list-item-group
+                color="primary"
+                active-class="pink--text "
+                v-model="ShoppingCartMenu"
+              >
+                <v-list-item
+                  v-for="(item) in shoppingcart"
+                  :key="item.id+'-certificatesNavBar'"
+                  @click="showSingleCertificate(item.id)"
+                >
+                  <v-list-item-avatar tile>
+                    <v-img :src="item.image" alt="item.name" />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{item.name}}</v-list-item-title>
+                    <v-list-item-subtitle class="font-weight-bold">{{item.price | dollars}}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider class="mt-1 mb-1" />
+                <v-list-item :selectable="true" :inactive="true" active-class="black--text">
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      <p class="font-weight-black ma-0 pa-0">
+                        Total:
+                        <span style="position:absolute; right:15px">{{total | dollars}}</span>
+                      </p>
+                    </v-list-item-title>
+                  </v-list-item-content>
                 </v-list-item>
               </v-list-item-group>
               <v-divider class="mt-1 mb-1" />
-              <v-row class="ml-2 mr-2 mt-2">
+              <v-row class="ml-2 mr-2 mt-2" v-if="activeComponentName!='cart'">
                 <v-btn color="orange white--text" block @click="setComponent('cart')">Go to cart</v-btn>
               </v-row>
             </v-list>
           </v-card>
         </v-menu>
       </v-badge>
-
+      <!-- Empty Shopping Cart -->
+      <div class="ml-4 mr-4" v-show="numInCart==0">
+        <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon dark medium v-bind="attrs" v-on="on">shopping_cart</v-icon>
+          </template>
+          <v-card>
+            <v-list dense>
+              <v-list-item-group color="primary" active-class="black--text ">
+                <v-list-item :selectable="true" :inactive="true">
+                  <v-list-item-avatar tile>
+                    <v-icon>shopping_cart</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>Shopping Cart is Empty</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-card>
+        </v-menu>
+      </div>
+      <!-- end of Shopping Cart -->
       <!-- Profile -->
-      <v-menu
-        :nudge-width="200"
-        offset-y
-        nudge-left
-        open-on-hover
-        rounded
-        transition="slide-y-transition"
-        bottom
-        class="mr-4 ml-4"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-icon light medium dark v-bind="attrs" v-on="on">mdi-account</v-icon>
-          <!-- <v-avatar color="purple" v-bind="attrs" v-on="on" size="32px">
+      <div class="mr-4 ml-4">
+        <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon light medium dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+            <!-- <v-avatar color="purple" v-bind="attrs" v-on="on" size="32px">
             <span class="white--text font-weight-bold">{{abreviatedName}}</span>
             <v-badge color="error" v-if="numInCart >0" dot></v-badge>
-          </v-avatar>-->
-        </template>
-        <v-card>
-          <v-list dense v-if="!isLoggedIn">
-            <v-subheader>Account</v-subheader>
-            <v-list-item-group color="indigo" active-class="pink--text " v-model="NotLoggedInMenu">
-              <v-list-item @click="setComponent('login')" value="NotLoggedInMenu_login">
-                <v-list-item-icon>
-                  <v-icon>mdi-login</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>Sign in</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <!-- <v-divider></v-divider> -->
-              <v-list-item @click="setComponent('register')" value="NotLoggedInMenu_register">
-                <v-list-item-icon>
-                  <v-icon>mdi-account-plus</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>Sign up</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-          <v-list dense v-else>
-            <v-subheader>Account</v-subheader>
-            <v-list-item-group color="primary" active-class="pink--text " v-model="LoggedInMenu">
-              <v-list-item
-                v-if="user_type == 0 && isLoggedIn"
-                @click="setComponent('userboard')"
-                value="LoggedInMenu_userboard"
+            </v-avatar>-->
+          </template>
+          <v-card>
+            <v-list dense v-if="!isLoggedIn">
+              <v-subheader>Account</v-subheader>
+              <v-list-item-group
+                color="indigo"
+                active-class="pink--text "
+                v-model="NotLoggedInMenu"
               >
-                <v-list-item-avatar>
-                  <v-avatar color="purple" size="48px">
-                    <span class="white--text font-weight-bold">{{abreviatedName}}</span>
-                  </v-avatar>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>Hi, {{name}}</v-list-item-title>
-                  <v-list-item-subtitle>Genius Exams Website</v-list-item-subtitle>
-                </v-list-item-content>
-                <!-- <v-list-item-action>
+                <v-list-item @click="setComponent('login')" value="NotLoggedInMenu_login">
+                  <v-list-item-icon>
+                    <v-icon>mdi-login</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>Sign in</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <!-- <v-divider></v-divider> -->
+                <v-list-item @click="setComponent('register')" value="NotLoggedInMenu_register">
+                  <v-list-item-icon>
+                    <v-icon>mdi-account-plus</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>Sign up</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+            <v-list dense v-else>
+              <v-subheader>Account</v-subheader>
+              <v-list-item-group color="primary" active-class="pink--text " v-model="LoggedInMenu">
+                <v-list-item
+                  v-if="user_type == 0 && isLoggedIn"
+                  @click="setComponent('userboard')"
+                  value="LoggedInMenu_userboard"
+                >
+                  <v-list-item-avatar>
+                    <v-avatar color="purple" size="48px">
+                      <span class="white--text font-weight-bold">{{abreviatedName}}</span>
+                    </v-avatar>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>Hi, {{name}}</v-list-item-title>
+                    <v-list-item-subtitle>Genius Exams Website</v-list-item-subtitle>
+                  </v-list-item-content>
+                  <!-- <v-list-item-action>
                   <v-btn :class="fav ? 'red--text' : ''" icon @click="fav = !fav">
                     <v-icon>mdi-heart</v-icon>
                   </v-btn>
-                </v-list-item-action>-->
-              </v-list-item>
-              <v-divider class="mt-1 mb-1" />
-              <v-list-item
-                v-if="user_type == 1 && isLoggedIn"
-                @click="setComponent('main')"
-                value="LoggedInMenu_main"
-              >
-                <v-list-item-avatar>
-                  <v-img src="./images/logo.png" alt="Genius Exams" />
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>Hi, {{name}}</v-list-item-title>
-                  <v-list-item-subtitle>Genius Exams Website</v-list-item-subtitle>
-                </v-list-item-content>
-                <!-- <v-list-item-action>
+                  </v-list-item-action>-->
+                </v-list-item>
+                <v-divider class="mt-1 mb-1" />
+                <v-list-item
+                  v-if="user_type == 1 && isLoggedIn"
+                  @click="setComponent('main')"
+                  value="LoggedInMenu_main"
+                >
+                  <v-list-item-avatar>
+                    <v-img src="./images/logo.png" alt="Genius Exams" />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>Hi, {{name}}</v-list-item-title>
+                    <v-list-item-subtitle>Genius Exams Website</v-list-item-subtitle>
+                  </v-list-item-content>
+                  <!-- <v-list-item-action>
                   <v-btn :class="fav ? 'red--text' : ''" icon @click="fav = !fav">
                     <v-icon>mdi-heart</v-icon>
                   </v-btn>
-                </v-list-item-action>-->
-              </v-list-item>
-              <v-list-item
-                v-if="user_type == 0 && isLoggedIn"
-                @click="alertShoppingCartDialog "
-                value="LoggedInMenu_cart"
-              >
-                <v-list-item-icon>
-                  <v-icon color="error" v-if="numInCart>0">shopping_cart</v-icon>
-                  <v-icon v-else>shopping_cart</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>My cart</v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-badge
-                    color="error"
-                    :content="numInCart"
-                    v-if="numInCart >0 && isLoggedIn"
-                    overlap
-                    class="ml-4 mr-4"
-                  ></v-badge>
-                </v-list-item-action>
-              </v-list-item>
+                  </v-list-item-action>-->
+                </v-list-item>
+                <v-list-item
+                  v-if="user_type == 0 && isLoggedIn"
+                  @click="alertShoppingCartDialog "
+                  value="LoggedInMenu_cart"
+                >
+                  <v-list-item-icon>
+                    <v-icon color="error" v-if="numInCart>0">shopping_cart</v-icon>
+                    <v-icon v-else>shopping_cart</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>My cart</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-badge
+                      color="error"
+                      :content="numInCart"
+                      v-if="numInCart >0 && isLoggedIn"
+                      overlap
+                      class="ml-4 mr-4"
+                    ></v-badge>
+                  </v-list-item-action>
+                </v-list-item>
 
-              <v-list-item
-                v-if="user_type == 0 && isLoggedIn"
-                @click="alertWhishlistDialog "
-                value="LoggedInMenu_whish"
-              >
-                <v-list-item-icon>
-                  <v-icon color="error" v-if="numInWhishlist>0">mdi-heart</v-icon>
-                  <v-icon v-else>mdi-heart</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>Whishlist</v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-badge
-                    color="error"
-                    :content="numInWhishlist"
-                    v-if="numInWhishlist >0 && isLoggedIn"
-                    overlap
-                    class="ml-4 mr-4"
-                  ></v-badge>
-                </v-list-item-action>
-              </v-list-item>
+                <v-list-item
+                  v-if="user_type == 0 && isLoggedIn"
+                  @click="alertWhishlistDialog "
+                  value="LoggedInMenu_whish"
+                >
+                  <v-list-item-icon>
+                    <v-icon color="error" v-if="numInWhishlist>0">mdi-heart</v-icon>
+                    <v-icon v-else>mdi-heart</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>Whish List</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-badge
+                      color="error"
+                      :content="numInWhishlist"
+                      v-if="numInWhishlist >0 && isLoggedIn"
+                      overlap
+                      class="ml-4 mr-4"
+                    ></v-badge>
+                  </v-list-item-action>
+                </v-list-item>
 
-              <v-list-item
-                v-if="user_type == 0 && isLoggedIn"
-                @click="alertSavedlistDialog "
-                value="LoggedInMenu_saved"
-              >
-                <v-list-item-icon>
-                  <v-icon color="error" v-if="numInSavedlist>0">watch_later</v-icon>
-                  <v-icon v-else>watch_later</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>Savedlist</v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-badge
-                    color="error"
-                    :content="numInSavedlist"
-                    v-if="numInSavedlist >0 && isLoggedIn"
-                    overlap
-                    class="ml-4 mr-4"
-                  ></v-badge>
-                </v-list-item-action>
-              </v-list-item>
-              <v-divider class="mt-1 mb-1" v-if="user_type == 0 && isLoggedIn" />
+                <v-list-item
+                  v-if="user_type == 0 && isLoggedIn"
+                  @click="alertSavedlistDialog "
+                  value="LoggedInMenu_saved"
+                >
+                  <v-list-item-icon>
+                    <v-icon color="error" v-if="numInSavedlist>0">watch_later</v-icon>
+                    <v-icon v-else>watch_later</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>Saved List</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-badge
+                      color="error"
+                      :content="numInSavedlist"
+                      v-if="numInSavedlist >0 && isLoggedIn"
+                      overlap
+                      class="ml-4 mr-4"
+                    ></v-badge>
+                  </v-list-item-action>
+                </v-list-item>
+                <v-divider class="mt-1 mb-1" v-if="user_type == 0 && isLoggedIn" />
 
-              <v-list-item
-                @click="setComponent('changepassword'); "
-                value="LoggedInMenu_changepassword"
-              >
-                <v-list-item-icon>
-                  <v-icon>mdi-key-change</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>Change Password</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <!-- <v-divider></v-divider> -->
-              <v-list-item @click="logout" value="LoggedInMenu_logout">
-                <v-list-item-icon>
-                  <v-icon>mdi-logout</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>Sign out</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-        </v-card>
-      </v-menu>
+                <v-list-item
+                  @click="setComponent('changepassword'); "
+                  value="LoggedInMenu_changepassword"
+                >
+                  <v-list-item-icon>
+                    <v-icon>mdi-key-change</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>Change Password</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <!-- <v-divider></v-divider> -->
+                <v-list-item @click="logout" value="LoggedInMenu_logout">
+                  <v-list-item-icon>
+                    <v-icon>mdi-logout</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>Sign out</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-card>
+        </v-menu>
+      </div>
       <template v-slot:extension>
         <v-container
           row
@@ -384,6 +494,11 @@
                   @click="setComponent('sessions')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Sessions</v-tab>
+                <v-tab
+                  :href="`#tab_coupons`"
+                  @click="setComponent('coupons')"
+                  v-if="user_type == 1 && isLoggedIn"
+                >Coupons</v-tab>
                 <v-tab
                   :href="`#tab_services`"
                   v-if="user_type !=1"
@@ -525,6 +640,14 @@
               <v-list-item-title class="white--text">Sessions</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item @click="setComponent('coupons')" value="admin_drawer_coupons">
+            <v-list-item-action>
+              <v-icon class="white--text">dashboard</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="white--text">Coupons</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
       <v-footer app>
@@ -616,6 +739,7 @@
             @showExams="showExams"
             @showConfirmation="showConfirmation"
             @showSingleCertificate="showSingleCertificate"
+            @showCheckout="showCheckout"
             @loggedIn="change"
             @StartSession="StartSession"
             @verification_result_hide="verification_result_hide"
@@ -640,7 +764,6 @@
         <ShoppingCartDialog
           :showShoppingCartDialog="showShoppingCartDialog"
           @closeShoppingCartDialog="closeShoppingCartDialog"
-          @checkout="checkout"
           :certificates="certificates"
         />
         <WhishlistDialog
@@ -663,6 +786,7 @@
 import Main from "../admin/Main";
 import Users from "../admin/Users";
 import Sessions from "../admin/Sessions";
+import Coupons from "../admin/Coupons";
 import Certificates from "../admin/Certificates";
 import Exams from "../admin/Exams";
 import Questions from "../admin/Questions";
@@ -680,6 +804,7 @@ import WhishlistDialog from "../appcore/WhishlistDialog";
 import SavedlistDialog from "../appcore/SavedlistDialog";
 import Home from "../../views/Home";
 import SingleCertificate from "../../views/SingleCertificate";
+import Checkout from "../../views/Checkout";
 import Confirmation from "../../views/Confirmation";
 import StartSession from "../../views/StartSession";
 import * as easings from "vuetify/es5/services/goto/easing-patterns";
@@ -719,7 +844,10 @@ export default {
       verification_message: "",
       verification_result: false,
       NotLoggedInMenu: "",
+      ShoppingCartMenu: "",
+      WhishListMenu: "",
       LoggedInMenu: "",
+      activeComponentName: "",
       // links: [
       //   { icon: "home", text: "Home", route: "/" },
       //   { icon: "dashboard", text: "Dashboard", route: "/dashboard" },
@@ -735,6 +863,7 @@ export default {
     Main,
     Users,
     Sessions,
+    Coupons,
     Certificates,
     Exams,
     Questions,
@@ -777,6 +906,13 @@ export default {
         });
       });
     },
+    Whishlist() {
+      return this.$store.getters.inWhishlist.map((item) => {
+        return this.certificates.find((certificate) => {
+          return item === certificate.id;
+        });
+      });
+    },
   },
   mounted() {
     this.mounted = true;
@@ -797,6 +933,8 @@ export default {
       this.active_tab = "tab_home";
       this.LoggedInMenu = "";
       this.NotLoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
       this.activeComponent = ResetPasswordForm;
       this.$router.push({
         name: "reset-password",
@@ -814,6 +952,8 @@ export default {
       this.active_tab = "tab_home";
       this.LoggedInMenu = "";
       this.NotLoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
       this.activeComponent = Login;
       this.$router.push({
         name: "verify",
@@ -833,7 +973,10 @@ export default {
       this.active_tab = "tab_home";
       this.NotLoggedInMenu = "";
       this.LoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
       this.activeComponent = ForgotPassword;
+      this.activeComponentName = "forgotpassword";
       this.$router.push({
         name: "reset-password",
       });
@@ -843,7 +986,10 @@ export default {
       this.active_tab = "tab_home";
       this.NotLoggedInMenu = "";
       this.LoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
       this.activeComponent = Login;
+      this.activeComponentName = "login";
       this.$router.push({
         name: "login",
       });
@@ -861,7 +1007,10 @@ export default {
       this.active_tab = "tab_home";
       this.NotLoggedInMenu = "";
       this.LoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
       this.activeComponent = Home;
+      this.activeComponentName = "home";
     },
     showSingleCertificate(id) {
       this.showParentContent = true;
@@ -870,18 +1019,40 @@ export default {
       this.LoggedInMenu = "";
       this.active_user_drawer = "user_drawer_requests";
       this.activeComponent = SingleCertificate;
-      this.$router.push({
-        name: "single-certificates",
-        params: { id: id },
-      });
+      this.activeComponentName = "singlecertificate";
+      this.$router
+        .push({
+          name: "single-certificates",
+          params: { id: id },
+        })
+        .catch(() => {});
+    },
+    showCheckout() {
+      this.showParentContent = true;
+      this.active_tab = "tab_requests";
+      this.NotLoggedInMenu = "";
+      this.LoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
+      this.active_user_drawer = "user_drawer_requests";
+      this.activeComponent = Checkout;
+      this.activeComponentName = "checkout";
+      this.$router
+        .push({
+          name: "checkout",
+        })
+        .catch(() => {});
     },
     showConfirmation() {
       this.showParentContent = true;
       this.active_tab = "tab_requests";
       this.NotLoggedInMenu = "";
       this.LoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
       this.active_user_drawer = "user_drawer_requests";
       this.activeComponent = Confirmation;
+      this.activeComponentName = "confirmation";
       this.$router.push({
         name: "confirmation",
       });
@@ -891,7 +1062,10 @@ export default {
       this.active_tab = "tab_requests";
       this.LoggedInMenu = "";
       this.NotLoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
       this.activeComponent = StartSession;
+      this.activeComponentName = "startsession";
       this.$router.push({
         name: "start-session",
         params: { id: certificate_id },
@@ -902,7 +1076,10 @@ export default {
       this.active_tab = "tab_requests";
       this.LoggedInMenu = "";
       this.NotLoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
       this.activeComponent = UserBoard;
+      this.activeComponentName = "userboard";
       this.$router.push({ name: "userboard" }).catch((err) => {});
     },
     enrollLogin(next) {
@@ -911,7 +1088,10 @@ export default {
       this.active_tab = "tab_home";
       this.LoggedInMenu = "";
       this.NotLoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
       this.activeComponent = Login;
+      this.activeComponentName = "login";
       this.$router
         .push({
           name: "login",
@@ -924,7 +1104,10 @@ export default {
       this.active_tab = "tab_home";
       this.NotLoggedInMenu = "";
       this.LoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
       this.activeComponent = Register;
+      this.activeComponentName = "register";
       this.$router
         .push({
           name: "register",
@@ -951,24 +1134,46 @@ export default {
       this.isLoggedIn = localStorage.getItem("genius.jwt") != null;
       this.NotLoggedInMenu = "";
       this.LoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
       this.setDefaults();
     },
     hasNext(url) {
-      // alert(url);
       let parts = url.split("/");
       // alert(parts[2]);
       let page = parts[1];
-      let id = parts[2];
       if (page === "certificates") {
+        let id = parts[2];
         this.showParentContent = true;
         this.active_tab = "tab_requests";
         this.LoggedInMenu = "LoggedInMenu_userboard";
         this.activeComponent = SingleCertificate;
+        this.activeComponentName = "singlecertificate";
         this.NotLoggedInMenu = "";
-        this.$router.push({
-          name: "single-certificates",
-          params: { id: id },
-        });
+        this.ShoppingCartMenu = "";
+        this.WhishListMenu = "";
+        this.$router
+          .push({
+            name: "single-certificates",
+            params: { id: id },
+          })
+          .catch(() => {});
+      } else if (page === "checkout") {
+        let price = parts[2];
+        this.showParentContent = true;
+        this.active_tab = "tab_requests";
+        this.LoggedInMenu = "LoggedInMenu_userboard";
+        this.activeComponent = Checkout;
+        this.activeComponentName = "checkout";
+        this.NotLoggedInMenu = "";
+        this.ShoppingCartMenu = "";
+        this.WhishListMenu = "";
+        this.$router
+          .push({
+            name: "checkout",
+            params: { price: price },
+          })
+          .catch(() => {});
       }
     },
     noNext() {
@@ -976,16 +1181,22 @@ export default {
         this.showParentContent = true;
         this.active_tab = "tab_main";
         this.NotLoggedInMenu = "";
+        this.ShoppingCartMenu = "";
+        this.WhishListMenu = "";
         this.LoggedInMenu = "LoggedInMenu_main";
         this.active_admin_drawer = "admin_drawer_main";
         this.activeComponent = Main;
+        this.activeComponentName = "main";
       } else if (this.user_type == 0) {
         this.showParentContent = true;
         this.active_tab = "tab_requests";
         this.LoggedInMenu = "LoggedInMenu_userboard";
         this.NotLoggedInMenu = "";
+        this.WhishListMenu = "";
+        this.ShoppingCartMenu = "";
         this.active_user_drawer = 0;
         this.activeComponent = UserBoard;
+        this.activeComponentName = "userboard";
       }
     },
     logout() {
@@ -996,17 +1207,23 @@ export default {
       this.change();
       this.active_tab = "tab_home";
       this.NotLoggedInMenu = "";
+      this.ShoppingCartMenu = "";
+      this.WhishListMenu = "";
       this.LoggedInMenu = "";
       this.activeComponent = Home;
+      this.activeComponentName = "home";
       this.$router.push("/").catch((err) => {});
     },
     setComponent(value) {
+      this.activeComponentName = value;
       if (this.user_type == 1) {
         switch (value) {
           case "main":
             this.showParentContent = true;
             this.active_tab = "tab_main";
             this.NotLoggedInMenu = "";
+            this.WhishListMenu = "";
+            this.ShoppingCartMenu = "";
             this.LoggedInMenu = "LoggedInMenu_main";
             this.active_admin_drawer = "admin_drawer_main";
             this.activeComponent = Main;
@@ -1019,6 +1236,8 @@ export default {
             this.showParentContent = true;
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.LoggedInMenu = "";
             this.active_admin_drawer = "admin_drawer_home";
             this.activeComponent = Home;
@@ -1032,6 +1251,8 @@ export default {
             this.showParentContent = true;
             this.active_tab = "tab_requests";
             this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.LoggedInMenu = "LoggedInMenu_userboard";
             this.active_admin_drawer = "admin_drawer_requests";
             this.activeComponent = UserBoard;
@@ -1042,6 +1263,8 @@ export default {
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.active_admin_drawer = "admin_drawer_home";
             this.activeComponent = Register;
             this.$router.push({ name: "register" }).catch((err) => {});
@@ -1051,6 +1274,8 @@ export default {
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.active_admin_drawer = "admin_drawer_home";
             this.activeComponent = Login;
             this.$router.push({ name: "login" }).catch((err) => {});
@@ -1060,6 +1285,8 @@ export default {
             this.active_tab = "tab_users";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.active_admin_drawer = "admin_drawer_users";
             this.activeComponent = Users;
             this.$router
@@ -1071,10 +1298,25 @@ export default {
             this.active_tab = "tab_sessions";
             this.LoggedInMenu = "";
             this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.active_admin_drawer = "admin_drawer_sessions";
             this.activeComponent = Sessions;
             this.$router
               .push({ name: "admin-pages", params: { page: "sessions" } })
+              .catch((err) => {});
+            break;
+          case "coupons":
+            this.showParentContent = true;
+            this.active_tab = "tab_coupons";
+            this.LoggedInMenu = "";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.active_admin_drawer = "admin_drawer_coupons";
+            this.activeComponent = Coupons;
+            this.$router
+              .push({ name: "admin-pages", params: { page: "coupons" } })
               .catch((err) => {});
             break;
           case "certificates":
@@ -1082,6 +1324,8 @@ export default {
             this.active_tab = "tab_certificates";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.active_admin_drawer = "admin_drawer_certificates";
             this.activeComponent = Certificates;
             this.$router
@@ -1096,6 +1340,8 @@ export default {
             this.active_tab = "tab_orders";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.active_admin_drawer = "admin_drawer_requests";
             this.activeComponent = Orders;
             this.$router
@@ -1110,6 +1356,8 @@ export default {
             this.active_tab = "tab_exams";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.active_admin_drawer = "admin_drawer_exams";
             this.activeComponent = Exams;
             this.$router
@@ -1124,6 +1372,8 @@ export default {
             this.active_tab = "tab_questions";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.active_admin_drawer = "admin_drawer_questions";
             this.activeComponent = Questions;
             this.$router
@@ -1137,6 +1387,8 @@ export default {
             this.showParentContent = false;
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.LoggedInMenu = "LoggedInMenu_changepassword";
             this.active_admin_drawer = "admin_drawer_home";
             this.activeComponent = ChangePassword;
@@ -1147,6 +1399,8 @@ export default {
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.active_admin_drawer = "admin_drawer_home";
             this.activeComponent = Home;
             this.$router.push({ name: "home" }).catch((err) => {});
@@ -1159,6 +1413,8 @@ export default {
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.active_user_drawer = "user_drawer_home";
             this.activeComponent = Home;
             this.$router.push({ name: "home" }).catch((err) => {});
@@ -1167,6 +1423,8 @@ export default {
             this.showParentContent = true;
             this.active_tab = "tab_requests";
             this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.LoggedInMenu = "LoggedInMenu_userboard";
             this.active_user_drawer = "user_drawer_requests";
             this.activeComponent = UserBoard;
@@ -1176,6 +1434,8 @@ export default {
             this.showParentContent = true;
             this.active_tab = "tab_cart";
             this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.LoggedInMenu = "LoggedInMenu_cart";
             this.active_user_drawer = "user_drawer_cart";
             this.activeComponent = Cart;
@@ -1186,6 +1446,8 @@ export default {
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.active_user_drawer = "user_drawer_home";
             this.activeComponent = Register;
             this.$router.push({ name: "register" }).catch((err) => {});
@@ -1203,6 +1465,8 @@ export default {
             this.showParentContent = false;
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.LoggedInMenu = "LoggedInMenu_changepassword";
             this.active_user_drawer = "user_drawer_home";
             this.activeComponent = ChangePassword;
@@ -1213,6 +1477,8 @@ export default {
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.active_user_drawer = "user_drawer_home";
             this.activeComponent = Home;
             this.$router.push({ name: "home" }).catch((err) => {});
@@ -1225,6 +1491,8 @@ export default {
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.activeComponent = Home;
             this.$router.push({ name: "home" }).catch((err) => {});
             break;
@@ -1233,6 +1501,8 @@ export default {
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.activeComponent = Register;
             this.$router.push({ name: "register" }).catch((err) => {});
             break;
@@ -1241,6 +1511,8 @@ export default {
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.activeComponent = Login;
             this.$router.push({ name: "login" }).catch((err) => {});
             break;
@@ -1258,6 +1530,8 @@ export default {
             this.active_tab = "tab_cart";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             // this.active_user_drawer = "user_drawer_cart";
             this.activeComponent = Cart;
             this.$router.push({ name: "cart" }).catch((err) => {});
@@ -1267,6 +1541,8 @@ export default {
             this.active_tab = "tab_home";
             this.NotLoggedInMenu = "";
             this.LoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
             this.activeComponent = Home;
             this.$router.push({ name: "home" }).catch((err) => {});
             break;
@@ -1328,6 +1604,9 @@ export default {
       this.showSavedlistDialog = false;
     },
     checkout() {},
+    addToCart(certificate_id) {
+      this.$store.dispatch("addToCart", certificate_id);
+    },
   },
 };
 </script>
@@ -1393,6 +1672,9 @@ a.v-tab {
   transform: translateY(0px);
 }
 .drawer {
-  /* z-index: 1000; */
+  /* z-index: 1001 !important; */
+}
+.navBar {
+  /* z-index: 1000 !important; */
 }
 </style>

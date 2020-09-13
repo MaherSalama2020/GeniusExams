@@ -8,12 +8,16 @@ export default new Vuex.Store({
         inCart: [],
         inWhishlist: [],
         inSavedlist: [],
+        total: 0,
+        subtotal: 0,
     },
     getters: {
         // TODO: Add getters
         inCart: state => state.inCart,
         inWhishlist: state => state.inWhishlist,
         inSavedlist: state => state.inSavedlist,
+        total: state => state.total,
+        subtotal: state => state.subtotal,
     },
     mutations: {
         // TODO: Add mutations
@@ -34,6 +38,14 @@ export default new Vuex.Store({
             let filteredItems = state.inSavedlist.filter(item => item !== certificate_id)
             state.inSavedlist = filteredItems;
         },
+        ADD_TOTAL(state, total) { state.total = total; },
+        ADD_SUBTOTAL(state, subtotal) { state.subtotal = subtotal; },
+        RESET_STATE(state) {
+            state.inCart = [];
+            state.total = 0;
+            state.subtotal = 0;
+        },
+
         initialiseStore(state) {
             // Check if the ID exists
             // if (localStorage.getItem('store')) {
@@ -67,6 +79,15 @@ export default new Vuex.Store({
         },
         removeFromSavedlist(context, certificate_id) {
             context.commit('REMOVE_FROM_SAVEDLIST', certificate_id);
+        },
+        addTotal(context, total) {
+            context.commit('ADD_TOTAL', total);
+        },
+        addSubTotal(context, subtotal) {
+            context.commit('ADD_SUBTOTAL', subtotal);
+        },
+        resetState(context) {
+            context.commit('RESET_STATE');
         },
     },
 });

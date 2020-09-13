@@ -3,17 +3,20 @@
     <v-dialog v-model="showSavedlistDialog" persistent scrollable max-width="700px">
       <v-card>
         <v-card-title>
-          Savedlist
+          Saved List
           <v-spacer />
           <span icon @click="closeSavedlistDialog">
             <v-icon class="close">mdi-close</v-icon>
           </span>
         </v-card-title>
         <!-- <v-divider></v-divider> -->
-        <v-card-text style="height: 300px;">
+        <v-card-text v-if="savedlist.length>0" style="height: 300px;">
           <table class="table">
             <tbody v-if="savedlist">
               <tr v-for="(item) in savedlist" :key="item.id+'-savedlist'">
+                <td>
+                  <v-img width="75px" :src="item.image"></v-img>
+                </td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.price | dollars }}</td>
                 <td>
@@ -22,20 +25,22 @@
                       <v-btn
                         icon
                         small
-                        color="error"
                         @click="removeFromSavedlist(item.id)"
                         v-bind="attrs"
                         v-on="on"
                       >
-                        <v-icon>watch_later</v-icon>
+                        <v-icon>delete_outline</v-icon>
                       </v-btn>
                     </template>
-                    <span>Remove from savedlist</span>
+                    <span>Remove from Saved List</span>
                   </v-tooltip>
                 </td>
               </tr>
             </tbody>
           </table>
+        </v-card-text>
+        <v-card-text v-if="savedlist.length==0" style="height: 300px;">
+          <v-divider class="mt-0 mb-2"></v-divider>You haven't added any certificates to your savedlist.
         </v-card-text>
         <!-- <v-divider></v-divider> -->
         <v-card-actions>

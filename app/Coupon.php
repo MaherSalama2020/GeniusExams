@@ -3,21 +3,18 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\User;
 class Coupon extends Model
 {
-    //
-    public static function findByCode($code){
-        return self::where('code',$code)->first();
-    }
-    public static function discount($total){
-        return self::where('code',$code)->first();
-        if($this->type=='fixed'){
-        return $this->value;}
-        else if($this->type='percent'){
-            return ($this->percent_off/100)*$total; 
-        }
-        else return 0;
-    }
+    use SoftDeletes;
 
+    protected $fillable = [
+        'code', 'user_id','type', 'value','percent_off','is_used'
+    ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

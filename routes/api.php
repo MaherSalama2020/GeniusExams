@@ -28,6 +28,7 @@ Route::get('/certificates/{certificate}', 'CertificateController@show');
 // Route::post('/forgot_password', 'UserController@forgot_password');
 
 Route::post('/user/verify', 'UserController@verifyUser');
+Route::post('/coupons/apply', 'CouponController@ApplyCoupon');
 
 
 // Send reset password mail
@@ -37,8 +38,9 @@ Route::post('reset/password', 'Auth\AuthController@callResetPassword');
 Route::resource('/cart', 'CartController');
 
 Route::group(['middleware' => 'auth:api'], function(){
-    Route::post('/coupons', 'CouponController@store');
-    Route::delete('/coupons', 'CouponController@destroy');
+    Route::resource('/coupons', 'CouponController');
+    Route::post('/coupons/paginate','CouponController@paginate');
+    Route::post('/coupons/checkcode','CouponController@checkCode');
     Route::post('change_password', 'UserController@change_password');
     Route::get('/users','UserController@index');
     Route::get('users/{user}','UserController@show');
@@ -52,6 +54,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('certificates/paginate','CertificateController@paginate');
     Route::post('certificates/bookedno','CertificateController@updatebookedNO');
     Route::resource('/orders', 'OrderController');
+    Route::post('/orders/placeshoppingcart', 'OrderController@placeShoppingCart');
     Route::post('/orders/adminstore', 'OrderController@adminStore');
     Route::post('orders/paginate','OrderController@paginate');
     Route::resource('/exams', 'ExamController');

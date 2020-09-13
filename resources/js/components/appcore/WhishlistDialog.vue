@@ -3,17 +3,20 @@
     <v-dialog v-model="showWhishlistDialog" persistent scrollable max-width="700px">
       <v-card>
         <v-card-title>
-          Whishlist
+          Whish List
           <v-spacer />
           <span icon @click="closeWhishlistDialog">
             <v-icon class="close">mdi-close</v-icon>
           </span>
         </v-card-title>
         <!-- <v-divider></v-divider> -->
-        <v-card-text style="height: 300px;">
+        <v-card-text v-if="whishlist.length>0" style="height: 300px;">
           <table class="table">
             <tbody v-if="whishlist">
               <tr v-for="(item) in whishlist" :key="item.id+'-whishlist'">
+                <td>
+                  <v-img width="75px" :src="item.image"></v-img>
+                </td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.price | dollars }}</td>
                 <td>
@@ -22,20 +25,32 @@
                       <v-btn
                         icon
                         small
-                        color="error"
                         @click="removeFromWhishlist(item.id)"
                         v-bind="attrs"
                         v-on="on"
                       >
-                        <v-icon>mdi-heart</v-icon>
+                        <v-icon>delete_outline</v-icon>
                       </v-btn>
                     </template>
-                    <span>Remove from whishlist</span>
+                    <span>Remove from Whish List</span>
+                  </v-tooltip>
+                </td>
+                <td>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn icon small @click="addToCart(item.id)" v-bind="attrs" v-on="on">
+                        <v-icon>add_shopping_cart</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Add to Cart</span>
                   </v-tooltip>
                 </td>
               </tr>
             </tbody>
           </table>
+        </v-card-text>
+        <v-card-text v-if="whishlist.length==0" style="height: 300px;">
+          <v-divider class="mt-0 mb-2"></v-divider>You haven't added any certificates to your wishlist.
         </v-card-text>
         <!-- <v-divider></v-divider> -->
         <v-card-actions>
@@ -82,6 +97,9 @@ export default {
     },
     removeFromWhishlist(certificate_id) {
       this.$store.dispatch("removeFromWhishlist", certificate_id);
+    },
+    addToCart(certificate_id) {
+      this.$store.dispatch("addToCart", certificate_id);
     },
   },
 };

@@ -10,27 +10,23 @@
           </span>
         </v-card-title>
         <!-- <v-divider></v-divider> -->
-        <v-card-text style="height: 300px;">
+        <v-card-text style="height: 300px;" v-if="shoppingcart.length>0">
           <table class="table">
             <tbody v-if="shoppingcart">
               <tr v-for="(item) in shoppingcart" :key="item.id+'-forsale'">
+                <td>
+                  <v-img width="75px" :src="item.image"></v-img>
+                </td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.price | dollars }}</td>
                 <td>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        icon
-                        small
-                        color="error"
-                        @click="removeFromCart(item.id)"
-                        v-bind="attrs"
-                        v-on="on"
-                      >
+                      <v-btn icon small @click="removeFromCart(item.id)" v-bind="attrs" v-on="on">
                         <v-icon>delete_outline</v-icon>
                       </v-btn>
                     </template>
-                    <span>Remove from cart</span>
+                    <span>Remove from Cart</span>
                   </v-tooltip>
                 </td>
                 <td>
@@ -40,24 +36,39 @@
                         <v-icon>mdi-heart</v-icon>
                       </v-btn>
                     </template>
-                    <span>Move to whishlist</span>
+                    <span>Move to Whish List</span>
+                  </v-tooltip>
+                </td>
+                <td>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn icon small @click="addToSavedlist(item.id)" v-bind="attrs" v-on="on">
+                        <v-icon>watch_later</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Move to Saved List</span>
                   </v-tooltip>
                 </td>
               </tr>
               <tr>
                 <th></th>
+                <th></th>
                 <th v-if="shoppingcart">{{ total | dollars }}</th>
+                <th></th>
                 <th></th>
                 <th></th>
               </tr>
             </tbody>
           </table>
         </v-card-text>
+        <v-card-text v-if="shoppingcart.length==0" style="height: 300px;">
+          <v-divider class="mt-0 mb-2"></v-divider>You haven't added any certificates to your cart.
+        </v-card-text>
         <!-- <v-divider></v-divider> -->
         <v-card-actions>
           <v-spacer />
           <v-btn color="orange darken-1" text @click="closeShoppingCartDialog">Keep Shopping</v-btn>
-          <v-btn color="orange darken-1" text @click="checkout">Checkout</v-btn>
+          <!-- <v-btn color="orange darken-1" text @click="checkout">Checkout</v-btn> -->
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -92,14 +103,17 @@ export default {
     closeShoppingCartDialog() {
       this.$emit("closeShoppingCartDialog");
     },
-    checkout() {
-      this.$emit("checkout");
-    },
+    // checkout() {
+    //   this.$emit("checkout");
+    // },
     removeFromCart(certificate_id) {
       this.$store.dispatch("removeFromCart", certificate_id);
     },
     addToWhishlist(certificate_id) {
       this.$store.dispatch("addToWhishlist", certificate_id);
+    },
+    addToSavedlist(certificate_id) {
+      this.$store.dispatch("addToSavedlist", certificate_id);
     },
   },
 };

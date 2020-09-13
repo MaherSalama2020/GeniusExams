@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Session;
+use App\Exam;
+use App\User;
 use Auth;
 use App\Http\Resources\SessionResource;
+use App\Notifications\MailResultNotification;
 
 class SessionController extends Controller
 {
@@ -60,7 +63,14 @@ class SessionController extends Controller
             'exam_id' => $request->exam_id,
             'result' => $request->result,
         ]);
+        $user=Auth::user();
+        $exam=Exam::where('id', $request->exam_id)->first();
+        $examName=$exam->name;
+        $examType=$exam->type;
+        $passing_rate=$exam->passing_rate;
+        $examDate=$session->created_at;
 
+        $user->notify(new MailResultNotification($request->result, $examName, $examType, $passing_rate, $examDate));
         return response()->json([
             'status' => (bool) $session,
             'data'   => $session,

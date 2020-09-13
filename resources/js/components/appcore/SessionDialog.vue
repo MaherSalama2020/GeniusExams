@@ -68,7 +68,7 @@
             <!-- <p>Marked Answers:{{ markedAnswers || 'null' }}</p> -->
             <!-- <p>Marked Diffrences Steps:{{ markedDifferencesSteps || 'null' }}</p> -->
             <!-- <p>Marked Steps:{{ markedSteps || 'null' }}</p> -->
-            <p>Answers:{{ answers || 'null' }}</p>
+            <!-- <p>Answers:{{ answers || 'null' }}</p> -->
             <!-- <v-stepper-header>
               <template v-for="(question, index) in examQuestions">
                 <v-stepper-step
@@ -250,40 +250,40 @@
                   </v-tooltip>
                 </v-row>
                 <v-row>
-                  <v-tooltip bottom v-if="!alertShowCorrectAnswer">
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        class="ml-5 mt-2 mb-2 text-center"
-                        color="orange white--text"
-                        @click="showCorrectAnswer"
-                        v-if="type=='Practical Test'"
-                        small
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        View Correct
-                        <v-icon color="grey" class="ml-2">mdi-eye-off</v-icon>
-                      </v-btn>
-                    </template>
-                    View Correct Answer
-                  </v-tooltip>
-                  <v-tooltip bottom v-else>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        class="ml-5 mt-2 mb-2 text-center"
-                        color="orange white--text"
-                        @click="hideCorrectAnswer"
-                        v-if="type=='Practical Test'"
-                        small
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        Hide Correct
-                        <v-icon class="ml-2">mdi-eye</v-icon>
-                      </v-btn>
-                    </template>
-                    Hide Correct Answer
-                  </v-tooltip>
+                  <span v-if="type=='Practical Test'">
+                    <v-tooltip bottom v-if="!alertShowCorrectAnswer">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          class="ml-5 mt-2 mb-2 text-center"
+                          color="orange white--text"
+                          @click="showCorrectAnswer"
+                          small
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          View Correct
+                          <v-icon color="grey" class="ml-2">mdi-eye-off</v-icon>
+                        </v-btn>
+                      </template>
+                      View Correct Answer
+                    </v-tooltip>
+                    <v-tooltip bottom v-else>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          class="ml-5 mt-2 mb-2 text-center"
+                          color="orange white--text"
+                          @click="hideCorrectAnswer"
+                          small
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          Hide Correct
+                          <v-icon class="ml-2">mdi-eye</v-icon>
+                        </v-btn>
+                      </template>
+                      Hide Correct Answer
+                    </v-tooltip>
+                  </span>
                   <!-- <v-tooltip bottom v-if="!ViewMarkedAnswers && !alertShowMark"> -->
                   <v-tooltip bottom v-if=" !alertShowMark">
                     <template v-slot:activator="{ on, attrs }">

@@ -84,18 +84,18 @@
             </v-row>
             <div class="font-weight-light grey--text mb-2">{{certificate.description}}</div>
           </v-card-text>
-          <v-card-actions>
+          <!-- <v-card-actions>
             <v-spacer />
-            <v-btn @click="showSingleCertificate(certificate.id)">Buy Certificate</v-btn>
-            <!-- <v-btn
+          <v-btn @click="showSingleCertificate(certificate.id)">Buy Certificate</v-btn>-->
+          <!-- <v-btn
               @click="addToCart(certificate.id)"
               v-if="inCart.find((item)=> item== certificate.id)>-1?false:true"
-            >Add to cart</v-btn>-->
-            <!-- <v-btn
+          >Add to cart</v-btn>-->
+          <!-- <v-btn
               @click="removeFromCart(certificate.id)"
               v-if="inCart.find((item)=> item== certificate.id)>-1?true:false"
-            >Remove from cart</v-btn>-->
-          </v-card-actions>
+          >Remove from cart</v-btn>-->
+          <!-- </v-card-actions> -->
         </v-card>
       </v-hover>
     </div>
