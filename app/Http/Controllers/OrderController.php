@@ -85,6 +85,8 @@ class OrderController extends Controller
                     'user_id' => Auth::id(),
                 ]);
                 $orderDate=$order->created_at;
+                $certificate->bookedNO+=1;
+                $certificate->save();
         }
        
         $user=Auth::user();

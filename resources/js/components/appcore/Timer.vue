@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="text-center" v-if="countDown">
-      <v-icon>mdi-clock</v-icon>
+      <v-icon>mdi-av-timer</v-icon>
       <span>{{ minutes | formatTime }}:{{ seconds | formatTime }}</span>
     </div>
     <div class="text-center" v-if="!countDown">
-      <v-icon>mdi-clock</v-icon>Time's Up!
+      <v-icon>mdi-av-timer</v-icon>Time's Up!
     </div>
   </div>
 </template>

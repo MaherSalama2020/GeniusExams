@@ -22,7 +22,7 @@
             class="ml-1"
           >Passing rate: {{ passing_rate}}%</v-chip>
         </v-card-title>
-        <v-card-text>Your result: {{result.toFixed(2)}}%</v-card-text>
+        <v-card-text>Your result: {{Number.parseFloat(result).toFixed(2)}}%</v-card-text>
         <v-card-text v-if="text1">{{text1}}</v-card-text>
         <v-card-text v-if="text2 && type!='Exam'">{{text2}}</v-card-text>
         <v-card-text v-if="text3 && type!='Exam'">{{text3}}</v-card-text>

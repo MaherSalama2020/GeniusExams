@@ -9,395 +9,446 @@
       v-show="showParentContent"
       class="navBar"
     >
-      <v-app-bar-nav-icon x-large @click="drawer = !drawer" v-if="isLoggedIn"></v-app-bar-nav-icon>
-      <v-spacer />
-      <v-toolbar-title class="ml-6 mt-6">
-        <span @click="setComponent('home')" class="pointer">
-          <v-img class="mx-2" :src="'/images/logo.png'" max-width="75" contain></v-img>
-        </span>
-      </v-toolbar-title>
-      <v-container>
-        <v-row justify="center" no-gutters>
-          <v-col cols="12" sm="3" dark color="orange">
-            <v-row justify="center" align="center">
-              <v-divider class="mr-0 white" inset vertical></v-divider>
-              <v-col cols="12" sm="2">
-                <v-icon class="pr-1" x-large>email</v-icon>
-              </v-col>
-              <v-col cols="12" sm="9">
-                <v-card dark color="orange" flat>
-                  <v-list-item two-line>
-                    <v-list-item-content>
-                      <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
-                      <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-col>
-          <v-col cols="12" sm="3" dark color="orange">
-            <v-row justify="center" align="center">
-              <v-divider class="mr-0 white" inset vertical></v-divider>
-              <v-col cols="12" sm="2">
-                <v-icon class="pr-1" x-large>facebook</v-icon>
-              </v-col>
-              <v-col cols="12" sm="9">
-                <v-card dark color="orange" flat>
-                  <v-list-item two-line>
-                    <v-list-item-content>
-                      <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
-                      <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-col>
-          <v-col cols="12" sm="3" dark color="orange">
-            <v-row justify="center" align="center">
-              <v-divider class="mr-0 white" inset vertical></v-divider>
-              <v-col cols="12" sm="2">
-                <v-icon class="pr-1" x-large>linkedin</v-icon>
-              </v-col>
-              <v-col cols="12" sm="9">
-                <v-card dark color="orange" flat>
-                  <v-list-item two-line>
-                    <v-list-item-content>
-                      <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
-                      <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-container>
-      <v-spacer />
-      <!-- Not Empty Whishllist  -->
-      <v-badge
-        color="green"
-        :content="numInWhishlist"
-        v-if="numInWhishlist >0 "
-        overlap
-        class="ml-4 mr-4"
-      >
-        <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon dark medium v-bind="attrs" v-on="on">mdi-heart</v-icon>
-          </template>
-          <v-card>
-            <v-list dense v-if="Whishlist">
-              <v-list-item-group color="primary" active-class="pink--text " v-model="WhishListMenu">
-                <v-list-item
-                  v-for="(item) in Whishlist"
-                  :key="item.id+'-certificatesNavBar'"
-                  :selectable="activeComponentName=='whishlist'"
-                  :inactive="activeComponentName=='whishlist'"
-                  @click="showSingleCertificate(item.id)"
-                >
-                  <v-list-item-avatar tile>
-                    <v-img :src="item.image" alt="item.name" />
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>{{item.name}}</v-list-item-title>
-                    <v-list-item-subtitle class="font-weight-bold">{{item.price | dollars}}</v-list-item-subtitle>
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-btn icon color="orange" @click="addToCart(item.id)">
-                      <v-icon>add_shopping_cart</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
-                <!-- <v-divider class="mt-1 mb-1" />
+      <v-app-bar-nav-icon class="mt-6" large @click="drawer = !drawer" v-if="isLoggedIn">
+        <v-icon>mdi-hamburger</v-icon>
+      </v-app-bar-nav-icon>
+      <v-row no-gutters justify="center" align="center">
+        <v-col class="col-sm-6 col-md-6 col-lg-2 col-xl-2">
+          <v-row justify="end" align="center" no-gutters>
+            <v-toolbar-title class="ml-6 mt-6">
+              <span @click="setComponent('home')" class="pointer">
+                <v-img :src="'/images/logo.png'" max-width="75" contain></v-img>
+              </span>
+            </v-toolbar-title>
+          </v-row>
+        </v-col>
+        <v-col class="col-lg-8 col-xl-8">
+          <v-row justify="center" align="center" no-gutters>
+            <v-col class="col-sm-3 d-none d-lg-block" dark color="orange">
+              <v-row justify="center" align="center">
+                <v-divider class="mr-0 white" vertical></v-divider>
+                <v-col cols="12" sm="2">
+                  <v-icon class="pr-1" x-large>email</v-icon>
+                </v-col>
+                <v-col cols="12" sm="9">
+                  <v-card dark color="orange" flat>
+                    <v-list-item two-line>
+                      <v-list-item-content>
+                        <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
+                        <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col class="col-sm-3 d-none d-lg-block" dark color="orange">
+              <v-row justify="center" align="center">
+                <v-divider class="mr-0 white" vertical></v-divider>
+                <v-col cols="12" sm="2">
+                  <v-icon class="pr-1" x-large>facebook</v-icon>
+                </v-col>
+                <v-col cols="12" sm="9">
+                  <v-card dark color="orange" flat>
+                    <v-list-item two-line>
+                      <v-list-item-content>
+                        <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
+                        <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col class="col-sm-3 d-none d-lg-block" dark color="orange">
+              <v-row justify="center" align="center">
+                <v-divider class="mr-0 white" vertical></v-divider>
+                <v-col cols="12" sm="2">
+                  <v-icon class="pr-1" x-large>linkedin</v-icon>
+                </v-col>
+                <v-col cols="12" sm="9">
+                  <v-card dark color="orange" flat>
+                    <v-list-item two-line>
+                      <v-list-item-content>
+                        <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
+                        <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-col>
+
+        <v-spacer />
+        <v-col class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2 mt-6">
+          <v-row no-gutters justify="end" align="center">
+            <!-- Not Empty Whishllist  -->
+            <v-badge
+              color="green"
+              :content="numInWhishlist"
+              v-if="numInWhishlist >0 && (user_type ==-1 || user_type==0) "
+              overlap
+              class="ml-0 mr-0"
+            >
+              <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon dark medium v-bind="attrs" v-on="on">mdi-heart</v-icon>
+                </template>
+                <v-card>
+                  <v-list dense v-if="typeof Whishlist[0]!='undefined'">
+                    <v-list-item-group
+                      color="primary"
+                      active-class="pink--text "
+                      v-model="WhishListMenu"
+                    >
+                      <v-list-item
+                        v-for="(item) in Whishlist"
+                        :key="item.id+'-certificatesNavBar'"
+                        :selectable="activeComponentName=='whishlist'"
+                        :inactive="activeComponentName=='whishlist'"
+                        @click="showSingleCertificate(item.id,'home')"
+                      >
+                        <v-list-item-avatar tile>
+                          <v-img :src="item.image" alt="item.name" />
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title>{{item.name}}</v-list-item-title>
+                          <v-list-item-subtitle class="font-weight-bold">{{item.price | dollars}}</v-list-item-subtitle>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn
+                                icon
+                                color="orange"
+                                @click="addToCart(item.id)"
+                                v-bind="attrs"
+                                v-on="on"
+                              >
+                                <v-icon>mdi-cart-plus</v-icon>
+                              </v-btn>
+                            </template>
+                            Add To Cart
+                          </v-tooltip>
+                        </v-list-item-action>
+                      </v-list-item>
+                      <!-- <v-divider class="mt-1 mb-1" />
                 <v-list-item inactive :selectable="false">
                   <v-list-item-content>
                     <v-list-item-title>
                       <p class="font-weight-black ma-0 pa-0">Total{{total | dollars}}</p>
                     </v-list-item-title>
                   </v-list-item-content>
-                </v-list-item>-->
-              </v-list-item-group>
-              <v-divider class="mt-1 mb-1" />
-              <v-row class="ml-2 mr-2 mt-2" v-if="activeComponentName!='whishlist'">
-                <v-btn
-                  color="orange white--text"
-                  block
-                  @click="setComponent('whishlist')"
-                >Go to Whishlist</v-btn>
-              </v-row>
-            </v-list>
-          </v-card>
-        </v-menu>
-      </v-badge>
-      <!-- Empty Whishlist -->
-      <div class="ml-4 mr-4" v-show="numInWhishlist==0">
-        <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon dark medium v-bind="attrs" v-on="on">mdi-heart</v-icon>
-          </template>
-          <v-card>
-            <v-list dense>
-              <v-list-item-group color="primary" active-class="black--text ">
-                <v-list-item :selectable="true" :inactive="true">
-                  <v-list-item-avatar tile>
-                    <v-icon>mdi-heart</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>Whish List is Empty</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-          </v-card>
-        </v-menu>
-      </div>
-      <!-- end of Whishllist -->
-      <v-spacer />
-      <!-- Not Empty Shopping Cart  -->
-      <v-badge color="green" :content="numInCart" v-show="numInCart >0 " overlap class="ml-4 mr-4">
-        <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon dark medium v-bind="attrs" v-on="on">shopping_cart</v-icon>
-          </template>
-          <v-card>
-            <v-list dense v-if="shoppingcart">
-              <v-list-item-group
-                color="primary"
-                active-class="pink--text "
-                v-model="ShoppingCartMenu"
+                      </v-list-item>-->
+                    </v-list-item-group>
+                    <v-divider class="mt-1 mb-1" />
+                    <v-row class="ml-2 mr-2 mt-2" v-if="activeComponentName!='whishlist'">
+                      <v-btn
+                        color="orange white--text"
+                        block
+                        @click="setComponent('whishlist')"
+                      >Go to Whishlist</v-btn>
+                    </v-row>
+                  </v-list>
+                </v-card>
+              </v-menu>
+            </v-badge>
+            <!-- Empty Whishlist -->
+            <div class="ml-0 mr-0" v-show="numInWhishlist ==0 && (user_type ==-1 || user_type==0)">
+              <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon dark medium v-bind="attrs" v-on="on">mdi-heart-outline</v-icon>
+                </template>
+                <v-card>
+                  <v-list dense>
+                    <v-list-item-group color="primary" active-class="black--text ">
+                      <v-list-item :selectable="true" :inactive="true">
+                        <v-list-item-avatar tile>
+                          <v-icon>mdi-heart-outline</v-icon>
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title>Whish List is Empty</v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
+                </v-card>
+              </v-menu>
+            </div>
+            <!-- end of Whishllist -->
+            <!-- Not Empty Shopping Cart  -->
+            <v-badge
+              color="green"
+              :content="numInCart"
+              v-if="numInCart >0 && (user_type ==-1 || user_type==0)"
+              overlap
+              class="ml-8 mr-0"
+            >
+              <v-menu
+                :nudge-width="200"
+                offset-y
+                nudge-left
+                open-on-hover
+                rounded
+                bottom
+                data-container="body"
               >
-                <v-list-item
-                  v-for="(item) in shoppingcart"
-                  :key="item.id+'-certificatesNavBar'"
-                  @click="showSingleCertificate(item.id)"
-                >
-                  <v-list-item-avatar tile>
-                    <v-img :src="item.image" alt="item.name" />
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>{{item.name}}</v-list-item-title>
-                    <v-list-item-subtitle class="font-weight-bold">{{item.price | dollars}}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider class="mt-1 mb-1" />
-                <v-list-item :selectable="true" :inactive="true" active-class="black--text">
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      <p class="font-weight-black ma-0 pa-0">
-                        Total:
-                        <span style="position:absolute; right:15px">{{total | dollars}}</span>
-                      </p>
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-              <v-divider class="mt-1 mb-1" />
-              <v-row class="ml-2 mr-2 mt-2" v-if="activeComponentName!='cart'">
-                <v-btn color="orange white--text" block @click="setComponent('cart')">Go to cart</v-btn>
-              </v-row>
-            </v-list>
-          </v-card>
-        </v-menu>
-      </v-badge>
-      <!-- Empty Shopping Cart -->
-      <div class="ml-4 mr-4" v-show="numInCart==0">
-        <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon dark medium v-bind="attrs" v-on="on">shopping_cart</v-icon>
-          </template>
-          <v-card>
-            <v-list dense>
-              <v-list-item-group color="primary" active-class="black--text ">
-                <v-list-item :selectable="true" :inactive="true">
-                  <v-list-item-avatar tile>
-                    <v-icon>shopping_cart</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>Shopping Cart is Empty</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-          </v-card>
-        </v-menu>
-      </div>
-      <!-- end of Shopping Cart -->
-      <!-- Profile -->
-      <div class="mr-4 ml-4">
-        <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon light medium dark v-bind="attrs" v-on="on">mdi-account</v-icon>
-            <!-- <v-avatar color="purple" v-bind="attrs" v-on="on" size="32px">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon dark medium v-bind="attrs" v-on="on">shopping_cart</v-icon>
+                </template>
+                <v-card>
+                  <v-list dense v-if="typeof shoppingcart[0]!='undefined'">
+                    <v-list-item-group
+                      color="primary"
+                      active-class="pink--text "
+                      v-model="ShoppingCartMenu"
+                    >
+                      <v-list-item
+                        v-for="(item) in shoppingcart"
+                        :key="item.id+'-certificatesNavBar'"
+                        @click="showSingleCertificate(item.id,'home')"
+                      >
+                        <v-list-item-avatar tile>
+                          <v-img :src="item.image" alt="item.name" />
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title>{{item.name}}</v-list-item-title>
+                          <v-list-item-subtitle class="font-weight-bold">{{item.price | dollars}}</v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                      <v-divider class="mt-1 mb-1" />
+                      <v-list-item :selectable="true" :inactive="true" active-class="black--text">
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            <p class="font-weight-black ma-0 pa-0">
+                              Total:
+                              <span style="position:absolute; right:15px">{{total | dollars}}</span>
+                            </p>
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list-item-group>
+                    <v-divider class="mt-1 mb-1" />
+                    <v-row class="ml-2 mr-2 mt-2" v-if="activeComponentName!='cart'">
+                      <v-btn
+                        color="orange white--text"
+                        block
+                        @click="setComponent('cart')"
+                      >Go to cart</v-btn>
+                    </v-row>
+                  </v-list>
+                </v-card>
+              </v-menu>
+            </v-badge>
+            <!-- Empty Shopping Cart -->
+            <div class="ml-8 mr-0" v-if="numInCart==0 && (user_type ==-1 || user_type==0)">
+              <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon dark medium v-bind="attrs" v-on="on">mdi-cart-outline</v-icon>
+                </template>
+                <v-card>
+                  <v-list dense>
+                    <v-list-item-group color="primary" active-class="black--text ">
+                      <v-list-item :selectable="true" :inactive="true">
+                        <v-list-item-avatar tile>
+                          <v-icon>mdi-cart-outline</v-icon>
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title>Shopping Cart is Empty</v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
+                </v-card>
+              </v-menu>
+            </div>
+            <!-- end of Shopping Cart -->
+            <!-- Profile -->
+            <div class="mr-0 ml-8">
+              <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon light medium dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+                  <!-- <v-avatar color="purple" v-bind="attrs" v-on="on" size="32px">
             <span class="white--text font-weight-bold">{{abreviatedName}}</span>
             <v-badge color="error" v-if="numInCart >0" dot></v-badge>
-            </v-avatar>-->
-          </template>
-          <v-card>
-            <v-list dense v-if="!isLoggedIn">
-              <v-subheader>Account</v-subheader>
-              <v-list-item-group
-                color="indigo"
-                active-class="pink--text "
-                v-model="NotLoggedInMenu"
-              >
-                <v-list-item @click="setComponent('login')" value="NotLoggedInMenu_login">
-                  <v-list-item-icon>
-                    <v-icon>mdi-login</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>Sign in</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <!-- <v-divider></v-divider> -->
-                <v-list-item @click="setComponent('register')" value="NotLoggedInMenu_register">
-                  <v-list-item-icon>
-                    <v-icon>mdi-account-plus</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>Sign up</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-            <v-list dense v-else>
-              <v-subheader>Account</v-subheader>
-              <v-list-item-group color="primary" active-class="pink--text " v-model="LoggedInMenu">
-                <v-list-item
-                  v-if="user_type == 0 && isLoggedIn"
-                  @click="setComponent('userboard')"
-                  value="LoggedInMenu_userboard"
-                >
-                  <v-list-item-avatar>
-                    <v-avatar color="purple" size="48px">
-                      <span class="white--text font-weight-bold">{{abreviatedName}}</span>
-                    </v-avatar>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>Hi, {{name}}</v-list-item-title>
-                    <v-list-item-subtitle>Genius Exams Website</v-list-item-subtitle>
-                  </v-list-item-content>
-                  <!-- <v-list-item-action>
+                  </v-avatar>-->
+                </template>
+                <v-card>
+                  <v-list dense v-if="!isLoggedIn">
+                    <v-subheader>Account</v-subheader>
+                    <v-list-item-group
+                      color="indigo"
+                      active-class="pink--text "
+                      v-model="NotLoggedInMenu"
+                    >
+                      <v-list-item @click="setComponent('login')" value="NotLoggedInMenu_login">
+                        <v-list-item-icon>
+                          <v-icon>mdi-login</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title>Sign in</v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                      <!-- <v-divider></v-divider> -->
+                      <v-list-item
+                        @click="setComponent('register')"
+                        value="NotLoggedInMenu_register"
+                      >
+                        <v-list-item-icon>
+                          <v-icon>mdi-account-plus</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title>Sign up</v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
+                  <v-list dense v-else>
+                    <v-subheader>Account</v-subheader>
+                    <v-list-item-group
+                      color="primary"
+                      active-class="pink--text "
+                      v-model="LoggedInMenu"
+                    >
+                      <v-list-item
+                        v-if="user_type == 0 && isLoggedIn"
+                        @click="setComponent('userboard')"
+                        value="LoggedInMenu_userboard"
+                      >
+                        <v-list-item-avatar>
+                          <v-avatar color="purple" size="48px">
+                            <span class="white--text font-weight-bold">{{abreviatedName}}</span>
+                          </v-avatar>
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title>Hi, {{name}}</v-list-item-title>
+                          <v-list-item-subtitle>Genius Exams Website</v-list-item-subtitle>
+                        </v-list-item-content>
+                        <!-- <v-list-item-action>
                   <v-btn :class="fav ? 'red--text' : ''" icon @click="fav = !fav">
                     <v-icon>mdi-heart</v-icon>
                   </v-btn>
-                  </v-list-item-action>-->
-                </v-list-item>
-                <v-divider class="mt-1 mb-1" />
-                <v-list-item
-                  v-if="user_type == 1 && isLoggedIn"
-                  @click="setComponent('main')"
-                  value="LoggedInMenu_main"
-                >
-                  <v-list-item-avatar>
-                    <v-img src="./images/logo.png" alt="Genius Exams" />
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>Hi, {{name}}</v-list-item-title>
-                    <v-list-item-subtitle>Genius Exams Website</v-list-item-subtitle>
-                  </v-list-item-content>
-                  <!-- <v-list-item-action>
+                        </v-list-item-action>-->
+                      </v-list-item>
+                      <v-divider class="mt-1 mb-1" />
+                      <v-list-item
+                        v-if="user_type == 1 && isLoggedIn"
+                        @click="setComponent('main')"
+                        value="LoggedInMenu_main"
+                      >
+                        <v-list-item-avatar>
+                          <v-img src="./images/logo.png" alt="Genius Exams" />
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title>Hi, {{name}}</v-list-item-title>
+                          <v-list-item-subtitle>Genius Exams Website</v-list-item-subtitle>
+                        </v-list-item-content>
+                        <!-- <v-list-item-action>
                   <v-btn :class="fav ? 'red--text' : ''" icon @click="fav = !fav">
                     <v-icon>mdi-heart</v-icon>
                   </v-btn>
-                  </v-list-item-action>-->
-                </v-list-item>
-                <v-list-item
-                  v-if="user_type == 0 && isLoggedIn"
-                  @click="alertShoppingCartDialog "
-                  value="LoggedInMenu_cart"
-                >
-                  <v-list-item-icon>
-                    <v-icon color="error" v-if="numInCart>0">shopping_cart</v-icon>
-                    <v-icon v-else>shopping_cart</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>My cart</v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-badge
-                      color="error"
-                      :content="numInCart"
-                      v-if="numInCart >0 && isLoggedIn"
-                      overlap
-                      class="ml-4 mr-4"
-                    ></v-badge>
-                  </v-list-item-action>
-                </v-list-item>
+                        </v-list-item-action>-->
+                      </v-list-item>
+                      <v-list-item
+                        v-if="user_type == 0 && isLoggedIn"
+                        @click="alertShoppingCartDialog "
+                        value="LoggedInMenu_cart"
+                      >
+                        <v-list-item-icon>
+                          <v-icon color="error" v-if="numInCart>0">mdi-cart</v-icon>
+                          <v-icon v-else>mdi-cart-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title>My cart</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-badge
+                            color="error"
+                            :content="numInCart"
+                            v-if="numInCart >0 && isLoggedIn"
+                            overlap
+                            class="ml-4 mr-4"
+                          ></v-badge>
+                        </v-list-item-action>
+                      </v-list-item>
 
-                <v-list-item
-                  v-if="user_type == 0 && isLoggedIn"
-                  @click="alertWhishlistDialog "
-                  value="LoggedInMenu_whish"
-                >
-                  <v-list-item-icon>
-                    <v-icon color="error" v-if="numInWhishlist>0">mdi-heart</v-icon>
-                    <v-icon v-else>mdi-heart</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>Whish List</v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-badge
-                      color="error"
-                      :content="numInWhishlist"
-                      v-if="numInWhishlist >0 && isLoggedIn"
-                      overlap
-                      class="ml-4 mr-4"
-                    ></v-badge>
-                  </v-list-item-action>
-                </v-list-item>
+                      <v-list-item
+                        v-if="user_type == 0 && isLoggedIn"
+                        @click="alertWhishlistDialog "
+                        value="LoggedInMenu_whish"
+                      >
+                        <v-list-item-icon>
+                          <v-icon color="error" v-if="numInWhishlist>0">mdi-heart</v-icon>
+                          <v-icon v-else>mdi-heart-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title>Whish List</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-badge
+                            color="error"
+                            :content="numInWhishlist"
+                            v-if="numInWhishlist >0 && isLoggedIn"
+                            overlap
+                            class="ml-4 mr-4"
+                          ></v-badge>
+                        </v-list-item-action>
+                      </v-list-item>
 
-                <v-list-item
-                  v-if="user_type == 0 && isLoggedIn"
-                  @click="alertSavedlistDialog "
-                  value="LoggedInMenu_saved"
-                >
-                  <v-list-item-icon>
-                    <v-icon color="error" v-if="numInSavedlist>0">watch_later</v-icon>
-                    <v-icon v-else>watch_later</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>Saved List</v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-badge
-                      color="error"
-                      :content="numInSavedlist"
-                      v-if="numInSavedlist >0 && isLoggedIn"
-                      overlap
-                      class="ml-4 mr-4"
-                    ></v-badge>
-                  </v-list-item-action>
-                </v-list-item>
-                <v-divider class="mt-1 mb-1" v-if="user_type == 0 && isLoggedIn" />
+                      <v-list-item
+                        v-if="user_type == 0 && isLoggedIn"
+                        @click="alertSavedlistDialog "
+                        value="LoggedInMenu_saved"
+                      >
+                        <v-list-item-icon>
+                          <v-icon color="error" v-if="numInSavedlist>0">mdi-clock</v-icon>
+                          <v-icon v-else>mdi-clock-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title>Saved List</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-badge
+                            color="error"
+                            :content="numInSavedlist"
+                            v-if="numInSavedlist >0 && isLoggedIn"
+                            overlap
+                            class="ml-4 mr-4"
+                          ></v-badge>
+                        </v-list-item-action>
+                      </v-list-item>
+                      <v-divider class="mt-1 mb-1" v-if="user_type == 0 && isLoggedIn" />
 
-                <v-list-item
-                  @click="setComponent('changepassword'); "
-                  value="LoggedInMenu_changepassword"
-                >
-                  <v-list-item-icon>
-                    <v-icon>mdi-key-change</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>Change Password</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <!-- <v-divider></v-divider> -->
-                <v-list-item @click="logout" value="LoggedInMenu_logout">
-                  <v-list-item-icon>
-                    <v-icon>mdi-logout</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>Sign out</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-          </v-card>
-        </v-menu>
-      </div>
+                      <v-list-item
+                        @click="setComponent('changepassword'); "
+                        value="LoggedInMenu_changepassword"
+                      >
+                        <v-list-item-icon>
+                          <v-icon>mdi-key-change</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title>Change Password</v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                      <!-- <v-divider></v-divider> -->
+                      <v-list-item @click="logout" value="LoggedInMenu_logout">
+                        <v-list-item-icon>
+                          <v-icon>mdi-logout</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title>Sign out</v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
+                </v-card>
+              </v-menu>
+            </div>
+          </v-row>
+        </v-col>
+      </v-row>
       <template v-slot:extension>
         <v-container
           row
@@ -408,10 +459,15 @@
           color="#26c6da"
         >
           <v-hover v-slot:default="{ hover }">
-            <v-card :elevation="hover ? 2 : 0" id="rounded-card" light outlined>
+            <v-card
+              :elevation="hover ? 2 : 0"
+              id="rounded-card"
+              light
+              outlined
+              class="col-md-12 col-lg-10 col-xl-10"
+            >
               <v-tabs
                 show-arrows
-                grow
                 v-model="active_tab"
                 background-color="white"
                 center-active
@@ -454,11 +510,12 @@
                   v-if="user_type == 0 && isLoggedIn"
                   key="userboard"
                 >Orders</v-tab>
-                <!-- <v-tab
+                <v-tab
                   :href="`#tab_cart`"
                   @click="setComponent('cart')"
+                  v-if="user_type == 0 && isLoggedIn"
                   key="cart"
-                >Cart({{numInCart}})</v-tab>-->
+                >Cart({{numInCart}})</v-tab>
                 <v-tab
                   :href="`#tab_main`"
                   @click="setComponent('main')"
@@ -517,7 +574,21 @@
                 easing: 'easeInOutQuad'
               })"
                 >Contact us</v-tab>
-                <v-spacer></v-spacer>
+                <v-spacer />
+                <v-divider class="ma-0 pa-0 grey lighten-2" vertical></v-divider>
+                <v-tab
+                  class="pl-0"
+                  :href="`#tab_login`"
+                  v-if="user_type ==-1 && !isLoggedIn"
+                  @click="active_user_drawer='user_drawer_home';active_admin_drawer='admin_drawer_home';"
+                >Sign in</v-tab>
+                <v-divider class="ma-0 pa-0 grey lighten-2" vertical></v-divider>
+                <v-tab
+                  class="pl-0"
+                  :href="`#tab_register`"
+                  v-if="user_type ==-1 && !isLoggedIn"
+                  @click="active_user_drawer='user_drawer_home';active_admin_drawer='admin_drawer_home';"
+                >Sign up</v-tab>
               </v-tabs>
             </v-card>
           </v-hover>
@@ -526,7 +597,7 @@
     </v-app-bar>
     <v-row v-show="showParentContent">
       <v-col>
-        <v-slide-y-reverse-transition>
+        <v-fab-transition>
           <v-btn
             v-scroll="onScroll"
             v-show="fab"
@@ -535,12 +606,12 @@
             fixed
             bottom
             right
-            color="orange"
+            color="black"
             @click="toTop"
           >
             <v-icon large class="arrow">keyboard_arrow_up</v-icon>
           </v-btn>
-        </v-slide-y-reverse-transition>
+        </v-fab-transition>
       </v-col>
     </v-row>
     <v-navigation-drawer
@@ -683,30 +754,88 @@
       <v-list dense nav class="pt-3 white--text">
         <v-list-item-group color="primary" v-model="active_user_drawer" active-class="pink--text ">
           <v-list-item @click="setComponent('home')" value="user_drawer_home">
-            <v-list-item-action>
+            <v-list-item-icon>
               <v-icon class="white--text">home</v-icon>
-            </v-list-item-action>
+            </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="white--text">Home</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
           <v-list-item @click="setComponent('userboard')" value="user_drawer_requests">
-            <v-list-item-action>
-              <v-icon class="white--text">dashboard</v-icon>
-            </v-list-item-action>
+            <v-list-item-icon>
+              <v-icon class="white--text">mdi-book-multiple</v-icon>
+            </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="white--text">Orders</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="setComponent('cart')" value="user_drawer_cart">
-            <v-list-item-action>
-              <v-icon class="white--text">mdi-cart</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Cart</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+          <v-list-group prepend-icon="mdi-cart" :value="false">
+            <template v-slot:activator>
+              <v-list-item-title>Shopping Cart</v-list-item-title>
+            </template>
+            <v-list-item @click="setComponent('cart')" value="user_drawer_cart">
+              <v-list-item-icon v-if="numInCart==0">
+                <v-icon class="white--text">mdi-cart-outline</v-icon>
+              </v-list-item-icon>
+              <v-list-item-icon v-if="numInCart>0">
+                <v-icon class="white--text">mdi-cart</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title class="white--text">Cart</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-badge
+                  color="error"
+                  :content="numInCart"
+                  v-if="numInCart >0 && isLoggedIn"
+                  overlap
+                  class="ml-4 mr-4"
+                ></v-badge>
+              </v-list-item-action>
+            </v-list-item>
+            <v-list-item @click="setComponent('cart')" value="user_drawer_whishlist">
+              <v-list-item-icon v-if="numInWhishlist==0">
+                <v-icon class="white--text">mdi-heart-outline</v-icon>
+              </v-list-item-icon>
+              <v-list-item-icon v-if="numInWhishlist>0">
+                <v-icon class="white--text">mdi-heart</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title class="white--text">Whish List</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-badge
+                  color="error"
+                  :content="numInWhishlist"
+                  v-if="numInWhishlist >0 && isLoggedIn"
+                  overlap
+                  class="ml-4 mr-4"
+                ></v-badge>
+              </v-list-item-action>
+            </v-list-item>
+            <v-list-item @click="setComponent('cart')" value="user_drawer_savedlist">
+              <v-list-item-icon v-if="numInSavedlist==0">
+                <v-icon class="white--text">mdi-clock-outline</v-icon>
+              </v-list-item-icon>
+              <v-list-item-icon v-if="numInSavedlist>0">
+                <v-icon class="white--text">mdi-clock</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title class="white--text">Saved List</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-badge
+                  color="error"
+                  :content="numInSavedlist"
+                  v-if="numInSavedlist >0 && isLoggedIn"
+                  overlap
+                  class="ml-4 mr-4"
+                ></v-badge>
+              </v-list-item-action>
+            </v-list-item>
+          </v-list-group>
+
           <!-- <v-divider></v-divider> -->
         </v-list-item-group>
       </v-list>
@@ -726,7 +855,10 @@
             :verification_result="verification_result"
             :isLoggedIn="isLoggedIn"
             :certificates="certificates"
+            :reference_singlecertificate="reference_singlecertificate"
             @linkToHome="linkToHome"
+            @linkToCart="linkToCart"
+            @linkToOrders="linkToOrders"
             @linkToRegister="linkToRegister"
             @linkToLogin="linkToLogin"
             @PasswordWasReset="PasswordWasReset"
@@ -822,6 +954,7 @@ export default {
   },
   data() {
     return {
+      reference_singlecertificate: "",
       abreviatedName: "",
       showShoppingCartDialog: false,
       showWhishlistDialog: false,
@@ -915,7 +1048,6 @@ export default {
     },
   },
   mounted() {
-    this.mounted = true;
     this.setDefaults();
   },
   beforeMount() {
@@ -1012,9 +1144,10 @@ export default {
       this.activeComponent = Home;
       this.activeComponentName = "home";
     },
-    showSingleCertificate(id) {
+    showSingleCertificate(id, reference_singlecertificate) {
+      this.reference_singlecertificate = reference_singlecertificate;
       this.showParentContent = true;
-      this.active_tab = "tab_requests";
+      // this.active_tab = "tab_requests";
       this.NotLoggedInMenu = "";
       this.LoggedInMenu = "";
       this.active_user_drawer = "user_drawer_requests";
@@ -1174,6 +1307,21 @@ export default {
             params: { price: price },
           })
           .catch(() => {});
+      } else if (page === "cart") {
+        // let price = parts[2];
+        this.showParentContent = true;
+        this.active_tab = "tab_cart";
+        this.LoggedInMenu = "LoggedInMenu_userboard";
+        this.activeComponent = Cart;
+        this.activeComponentName = "cart";
+        this.NotLoggedInMenu = "";
+        this.ShoppingCartMenu = "";
+        this.WhishListMenu = "";
+        this.$router
+          .push({
+            name: "cart",
+          })
+          .catch(() => {});
       }
     },
     noNext() {
@@ -1215,9 +1363,21 @@ export default {
       this.$router.push("/").catch((err) => {});
     },
     setComponent(value) {
+      this.reference_singlecertificate = "";
       this.activeComponentName = value;
       if (this.user_type == 1) {
         switch (value) {
+          case "cart":
+            this.showParentContent = true;
+            this.active_tab = "tab_cart";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "LoggedInMenu_cart";
+            this.active_user_drawer = "user_drawer_cart";
+            this.activeComponent = Cart;
+            this.$router.push({ name: "cart" }).catch((err) => {});
+            break;
           case "main":
             this.showParentContent = true;
             this.active_tab = "tab_main";
@@ -1569,6 +1729,12 @@ export default {
     },
     linkToHome() {
       this.setComponent("home");
+    },
+    linkToCart() {
+      this.setComponent("cart");
+    },
+    linkToOrders() {
+      this.setComponent("userboard");
     },
     linkToLogin() {
       this.NotLoggedInMenu = "NotLoggedInMenu_login";

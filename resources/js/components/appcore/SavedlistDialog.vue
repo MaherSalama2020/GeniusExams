@@ -29,10 +29,20 @@
                         v-bind="attrs"
                         v-on="on"
                       >
-                        <v-icon>delete_outline</v-icon>
+                        <v-icon>mdi-delete-outline</v-icon>
                       </v-btn>
                     </template>
                     <span>Remove from Saved List</span>
+                  </v-tooltip>
+                </td>
+                <td>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn icon small @click="addToCart(item.id)" v-bind="attrs" v-on="on">
+                        <v-icon>mdi-cart-plus</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Add to Cart</span>
                   </v-tooltip>
                 </td>
               </tr>
@@ -82,6 +92,9 @@ export default {
     closeSavedlistDialog() {
       this.$emit("closeSavedlistDialog");
     },
+    addToCart(certificate_id) {
+      this.$store.dispatch("addToCart", certificate_id);
+    },
     addToSavedlist(certificate_id) {
       this.$store.dispatch("addToSavedlist", certificate_id);
     },
@@ -99,5 +112,9 @@ export default {
   color: orange;
   cursor: pointer;
   transform: rotate(90deg);
+}
+td {
+  height: 75;
+  vertical-align: middle;
 }
 </style>

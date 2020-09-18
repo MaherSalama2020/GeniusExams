@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Coupon;
 use App\User;
+use DB;
 use App\Http\Resources\CouponResource;
 use App\Notifications\MailCouponNotification;
 
@@ -16,22 +17,22 @@ class CouponController extends Controller
     }
     public function paginate(Request $request){
         $per_page=$request->selected_per_page;
-        $coupons= Coupon::orderBy('id','desc')->with(['user'])->paginate($per_page);
+        $coupons= Coupon::orderBy('id','desc')->paginate($per_page);
         return CouponResource::collection($coupons);
     }
     public function store(Request $request)
     {
         
         $coupon = Coupon::create([
-            'user_id' => $request->user_id,
+            'email' => $request->email,
             'code' => $request->code,
             'type' => $request->type,
             'value' => $request->value,
             'percent_off' => $request->percent_off,
             'is_used' => $request->is_used,
         ]);
-        $user=User::where('id', $request->user_id)->first();
-        $user->notify(new MailCouponNotification($request->code, $request->type, $request->value, $request->percent_off));
+        
+        $coupon->notify(new MailCouponNotification($request->code, $request->type, $request->value, $request->percent_off));
         return response()->json([
             'status' => (bool) $coupon,
             'id' =>$coupon->id,
@@ -43,7 +44,7 @@ class CouponController extends Controller
     public function update(Request $request, Coupon $coupon)
     {
         $status = $coupon->update(
-            $request->only(['user_id', 'code','type','value', 'percent_off', 'is_used'])
+            $request->only(['email', 'code','type','value', 'percent_off', 'is_used'])
         );
 
         return response()->json([
@@ -68,7 +69,7 @@ class CouponController extends Controller
     public function ApplyCoupon(Request $request)
     {
         //
-        $coupon=Coupon::where('code', $request->couponCode)->first();
+        $coupon=Coupon::where(DB::raw('BINARY `code`'), $request->couponCode)->first();
         
         $total=$request->total;
         if(!$coupon){

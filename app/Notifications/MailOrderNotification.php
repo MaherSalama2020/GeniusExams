@@ -58,7 +58,7 @@ class MailOrderNotification extends Notification
             ->greeting('Hi!')
             ->subject( 'Your order on Genius Exams completed.' )
             ->line( 'Order Date:'. $this->orderDate )
-            ->line( 'Original Price:'. $original_price)
+            ->line( 'Original Price: $'. $original_price)
             ->line( 'Total: $'. $new_price)
             ->line( 'Order Details:' )
             ->line( $this->certificates)

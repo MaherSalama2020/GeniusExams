@@ -11,13 +11,13 @@ class CertificateController extends Controller
 {
     public function index()
     {
-        return response()->json(Certificate::with(['exams','orders'])->get(),200);
+        return response()->json(Certificate::with(['exams','orders','rates'])->get(),200);
         // $certificates= Certificate::with(['exams'])->paginate(3);
         // return CertificateResource::collection($certificates);
     }
     public function paginate(Request $request){
         $per_page=$request->selected_per_page;
-        $certificates= Certificate::orderBy('id','desc')->with(['exams'])->paginate($per_page);
+        $certificates= Certificate::orderBy('id','desc')->with(['exams','rates'])->paginate($per_page);
         return CertificateResource::collection($certificates);
     }
 
@@ -49,7 +49,7 @@ class CertificateController extends Controller
     public function cExams(Request $request)
     {
         $certificate= Certificate::where('id',$request->id)->first();
-        return response()->json($certificate->exams()->get(),200);
+        return response()->json($certificate->exams()->with(['questions'])->get(),200);
     }
     /**
     * Display the specified resource.
@@ -106,7 +106,7 @@ class CertificateController extends Controller
 
     public function show(Certificate $certificate)
     {
-        return response()->json($certificate,200); 
+        return response()->json(Certificate::where('id',$certificate->id)->with(['rates'])->first(),200); 
     }
 
     public function update(Request $request, Certificate $certificate)

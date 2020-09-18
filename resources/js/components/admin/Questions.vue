@@ -126,8 +126,13 @@
                     <v-alert
                       slot="no-results"
                       :value="true"
-                      color="red lighten-4"
-                      icon="warning"
+                      type="error"
+                      border="left"
+                      colored-border
+                      color="error accent-4"
+                      elevation="2"
+                      dismissible
+                      class="ma-4"
                     >No options yet for "{{ item.name }}".</v-alert>
                   </td>
                 </tr>
@@ -159,8 +164,13 @@
                     <v-alert
                       slot="no-results"
                       :value="true"
-                      color="red lighten-4"
-                      icon="warning"
+                      type="error"
+                      border="left"
+                      colored-border
+                      color="error accent-4"
+                      elevation="2"
+                      dismissible
+                      class="ma-4"
                     >No Exams yet for "{{ item.name }}".</v-alert>
                   </td>
                 </tr>
@@ -172,8 +182,13 @@
               <v-alert
                 slot="no-results"
                 :value="true"
-                color="red lighten-4"
-                icon="warning"
+                type="error"
+                border="left"
+                colored-border
+                color="error accent-4"
+                elevation="2"
+                dismissible
+                class="ma-4"
               >Your search for "{{ search }}" found no results.</v-alert>
             </v-data-table>
             <v-pagination

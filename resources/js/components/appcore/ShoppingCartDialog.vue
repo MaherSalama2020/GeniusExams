@@ -33,7 +33,7 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn icon small @click="addToWhishlist(item.id)" v-bind="attrs" v-on="on">
-                        <v-icon>mdi-heart</v-icon>
+                        <v-icon>mdi-heart-outline</v-icon>
                       </v-btn>
                     </template>
                     <span>Move to Whish List</span>
@@ -43,7 +43,7 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn icon small @click="addToSavedlist(item.id)" v-bind="attrs" v-on="on">
-                        <v-icon>watch_later</v-icon>
+                        <v-icon>mdi-clock-outline</v-icon>
                       </v-btn>
                     </template>
                     <span>Move to Saved List</span>
@@ -52,7 +52,7 @@
               </tr>
               <tr>
                 <th></th>
-                <th></th>
+                <th>Total:</th>
                 <th v-if="shoppingcart">{{ total | dollars }}</th>
                 <th></th>
                 <th></th>
@@ -67,7 +67,7 @@
         <!-- <v-divider></v-divider> -->
         <v-card-actions>
           <v-spacer />
-          <v-btn color="orange darken-1" text @click="closeShoppingCartDialog">Keep Shopping</v-btn>
+          <v-btn color="orange darken-1 white--text" @click="closeShoppingCartDialog">Keep Shopping</v-btn>
           <!-- <v-btn color="orange darken-1" text @click="checkout">Checkout</v-btn> -->
         </v-card-actions>
       </v-card>
@@ -126,5 +126,9 @@ export default {
   color: orange;
   cursor: pointer;
   transform: rotate(90deg);
+}
+td {
+  height: 75;
+  vertical-align: middle;
 }
 </style>

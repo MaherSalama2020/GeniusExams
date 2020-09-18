@@ -20,18 +20,30 @@
                 <v-col>
                   <v-slide-y-transition>
                     <v-alert
-                      color="success lighten-4"
-                      icon="check"
+                      type="success"
+                      border="left"
+                      colored-border
+                      color="success accent-4"
+                      elevation="2"
+                      dismissible
                       v-if="verification_result && !verification_result_hide"
                     >{{verification_message}}</v-alert>
                     <v-alert
-                      color="success lighten-4"
-                      icon="check"
+                      type="success"
+                      border="left"
+                      colored-border
+                      color="success accent-4"
+                      elevation="2"
+                      dismissible
                       v-if="responseReady&&responseMessageStatus"
                     >{{responseMessage}}</v-alert>
                     <v-alert
-                      color="error lighten-4"
-                      icon="warning"
+                      type="error"
+                      border="left"
+                      colored-border
+                      color="error accent-4"
+                      elevation="2"
+                      dismissible
                       v-if="responseReady&&!responseMessageStatus"
                     >{{responseMessage}}</v-alert>
                   </v-slide-y-transition>

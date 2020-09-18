@@ -17,6 +17,7 @@
     "vue-feather-icons": "^5.1.0",
     "vue-router": "^3.4.2",
     "vuedraggable": "^2.24.0",
+    "vueperslides": "^2.10.8",
     "vuetify": "^2.3.8",
     "vuetify-datetime": "^2.0.4",
     "vuetify-image-input": "^19.1.0",

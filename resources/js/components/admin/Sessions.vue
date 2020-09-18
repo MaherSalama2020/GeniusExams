@@ -69,8 +69,13 @@
             </span>
             <v-alert
               v-if="noresults"
-              color="red lighten-4"
-              icon="warning"
+              type="error"
+              border="left"
+              colored-border
+              color="error accent-4"
+              elevation="2"
+              dismissible
+              class="ma-4"
             >Your search for "{{ search }}" found no results.</v-alert>
             <v-pagination
               v-model="pagination.current_page"

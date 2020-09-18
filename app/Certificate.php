@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Exam;
 use App\Order;
+use App\Rate;
 class Certificate extends Model
 {
     //
@@ -16,6 +17,9 @@ class Certificate extends Model
     ];
     public function orders(){
         return $this->hasMany(Order::class);
+    }
+    public function rates(){
+        return $this->hasMany(Rate::class);
     }
 
     public function exams(){

@@ -29,7 +29,7 @@
                         v-bind="attrs"
                         v-on="on"
                       >
-                        <v-icon>delete_outline</v-icon>
+                        <v-icon>mdi-delete-outline</v-icon>
                       </v-btn>
                     </template>
                     <span>Remove from Whish List</span>
@@ -39,7 +39,7 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn icon small @click="addToCart(item.id)" v-bind="attrs" v-on="on">
-                        <v-icon>add_shopping_cart</v-icon>
+                        <v-icon>mdi-cart-plus</v-icon>
                       </v-btn>
                     </template>
                     <span>Add to Cart</span>
@@ -112,5 +112,9 @@ export default {
   color: orange;
   cursor: pointer;
   transform: rotate(90deg);
+}
+td {
+  height: 75;
+  vertical-align: middle;
 }
 </style>

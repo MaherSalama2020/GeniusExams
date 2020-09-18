@@ -9,7 +9,7 @@ export default new Vuex.Store({
         inWhishlist: [],
         inSavedlist: [],
         total: 0,
-        subtotal: 0,
+        subtotal: -1,
     },
     getters: {
         // TODO: Add getters
@@ -43,17 +43,18 @@ export default new Vuex.Store({
         RESET_STATE(state) {
             state.inCart = [];
             state.total = 0;
-            state.subtotal = 0;
+            state.subtotal = -1;
         },
 
         initialiseStore(state) {
             // Check if the ID exists
-            // if (localStorage.getItem('store')) {
-            //     // Replace the state object with the stored item
-            //     this.replaceState(
-            //         Object.assign(state, JSON.parse(localStorage.getItem('store')))
-            //     );
-            // }
+            // localStorage.removeItem('store')
+            if (localStorage.getItem('store')) {
+                // Replace the state object with the stored item
+                this.replaceState(
+                    Object.assign(state, JSON.parse(localStorage.getItem('store')))
+                );
+            }
         }
     },
     actions: {

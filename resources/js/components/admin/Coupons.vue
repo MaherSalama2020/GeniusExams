@@ -35,8 +35,8 @@
               <template v-slot:item="{item,}">
                 <tr @dblclick="showEditingDialog(item)">
                   <td>{{ item.id }}</td>
-                  <td>{{ item.user.name }}</td>
-                  <td>{{ item.user.email }}</td>
+                  <!-- <td>{{ item.user.name }}</td> -->
+                  <td>{{ item.email }}</td>
                   <td class="text-xs-right">{{ item.code }}</td>
                   <td class="text-xs-right">
                     <v-chip :color="getTypeColor(item.type)" dark>{{ item.type }}</v-chip>
@@ -116,8 +116,13 @@
               <v-alert
                 slot="no-results"
                 :value="true"
-                color="red lighten-4"
-                icon="warning"
+                type="error"
+                border="left"
+                colored-border
+                color="error accent-4"
+                elevation="2"
+                dismissible
+                class="ma-4"
               >Your search for "{{ search }}" found no results.</v-alert>
             </v-data-table>
             <v-pagination
@@ -199,8 +204,8 @@ export default {
           filterable: false,
           value: "id",
         },
-        { text: "User Name", value: "user.name" },
-        { text: "User Email", value: "user.email" },
+        // { text: "User Name", value: "user.name" },
+        { text: "User Email", value: "email" },
         { text: "Code", value: "code" },
         { text: "Type", value: "type" },
         { text: "Value", value: "value" },

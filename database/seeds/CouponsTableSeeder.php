@@ -13,7 +13,7 @@ class CouponsTableSeeder extends Seeder
     {
         //
         $coupon=new Coupon;
-        $coupon->user_id=3;
+        $coupon->email="vv@vv.vv";
         $coupon->code="ABC123";
         $coupon->type="fixed";
         $coupon->value=30;
@@ -21,7 +21,7 @@ class CouponsTableSeeder extends Seeder
         $coupon->save();
 
         $coupon=new Coupon;
-        $coupon->user_id=3;
+        $coupon->email="aa@aa.aa";
         $coupon->code="DEF456";
         $coupon->type="percent_off";
         $coupon->percent_off=50;

@@ -15,9 +15,11 @@ class CertificatesTableSeeder extends Seeder
         $certificates=[
             [
                 'name' => 'AI',
+                'rate' => 0,
                 'price' => 22.22,
                 'available_for' => 180,
                 'bookedNO' => 0,
+                'ratedNO' => 0,
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                 tempor incididunt ut labore et dolore magna aliqua consequat.',
                 'image' => 'http://localhost:8000/images/exam.jpeg',
@@ -26,9 +28,11 @@ class CertificatesTableSeeder extends Seeder
             ],
             [
                 'name' => 'Management',
+                'rate' => 0,
                 'available_for' => 90,
                 'price' => 33.33,
                 'bookedNO' => 0,
+                'ratedNO' => 0,
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                 tempor incididunt ut labore et dolore magna aliqua consequat.',
                 'image' => 'http://localhost:8000/images/exam.jpeg',

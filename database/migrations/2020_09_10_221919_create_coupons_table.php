@@ -15,8 +15,8 @@ class CreateCouponsTable extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('email');
+            // $table->foreign('user_id')->references('id')->on('users');
             $table->string('code')->unique();
             $table->string('type');
             $table->integer('value')->nullable();

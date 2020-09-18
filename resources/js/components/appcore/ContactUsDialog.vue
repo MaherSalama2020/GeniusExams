@@ -19,13 +19,23 @@
               <v-slide-y-transition>
                 <v-alert
                   v-if="response_show"
-                  color="success lighten-4"
-                  icon="check"
+                  type="success"
+                  border="left"
+                  colored-border
+                  color="success accent-4"
+                  elevation="2"
+                  dismissible
+                  class="ma-4"
                 >{{response_message}}</v-alert>
                 <v-alert
                   v-if="error_show"
-                  color="error lighten-4"
-                  icon="warning"
+                  type="error"
+                  border="left"
+                  colored-border
+                  color="error accent-4"
+                  elevation="2"
+                  dismissible
+                  class="ma-4"
                 >{{response_message}}</v-alert>
               </v-slide-y-transition>
             </v-col>

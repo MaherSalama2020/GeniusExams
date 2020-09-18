@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 use App\Order;
 use App\Coupon;
+use App\Rate;
 class User extends Authenticatable
 {
     use Notifiable, SoftDeletes, HasApiTokens;
@@ -24,10 +25,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
-    public function coupons()
-    {
-        return $this->hasMany(Coupon::class);
-    }
+    // public function coupons()
+    // {
+    //     return $this->hasMany(Coupon::class);
+    // }
     /**
     * Override the mail body for reset password notification mail.
     */
@@ -39,5 +40,8 @@ class User extends Authenticatable
     public function verifyUser()
     {
         return $this->hasOne('App\VerifyUser');
+    }
+    public function rates(){
+        return $this->hasMany(Rate::class);
     }
 }

@@ -418,8 +418,13 @@
               <v-alert
                 v-if="alertShowCorrectAnswer"
                 :value="true"
-                color="green accent-1"
-                icon="warning"
+                type="success"
+                border="left"
+                colored-border
+                color="success accent-4"
+                elevation="2"
+                dismissible
+                class="ma-4"
               >{{showCorrectAnswerOptionName}}. {{showCorrectAnswerExplaination}}</v-alert>
             </v-expand-x-transition>
           </v-col>
@@ -905,6 +910,7 @@ export default {
       let exam_id = this.exam_id;
       let certificate_id = this.certificate_id;
       let result = (this.correctNO / this.examQuestions.length) * 100;
+      result = Number.parseFloat(result).toFixed(2);
       this.result = result;
       let answers = JSON.stringify(this.answers);
 

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <div>
     <!-- <p>SelectedExam:{{ selectedExam || 'null' }}</p> -->
     <!-- <p>SelectedExamName:{{ selectedExamName || 'null' }}</p> -->
     <!-- <p>Duration:{{ duration || 'null' }}</p> -->
@@ -17,28 +17,40 @@
       </v-dialog>
     </v-layout>
     <template>
-      <v-sheet class="mx-auto" max-width="auto">
-        <v-slide-group
-          v-if="exams.length>0"
-          class="pa-1"
-          :mandatory="true"
-          :show-arrows="true"
-          :center-active="true"
-          prev-icon="mdi-arrow-left-thick mdi-48px"
-          next-icon="mdi-arrow-right-thick mdi-48px"
-        >
-          <v-slide-item v-for="exam in exams " :key="exam.id" v-slot:default="{ active, toggle}">
-            <v-col>
-              <v-row class="mb-0" no-gutters>
+      <div
+        class="container-fluid hero-section d-flex align-content-center justify-content-center flex-wrap ml-auto"
+      >
+        <v-col>
+          <v-row class="ml-14" no-gutters>
+            <v-btn x-small icon @click="linkToHome">
+              <v-icon color="white">home</v-icon>
+            </v-btn>
+            <v-icon small color="white" class="mr-1 ml-1">arrow_forward</v-icon>
+            <span class="activeBreadcrumb" @click="linkToOrders">Orders</span>
+            <v-icon small color="white" class="mr-1 ml-1">arrow_forward</v-icon>
+            <span class="inactiveBreadcrumb">{{certificate_name}}</span>
+          </v-row>
+          <v-row class="ml-15 mt-3" no-gutters>
+            <h3 class="white--text">Orders</h3>
+          </v-row>
+        </v-col>
+      </div>
+      <v-row justify="center" align="center" no-gutters>
+        <v-col class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
+          <vueper-slides
+            3d
+            :arrows="true"
+            arrows-outside
+            bullets-outside
+            :touchable="false"
+            class="no-shadow"
+            fixed-height="200px"
+            fixed-width="400px"
+          >
+            <vueper-slide v-for="exam in exams " :key="exam.id">
+              <template v-slot:content>
                 <transition appear name="slide-in">
-                  <v-card
-                    :color="active ? 'orange lighten-5' : 'white'"
-                    rounded
-                    class="ma-1"
-                    height="175"
-                    width="300"
-                    @click="toggle"
-                  >
+                  <v-card rounded class="ma-0" height="200" width="400">
                     <v-card-title>
                       <v-chip :color="getTypeColor(exam.type)" dark>{{ exam.type}}</v-chip>
                       <v-chip
@@ -48,13 +60,23 @@
                         class="ml-1"
                       >Passing rate: {{ exam.passing_rate}}%</v-chip>
                     </v-card-title>
-                    <!-- <v-card-text v-if="active" class="white--text align-end textover">{{exam.name}}</v-card-text> -->
-                    <v-card-text class="textover">{{exam.name}}</v-card-text>
-                    <!-- <v-card-subtitle
-                    v-if="active"
-                    class="white--text align-end"
-                    >Passing rate: {{exam.passing_rate}} %</v-card-subtitle>-->
-
+                    <v-card-text class="textover font-weight-black">
+                      <h4>{{exam.name}}</h4>
+                      <v-row justify="end" align="center">
+                        <span class="ml-auto textover caption font-weight-light mt-0 mb-0">
+                          <v-icon small>mdi-counter</v-icon>
+                          <span class="small-text">{{exam.questions.length}}</span>
+                          <span class="small-text" v-if="exam.questions.length>1">Questions</span>
+                          <span class="small-text" v-if="exam.questions.length<=1">Question</span>
+                        </span>
+                        <span class="ml-2 mr-2 textover caption font-weight-light mt-0 mb-0">
+                          <v-icon small>mdi-clock</v-icon>
+                          <span class="small-text">{{exam.duration}}</span>
+                          <span class="small-text" v-if="exam.duration>1">Minutes</span>
+                          <span class="small-text" v-if="exam.duration<=1">Minute</span>
+                        </span>
+                      </v-row>
+                    </v-card-text>
                     <v-card-actions class="mb-0 mt-0">
                       <v-spacer />
                       <v-tooltip bottom>
@@ -62,7 +84,6 @@
                           <v-btn
                             fab
                             small
-                            :color="active ? 'orange' : 'orange'"
                             dark
                             @click="ExamSelected(exam.id)"
                             v-bind="attrs"
@@ -76,61 +97,145 @@
                     </v-card-actions>
                   </v-card>
                 </transition>
-              </v-row>
-            </v-col>
-          </v-slide-item>
-        </v-slide-group>
-      </v-sheet>
-      <!-- <v-container fluid>
-        <v-radio-group
-          column
-          height="1vh"
-          @change="ExamSelected(exam.name)"
-          v-model="selectedExam"
-          v-for="exam in exams"
-          :key="exam.id"
-        >
-          <v-radio :value="exam.id">
-            <template v-slot:label>
-              <div class="text-xs-right">
-                {{exam.name}}
-                <v-chip :color="getTypeColor(exam.type)" dark>{{ exam.type}}</v-chip>
-                <span v-if="exam.type=='Exam'">
-                  Passing Rate:
-                  <v-chip color="orange" dark>{{ exam.passing_rate}}%</v-chip>
-                </span>
-              </div>
-            </template>
-          </v-radio>
-        </v-radio-group>
-      </v-container>-->
+              </template>
+            </vueper-slide>
+          </vueper-slides>
+        </v-col>
+      </v-row>
+      <!-- <v-sheet class="mx-auto" max-width="auto">
+          <v-slide-group
+            v-if="exams.length>0"
+            class="pa-1"
+            :mandatory="true"
+            :show-arrows="true"
+            :center-active="true"
+            prev-icon="mdi-arrow-left-thick mdi-48px"
+            next-icon="mdi-arrow-right-thick mdi-48px"
+          >
+            <v-slide-item v-for="exam in exams " :key="exam.id" v-slot:default="{ active, toggle}">
+              <v-col>
+                <v-row class="mb-0" no-gutters>
+                  <transition appear name="slide-in">
+                    <v-card
+                      :color="active ? 'orange lighten-5' : 'white'"
+                      rounded
+                      class="ma-1"
+                      height="175"
+                      width="300"
+                      @click="toggle"
+                    >
+                      <v-card-title>
+                        <v-chip :color="getTypeColor(exam.type)" dark>{{ exam.type}}</v-chip>
+                        <v-chip
+                          color="orange"
+                          dark
+                          v-if="exam.passing_rate"
+                          class="ml-1"
+                        >Passing rate: {{ exam.passing_rate}}%</v-chip>
+                      </v-card-title>
+                      <v-card-text class="textover">{{exam.name}}</v-card-text>
+
+                      <v-card-actions class="mb-0 mt-0">
+                        <v-spacer />
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                              fab
+                              small
+                              :color="active ? 'orange' : 'orange'"
+                              dark
+                              @click="ExamSelected(exam.id)"
+                              v-bind="attrs"
+                              v-on="on"
+                            >
+                              <v-icon class="arrow">double_arrow</v-icon>
+                            </v-btn>
+                          </template>
+                          Start Session
+                        </v-tooltip>
+                      </v-card-actions>
+                    </v-card>
+                  </transition>
+                </v-row>
+              </v-col>
+            </v-slide-item>
+          </v-slide-group>
+      </v-sheet>-->
     </template>
     <!-- for exam session done -->
     <!-- <hr class="hr mt-0 mb-0" /> -->
     <template>
       <v-card flat>
-        <v-card-title>
-          <v-btn
-            fab
-            @click="all"
-            v-if="panel.length==0&&sessions.length>0"
-            dark
-            small
-            color="orange white--text"
-          >
-            <v-icon>add</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            @click="none"
-            v-if="panel.length>0&&sessions.length>0"
-            dark
-            small
-            color="orange white--text"
-          >
-            <v-icon>mdi-minus</v-icon>
-          </v-btn>
-        </v-card-title>
+        <v-card-actions>
+          <v-row no-gutters align="center" justify="start">
+            <v-col col2="12" md="1">
+              <v-tooltip top v-if="panel.length==0&&sessions.length>0">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    class="ml-4"
+                    fab
+                    small
+                    dark
+                    @click="all"
+                    color="black white--text"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-icon>add</v-icon>
+                  </v-btn>
+                </template>
+                Expand All
+              </v-tooltip>
+              <v-tooltip top v-if="panel.length>0&&sessions.length>0">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    class="ml-4"
+                    fab
+                    small
+                    dark
+                    @click="none"
+                    color="black  white--text"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-icon>mdi-minus</v-icon>
+                  </v-btn>
+                </template>
+                Collapse All
+              </v-tooltip>
+            </v-col>
+            <v-col cols="12" md="1" v-if="uRate!=0 && isLoggedIn">
+              <span class="text--lighten-2 caption mr-2">Rated: ({{ uRate }})</span>
+            </v-col>
+            <v-col v-if="uRate!=0 && isLoggedIn">
+              <v-rating
+                v-model="uRate"
+                background-color="grey darken-1"
+                empty-icon="$ratingFull"
+                color="#FF9800"
+                half-increments
+                readonly
+                size="20"
+              ></v-rating>
+            </v-col>
+            <v-col cols="12" md="1" v-if="uRate==0&& isLoggedIn">
+              <span class="text--lighten-2 caption mr-2">Rate: ({{ default_rating }})</span>
+            </v-col>
+            <v-col v-if="uRate==0&& isLoggedIn">
+              <v-rating
+                v-model="default_rating"
+                background-color="grey darken-1"
+                empty-icon="$ratingFull"
+                color="#FF9800"
+                half-increments
+                hover
+                size="20"
+                @input="rateCertificate"
+              ></v-rating>
+            </v-col>
+          </v-row>
+        </v-card-actions>
+
         <v-card-text>
           <v-expansion-panels ocusable color="warning" v-model="panel" multiple popout>
             <v-expansion-panel v-for="session in sessions" :key="session.id">
@@ -185,12 +290,15 @@
       :duration="duration"
       @closeSessionDialog="closeSessionDialog"
     />
-  </v-container>
+  </div>
 </template>
 <script>
 import SessionDialog from "../components/appcore/SessionDialog";
 import SessionAnswers from "../components/appcore/SessionAnswers";
+import { VueperSlides, VueperSlide } from "vueperslides";
+import "vueperslides/dist/vueperslides.css";
 export default {
+  props: ["isLoggedIn"],
   data() {
     return {
       panel: [],
@@ -205,14 +313,40 @@ export default {
       duration: -1,
       type: "",
       passing_rate: "",
+      ceertificate: {},
       certificate_id: 0,
+      certificate_name: "",
+      cRate: 0,
+      uRate: 0,
+      default_rating: 2.5,
+      user: {},
     };
   },
-  components: { SessionDialog, SessionAnswers },
+  components: { SessionDialog, SessionAnswers, VueperSlides, VueperSlide },
   beforeMount() {
+    if (localStorage.getItem("genius.jwt") != null) {
+      this.user = JSON.parse(localStorage.getItem("genius.user"));
+    }
+
     let id = this.$route.params.id;
     let certificate_id = id;
     this.certificate_id = id;
+    axios.get(`/api/certificates/${id}`).then((response) => {
+      console.log(response.data);
+      this.certificate_name = response.data.name;
+      this.certificate = response.data;
+      this.uRate = 0;
+      this.default_rating = 2.5;
+      let filteredRate = this.certificate.rates.filter(
+        (rate) =>
+          rate.user_id == this.user.id &&
+          rate.certificate_id == this.certificate.id
+      );
+      if (filteredRate[0]) this.uRate = filteredRate[0].value;
+      axios.post("/api/rates/crate", { certificate_id }).then((res) => {
+        this.cRate = res.data.rate;
+      });
+    });
     axios.post("/api/certificates/cexams/", { id }).then((response) => {
       this.exams = response.data;
     });
@@ -231,6 +365,12 @@ export default {
   // },
 
   methods: {
+    linkToHome() {
+      this.$emit("linkToHome");
+    },
+    linkToOrders() {
+      this.$emit("linkToOrders");
+    },
     fetchSessions() {
       let certificate_id = this.certificate_id;
 
@@ -291,15 +431,52 @@ export default {
     none() {
       this.panel = [];
     },
+    rateCertificate() {
+      let certificate_id = this.certificate.id;
+      let value = 0;
+      this.uRate = this.default_rating;
+      if (this.uRate == 0) value = this.default_rating;
+      else value = this.uRate;
+      axios.post("/api/rates", { certificate_id, value }).then((response) => {
+        axios.post("/api/rates/crate", { certificate_id }).then((res) => {
+          this.cRate = res.data.rate;
+        });
+      });
+    },
   },
 };
 </script>
 <style scoped>
+.inactiveBreadcrumb {
+  color: grey;
+}
+.activeBreadcrumb {
+  color: whitesmoke;
+  cursor: pointer;
+}
+.activeBreadcrumb:hover {
+  text-decoration: underline;
+}
+.hero-section {
+  background: #ababab;
+  height: 20vh;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: -20px;
+}
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: 0.5;
+  position: absolute;
+  width: 100%;
+}
 .textover {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 5; /* number of lines to show */
+  -webkit-line-clamp: 1; /* number of lines to show */
   -webkit-box-orient: vertical;
 }
 .arrow:hover {
@@ -348,5 +525,8 @@ export default {
 .slide-in-enter-active {
   transition: all 0.4s ease;
   transition-delay: calc(0.1s * var(--i));
+}
+.small-text {
+  font-size: 11px;
 }
 </style>
