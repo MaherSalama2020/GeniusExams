@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Certificate;
 use App\Exam;
+use App\Review;
 use Illuminate\Http\Request;
 use App\Http\Resources\CertificateResource;
 
@@ -11,13 +12,13 @@ class CertificateController extends Controller
 {
     public function index()
     {
-        return response()->json(Certificate::with(['exams','orders','rates'])->get(),200);
+        return response()->json(Certificate::with(['exams','orders','reviews'])->get(),200);
         // $certificates= Certificate::with(['exams'])->paginate(3);
         // return CertificateResource::collection($certificates);
     }
     public function paginate(Request $request){
         $per_page=$request->selected_per_page;
-        $certificates= Certificate::orderBy('id','desc')->with(['exams','rates'])->paginate($per_page);
+        $certificates= Certificate::orderBy('id','desc')->with(['exams','reviews'])->paginate($per_page);
         return CertificateResource::collection($certificates);
     }
 
@@ -39,7 +40,17 @@ class CertificateController extends Controller
             'message' => $certificate ? 'Certificate Created!' : 'Error Creating Certificate'
         ]);
     }
-
+    public function cReviews(Request $request)
+    {
+        $certificate= Certificate::where('id',$request->id)->first();
+        $reviews=Review::where('certificate_id',$request->id)->orderby('id','desc')->get();
+        foreach($reviews as $review){
+            $humans=$review->created_at->diffForHumans();
+            $review['humans']=$humans;
+            $review['cName']=$certificate->name;
+        }
+        return response()->json($reviews,200);
+    }
     /**
     * Display the specified resource.
     *
@@ -106,7 +117,7 @@ class CertificateController extends Controller
 
     public function show(Certificate $certificate)
     {
-        return response()->json(Certificate::where('id',$certificate->id)->with(['rates'])->first(),200); 
+        return response()->json(Certificate::where('id',$certificate->id)->with(['reviews'])->first(),200); 
     }
 
     public function update(Request $request, Certificate $certificate)

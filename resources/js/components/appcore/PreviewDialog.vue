@@ -15,14 +15,14 @@
           </span>
         </v-card-title>
         <hr class="hr mt-0 mb-0" />
-        <v-card-title>
+        <!-- <v-card-title>
           <v-btn fab @click="all" v-if="!openall" dark small color="orange white--text">
             <v-icon>add</v-icon>
           </v-btn>
           <v-btn fab @click="none" v-if="openall" dark small color="orange white--text">
             <v-icon>mdi-minus</v-icon>
           </v-btn>
-        </v-card-title>
+        </v-card-title>-->
         <v-card-text>
           <v-treeview
             :open-all="openall"
@@ -41,6 +41,7 @@
             selection-type="leaf"
             return-object
             item-disabled="locked"
+            class="border-left"
           >
             <template v-slot:prepend="{ item }">
               <v-icon v-if="item.children">question_answer</v-icon>

@@ -9,12 +9,13 @@ use Laravel\Passport\HasApiTokens;
 use App\Order;
 use App\Coupon;
 use App\Rate;
+use App\Review;
 class User extends Authenticatable
 {
     use Notifiable, SoftDeletes, HasApiTokens;
 
     protected $fillable = [
-        'name', 'email', 'password', 'verified'
+        'name', 'email', 'country', 'password', 'verified'
     ];
 
     protected $hidden = [
@@ -43,5 +44,8 @@ class User extends Authenticatable
     }
     public function rates(){
         return $this->hasMany(Rate::class);
+    }
+    public function reviews(){
+        return $this->hasMany(Review::class);
     }
 }

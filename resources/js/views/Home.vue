@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Parallax />
+    <HomeSlider @scrollToCertificates="scrollToCertificates" />
     <v-layout row justify-center>
       <v-dialog v-model="spinner" hide-overlay persistent width="300">
         <v-card color="orange" dark>
@@ -19,11 +19,21 @@
         color="orange white--text"
       >Cart ({{ numInCart }})</v-btn>
     </v-row>-->
-    <div class="mr-10 ml-10" v-if="certificates.length>0">
-      <span class="headline font-weight-bold">What to train next</span>
-      <br />
-      <span class="subtitle font-weight-bold">Students are viewing</span>
-    </div>
+    <v-row no-gutters justify="center" align="center" id="home_certifiacates">
+      <v-col cols="12" sm="auto" md="auto" lg="auto">
+        <span class="big-dot mr-2">.</span>
+        <span class="big-dot mr-2">.</span>
+        <span class="medium-title black--text font-weight-bold">What to train next</span>
+        <span class="big-dot ml-2 mr-2">.</span>
+        <span class="big-dot mr-2">.</span>
+      </v-col>
+    </v-row>
+    <v-row no-gutters justify="center" align="start" v-if="certificates.length>0">
+      <v-col cols="12" sm="auto" md="auto" lg="auto">
+        <span class="big-title black--text font-weight-bold">Students are viewing</span>
+      </v-col>
+    </v-row>
+
     <!-- <button @click="$refs.myVueperSlides.previous()">Previous</button>
       <button @click="$refs.myVueperSlides.goToSlide(6 - 1)">Go to slide 6</button>
     <button @click="$refs.myVueperSlides.next()">Next</button>-->
@@ -33,14 +43,10 @@
           <v-icon>keyboard_arrow_left</v-icon>
         </v-btn>
       </span>-->
-      <div id="box1">
-        <div id="box2">
-          <div id="box3" />
-        </div>
-      </div>
+
       <vueper-slides
         ref="myVueperSlides"
-        class="ml-10 mr-10 no-shadow py-15"
+        class="ml-10 mr-10 no-shadow"
         :autoplay="false"
         :visible-slides="5"
         slide-multiple
@@ -243,12 +249,13 @@
 </template>
 
 <script>
-import Parallax from "../components/applayout/Parallax";
+import HomeSlider from "../components/applayout/HomeSlider";
 import * as easings from "vuetify/es5/services/goto/easing-patterns";
 import ShoppingCartDialog from "../components/appcore/ShoppingCartDialog";
 import { VueperSlides, VueperSlide } from "vueperslides";
 import "vueperslides/dist/vueperslides.css";
-
+import ScrollAnimation from "../directives/scrollanimation";
+Vue.directive("scrollanimation", ScrollAnimation);
 export default {
   props: ["isLoggedIn"],
   filters: {
@@ -295,7 +302,7 @@ export default {
       },
     };
   },
-  components: { Parallax, ShoppingCartDialog, VueperSlides, VueperSlide },
+  components: { HomeSlider, ShoppingCartDialog, VueperSlides, VueperSlide },
   computed: {
     inCart() {
       return this.$store.getters.inCart;
@@ -386,6 +393,13 @@ export default {
       this.showShoppingCartDialog = false;
     },
     checkout() {},
+    scrollToCertificates() {
+      this.$vuetify.goTo("#home_certifiacates", {
+        offset: 100,
+        duration: 2000,
+        easing: "easeInOutQuad",
+      });
+    },
   },
 };
 </script>

@@ -154,9 +154,9 @@
                 <h5 class="font-weight-bold orange--text mb-2">{{certificate.name}}</h5>
 
                 <v-row no-gutters>
-                  <span style="color:#FF9800;">{{cRate}}</span>
+                  <span style="color:#FF9800;">{{certificate.rate}}</span>
                   <v-rating
-                    :value="cRate"
+                    :value="certificate.rate"
                     color="#FF9800"
                     background-color="grey darken-1"
                     empty-icon="$ratingFull"
@@ -186,7 +186,7 @@
                   {{certificate.available_for}} Day
                 </span>
               </v-card-subtitle>
-              <v-divider light class="mt-0 mb-0" v-if="isLoggedIn"></v-divider>
+              <!-- <v-divider light class="mt-0 mb-0" v-if="isLoggedIn"></v-divider>
               <v-card-actions class="pa-4" v-if="uRate!=0 && isLoggedIn">
                 <div class="text--lighten-2 caption mr-2">Rated: ({{ uRate }})</div>
                 <div class="ml-auto">
@@ -215,7 +215,7 @@
                     @input="rateCertificate"
                   ></v-rating>
                 </div>
-              </v-card-actions>
+              </v-card-actions>-->
             </v-card>
           </v-hover>
         </div>
@@ -235,10 +235,7 @@ export default {
   data() {
     return {
       certificate: [],
-      cRate: 0,
       spinner: false,
-      uRate: 0,
-      default_rating: 2.5,
       user: {},
     };
   },
@@ -258,40 +255,14 @@ export default {
   watch: {
     CID: function (newValue, oldValue) {
       let url = `/api/certificates/${this.$route.params.id}`;
-      axios.get(url).then((response) => {
-        this.uRate = 0;
-        this.default_rating = 2.5;
-        this.certificate = response.data;
-        let filteredRate = this.certificate.rates.filter(
-          (rate) =>
-            rate.user_id == this.user.id &&
-            rate.certificate_id == this.certificate.id
-        );
-        if (filteredRate[0]) this.uRate = filteredRate[0].value;
-        let certificate_id = this.certificate.id;
-        axios.post("/api/rates/crate", { certificate_id }).then((res) => {
-          this.cRate = res.data.rate;
-        });
-      });
+      axios.get(url).then((response) => {});
     },
   },
 
   beforeMount() {
     let url = `/api/certificates/${this.$route.params.id}`;
     axios.get(url).then((response) => {
-      this.uRate = 0;
-      this.default_rating = 2.5;
       this.certificate = response.data;
-      let filteredRate = this.certificate.rates.filter(
-        (rate) =>
-          rate.user_id == this.user.id &&
-          rate.certificate_id == this.certificate.id
-      );
-      if (filteredRate[0]) this.uRate = filteredRate[0].value;
-      let certificate_id = this.certificate.id;
-      axios.post("/api/rates/crate", { certificate_id }).then((res) => {
-        this.cRate = res.data.rate;
-      });
     });
     if (localStorage.getItem("genius.jwt") != null) {
       this.user = JSON.parse(localStorage.getItem("genius.user"));
@@ -312,18 +283,6 @@ export default {
     },
     removeFromCart(certificate_id) {
       this.$store.dispatch("removeFromCart", certificate_id);
-    },
-    rateCertificate() {
-      let certificate_id = this.certificate.id;
-      let value = 0;
-      this.uRate = this.default_rating;
-      if (this.uRate == 0) value = this.default_rating;
-      else value = this.uRate;
-      axios.post("/api/rates", { certificate_id, value }).then((response) => {
-        axios.post("/api/rates/crate", { certificate_id }).then((res) => {
-          this.cRate = res.data.rate;
-        });
-      });
     },
   },
 };

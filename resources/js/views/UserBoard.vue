@@ -33,7 +33,7 @@
                 <v-icon color="white">home</v-icon>
               </v-btn>
             </template>
-            home
+            Home
           </v-tooltip>
           <v-icon small color="white" class="mr-1 ml-1">arrow_forward</v-icon>
           <span class="inactiveBreadcrumb">Orders</span>
@@ -316,7 +316,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style >
 .inactiveBreadcrumb {
   color: grey;
 }

@@ -301,9 +301,6 @@ export default {
       axios
         .post("/api/orders/placeshoppingcart", { inCart, total, subtotal })
         .then((response) => {
-          this.inCart.forEach((item) => {
-            this.addToProgress(item);
-          });
           this.resetState();
           this.spinner = false;
           this.$emit("showConfirmation");
@@ -322,9 +319,6 @@ export default {
       axios
         .post("/api/orders/placeshoppingcart", { inCart, total, subtotal })
         .then((response) => {
-          this.inCart.forEach((item) => {
-            this.addToProgress(item);
-          });
           this.resetState();
           this.spinner = false;
           this.$emit("showConfirmation");
@@ -336,9 +330,7 @@ export default {
     resetState() {
       this.$store.dispatch("resetState");
     },
-    addToProgress(certificate_id) {
-      this.$store.dispatch("addToProgress", certificate_id);
-    },
+
     removeFromProgress(certificate_id) {
       this.$store.dispatch("removeFromProgress", certificate_id);
     },

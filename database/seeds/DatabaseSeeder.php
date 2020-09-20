@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             QuestionsTableSeeder::class,
             OptionsTableSeeder::class,
             CouponsTableSeeder::class,
+            ReviewsTableSeeder::class,
             ]);
     }
 }

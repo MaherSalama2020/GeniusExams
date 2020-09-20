@@ -77,6 +77,20 @@
                   required
                   color="purple lightn-2"
                 />
+                <v-select
+                  v-model="selectedCountry"
+                  :items="countries"
+                  item-text="name"
+                  item-value="name"
+                  label="Select Country"
+                  required
+                  menu-props="auto"
+                  prepend-icon="map"
+                  bottom
+                  autocomplete
+                  :rules="requiredRules"
+                  color="purple"
+                />
                 <v-text-field
                   id="password"
                   prepend-icon="mdi-lock"
@@ -164,6 +178,7 @@ export default {
   components: { ContactUsDialog },
   data() {
     return {
+      selectedCountry: {},
       showContactUsDialog: false,
       loading: false,
       register_result: false,
@@ -179,6 +194,8 @@ export default {
       responseMessage: "",
       responseMessageStatus: false,
       responseReady: false,
+      countries: [],
+      requiredRules: [(v) => !!v || "required!!"],
       nameRules: [
         (v) => !!v || "Name is required",
         (v) => (v && v.length >= 5) || "Name must have 5+ characters",
@@ -206,6 +223,14 @@ export default {
       ],
     };
   },
+  beforeMount() {
+    $.get("https://restcountries.eu/rest/v2/all?fields=name;alpha3Code;flag")
+      .then((response) => {
+        // this.countries = response.map((country) => country.name);
+        this.countries = response;
+      })
+      .catch((error) => console.log(error));
+  },
   methods: {
     clearerrors() {
       this.errors = [];
@@ -226,6 +251,7 @@ export default {
       // }
       let name = this.name;
       let email = this.email;
+      let country = this.selectedCountry;
       let password = this.password;
       let c_password = this.password_confirmation;
       this.loading = true;
@@ -240,7 +266,7 @@ export default {
           return;
         }
         axios
-          .post("api/register", { name, email, password, c_password })
+          .post("api/register", { name, email, country, password, c_password })
           .then((response) => {
             this.loading = false;
             let data = response.data;
@@ -265,7 +291,7 @@ export default {
             this.loading = false;
             // this.isValid = true;
             console.log(error);
-            this.responseMessage = "Check your password";
+            this.responseMessage = "Something went wrong.";
             this.responseMessageStatus = false;
             this.responseReady = true;
           });

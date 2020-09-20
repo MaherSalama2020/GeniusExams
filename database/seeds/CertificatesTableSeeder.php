@@ -15,7 +15,7 @@ class CertificatesTableSeeder extends Seeder
         $certificates=[
             [
                 'name' => 'AI',
-                'rate' => 0,
+                'rate' => 1,
                 'price' => 22.22,
                 'available_for' => 180,
                 'bookedNO' => 0,
@@ -28,7 +28,7 @@ class CertificatesTableSeeder extends Seeder
             ],
             [
                 'name' => 'Management',
-                'rate' => 0,
+                'rate' => 2,
                 'available_for' => 90,
                 'price' => 33.33,
                 'bookedNO' => 0,

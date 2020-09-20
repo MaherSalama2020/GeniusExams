@@ -1,15 +1,12 @@
 <template >
   <div class="myFont">
-    <v-app-bar
-      color="orange"
-      dark
-      fixed
-      hide-on-scroll
-      shaped
-      v-show="showParentContent"
-      class="navBar"
-    >
-      <v-app-bar-nav-icon class="mt-6" large @click="drawer = !drawer" v-if="isLoggedIn">
+    <v-app-bar color="orange" dark fixed hide-on-scroll v-show="showParentContent" class="navBar">
+      <v-app-bar-nav-icon
+        class="mt-6 hidden-md-and-up"
+        large
+        @click="drawer = !drawer"
+        v-if="isLoggedIn"
+      >
         <v-icon>mdi-hamburger</v-icon>
       </v-app-bar-nav-icon>
       <v-row no-gutters justify="center" align="center">
@@ -22,9 +19,9 @@
             </v-toolbar-title>
           </v-row>
         </v-col>
-        <v-col class="col-lg-8 col-xl-8">
+        <v-col class="col-lg-8 col-xl-8 hidden-md-and-down">
           <v-row justify="center" align="center" no-gutters>
-            <v-col class="col-sm-3 d-none d-lg-block" dark color="orange">
+            <v-col class="col-sm-3" dark color="orange">
               <v-row justify="center" align="center">
                 <v-divider class="mr-0 white" vertical></v-divider>
                 <v-col cols="12" sm="2">
@@ -42,7 +39,7 @@
                 </v-col>
               </v-row>
             </v-col>
-            <v-col class="col-sm-3 d-none d-lg-block" dark color="orange">
+            <v-col class="col-sm-3" dark color="orange">
               <v-row justify="center" align="center">
                 <v-divider class="mr-0 white" vertical></v-divider>
                 <v-col cols="12" sm="2">
@@ -60,7 +57,7 @@
                 </v-col>
               </v-row>
             </v-col>
-            <v-col class="col-sm-3 d-none d-lg-block" dark color="orange">
+            <v-col class="col-sm-3" dark color="orange">
               <v-row justify="center" align="center">
                 <v-divider class="mr-0 white" vertical></v-divider>
                 <v-col cols="12" sm="2">
@@ -143,14 +140,14 @@
                   </v-list-item-content>
                       </v-list-item>-->
                     </v-list-item-group>
-                    <v-divider class="mt-1 mb-1" />
+                    <!-- <v-divider class="mt-1 mb-1" />
                     <v-row class="ml-2 mr-2 mt-2" v-if="activeComponentName!='whishlist'">
                       <v-btn
                         color="orange white--text"
                         block
                         @click="setComponent('whishlist')"
                       >Go to Whishlist</v-btn>
-                    </v-row>
+                    </v-row>-->
                   </v-list>
                 </v-card>
               </v-menu>
@@ -455,21 +452,21 @@
           fill-height
           justify-center
           style="max-width: 1200px"
-          class="mx-auto"
-          color="#26c6da"
+          class="mx-auto col-md-10 col-lg-10 col-xl-10 hidden-sm-and-down"
+          color="#ff9800"
         >
           <v-hover v-slot:default="{ hover }">
             <v-card
               :elevation="hover ? 2 : 0"
               id="rounded-card"
               light
-              outlined
-              class="col-md-12 col-lg-10 col-xl-10"
+              class="py-2"
+              color="orange lighten-5"
             >
               <v-tabs
                 show-arrows
                 v-model="active_tab"
-                background-color="white"
+                background-color="orange lighten-5"
                 center-active
                 centered
                 color="orange"
@@ -478,6 +475,7 @@
               >
                 <v-tabs-slider></v-tabs-slider>
                 <v-tab
+                  class="font-weight-bold text--black"
                   v-if="user_type==0 && isLoggedIn"
                   :href="`#tab_home`"
                   @click="setComponent('home');   $vuetify.goTo('#navbar', {
@@ -487,6 +485,7 @@
                 })"
                 >Home</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   v-if="user_type==-1 && !isLoggedIn"
                   :href="`#tab_home`"
                   @click="setComponent('home');   $vuetify.goTo('#navbar', {
@@ -496,6 +495,7 @@
                 })"
                 >Home</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   v-if="user_type==1 && isLoggedIn"
                   :href="`#tab_home`"
                   @click="active_admin_drawer='admin_drawer_home';   setComponent('home');   $vuetify.goTo('#navbar', {
@@ -505,58 +505,74 @@
                 })"
                 >Home</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   :href="`#tab_requests`"
                   @click="setComponent('userboard')"
                   v-if="user_type == 0 && isLoggedIn"
                   key="userboard"
                 >Orders</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   :href="`#tab_cart`"
                   @click="setComponent('cart')"
-                  v-if="user_type == 0 && isLoggedIn"
+                  v-if="user_type == -1 || user_type == 0"
                   key="cart"
                 >Cart({{numInCart}})</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   :href="`#tab_main`"
                   @click="setComponent('main')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Main</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   :href="`#tab_certificates`"
                   @click="setComponent('certificates')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Certificates</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   :href="`#tab_orders`"
                   @click="setComponent('orders')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Orders</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   :href="`#tab_exams`"
                   @click="setComponent('exams')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Exams</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   :href="`#tab_questions`"
                   @click="setComponent('questions')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Questions</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   :href="`#tab_users`"
                   @click="setComponent('users')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Users</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   :href="`#tab_sessions`"
                   @click="setComponent('sessions')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Sessions</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   :href="`#tab_coupons`"
                   @click="setComponent('coupons')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Coupons</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
+                  :href="`#tab_reviews`"
+                  @click="setComponent('reviews')"
+                >Reviews</v-tab>
+                <v-tab
+                  class="font-weight-bold text--black"
                   :href="`#tab_services`"
                   v-if="user_type !=1"
                   @click="active_user_drawer='user_drawer_home';active_admin_drawer='admin_drawer_home';$vuetify.goTo('#tab_services', {
@@ -566,6 +582,7 @@
               })"
                 >Our Services</v-tab>
                 <v-tab
+                  class="font-weight-bold text--black"
                   :href="`#tab_contactus`"
                   v-if="user_type !=1"
                   @click="active_user_drawer='user_drawer_home';active_admin_drawer='admin_drawer_home';$vuetify.goTo('#tab_contactus', {
@@ -574,7 +591,7 @@
                 easing: 'easeInOutQuad'
               })"
                 >Contact us</v-tab>
-                <v-spacer />
+                <!-- <v-spacer />
                 <v-divider class="ma-0 pa-0 grey lighten-2" vertical></v-divider>
                 <v-tab
                   class="pl-0"
@@ -588,7 +605,7 @@
                   :href="`#tab_register`"
                   v-if="user_type ==-1 && !isLoggedIn"
                   @click="active_user_drawer='user_drawer_home';active_admin_drawer='admin_drawer_home';"
-                >Sign up</v-tab>
+                >Sign up</v-tab>-->
               </v-tabs>
             </v-card>
           </v-hover>
@@ -719,6 +736,14 @@
               <v-list-item-title class="white--text">Coupons</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item @click="setComponent('reviews')" value="admin_drawer_reviews">
+            <v-list-item-icon>
+              <v-icon class="white--text">preview</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title class="white--text">Reviews</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
       <v-footer app>
@@ -835,7 +860,14 @@
               </v-list-item-action>
             </v-list-item>
           </v-list-group>
-
+          <v-list-item @click="setComponent('reviews')" value="user_drawer_reviews">
+            <v-list-item-icon>
+              <v-icon class="white--text">preview</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title class="white--text">Reviews</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <!-- <v-divider></v-divider> -->
         </v-list-item-group>
       </v-list>
@@ -846,7 +878,7 @@
     </v-navigation-drawer>
     <v-main>
       <v-app fluid>
-        <v-flex style="margin-top:135px">
+        <v-flex style="margin-top:105px">
           <component
             class="myFont"
             id="tab_home"
@@ -878,21 +910,27 @@
             :is="activeComponent"
           ></component>
         </v-flex>
-        <Services
-          v-scrollanimation
+        <Benefits
+          @linkToHome="linkToHome"
+          @linkToReviews="linkToReviews"
           v-show="showParentContent"
-          class="myFont"
+          class="myFont mt-10"
+          id="tab_benefits"
+          v-intersect="handleBenefitsIntersect"
+        />
+        <Services
+          v-show="showParentContent"
+          class="myFont mt-10"
           id="tab_services"
           v-intersect="handleServicesIntersect"
         />
         <ContactUs
-          v-scrollanimation
           v-show="showParentContent"
-          class="myFont"
+          class="myFont mt-10"
           id="tab_contactus"
           v-intersect="handleContactUsIntersect"
         />
-        <Footer v-scrollanimation v-show="showParentContent" class="myFont" id="footer" />
+        <Footer v-show="showParentContent" class="myFont mt-10" id="footer" />
         <ShoppingCartDialog
           :showShoppingCartDialog="showShoppingCartDialog"
           @closeShoppingCartDialog="closeShoppingCartDialog"
@@ -932,6 +970,7 @@ import Admin from "../../views/Admin";
 import UserBoard from "../../views/UserBoard";
 import ShoppingCartDialog from "../appcore/ShoppingCartDialog";
 import Cart from "../../views/Cart";
+import Reviews from "../../views/Reviews";
 import WhishlistDialog from "../appcore/WhishlistDialog";
 import SavedlistDialog from "../appcore/SavedlistDialog";
 import Home from "../../views/Home";
@@ -942,11 +981,12 @@ import StartSession from "../../views/StartSession";
 import * as easings from "vuetify/es5/services/goto/easing-patterns";
 
 import ScrollAnimation from "../../directives/scrollanimation";
+Vue.directive("scrollanimation", ScrollAnimation);
 
+import Benefits from "./Benefits";
 import Services from "./Services";
 import ContactUs from "./ContactUs";
 import Footer from "./Footer";
-Vue.directive("scrollanimation", ScrollAnimation);
 
 export default {
   filters: {
@@ -1001,6 +1041,7 @@ export default {
     Exams,
     Questions,
     Orders,
+    Benefits,
     Services,
     ContactUs,
     Footer,
@@ -1008,6 +1049,7 @@ export default {
     ShoppingCartDialog,
     WhishlistDialog,
     SavedlistDialog,
+    Reviews,
   },
   computed: {
     inCart() {
@@ -1367,6 +1409,18 @@ export default {
       this.activeComponentName = value;
       if (this.user_type == 1) {
         switch (value) {
+          case "reviews":
+            this.showParentContent = true;
+            this.active_tab = "tab_reviews";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "";
+            this.active_user_drawer = "";
+            this.activeComponent = Reviews;
+            this.active_admin_drawer = "admin_drawer_reviews";
+            this.$router.push({ name: "reviews" }).catch((err) => {});
+            break;
           case "cart":
             this.showParentContent = true;
             this.active_tab = "tab_cart";
@@ -1568,6 +1622,17 @@ export default {
         }
       } else if (this.user_type == 0) {
         switch (value) {
+          case "reviews":
+            this.showParentContent = true;
+            this.active_tab = "tab_reviews";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "";
+            this.active_user_drawer = "user_drawer_reviews";
+            this.activeComponent = Reviews;
+            this.$router.push({ name: "reviews" }).catch((err) => {});
+            break;
           case "home":
             this.showParentContent = true;
             this.active_tab = "tab_home";
@@ -1645,7 +1710,19 @@ export default {
             break;
         }
       } else if (this.user_type == -1) {
+        // alert(value);
         switch (value) {
+          case "reviews":
+            this.showParentContent = true;
+            this.active_tab = "tab_reviews";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "";
+            this.active_user_drawer = "";
+            this.activeComponent = Reviews;
+            // this.$router.push({ name: "reviews" }).catch((err) => {});
+            break;
           case "home":
             this.showParentContent = true;
             this.active_tab = "tab_home";
@@ -1654,7 +1731,7 @@ export default {
             this.ShoppingCartMenu = "";
             this.WhishListMenu = "";
             this.activeComponent = Home;
-            this.$router.push({ name: "home" }).catch((err) => {});
+            // this.$router.push({ name: "home" }).catch((err) => {});
             break;
           case "register":
             this.showParentContent = false;
@@ -1704,28 +1781,38 @@ export default {
             this.ShoppingCartMenu = "";
             this.WhishListMenu = "";
             this.activeComponent = Home;
-            this.$router.push({ name: "home" }).catch((err) => {});
+            // this.$router.push({ name: "home" }).catch((err) => {});
             break;
         }
       }
     },
     handleHomeIntersect(entries, observer) {
-      // console.log(JSON.stringify(entries));
-      if (!this.isLoggedIn && entries[0].isIntersecting) {
-        this.active_tab = "tab_home";
-      }
+      // if (!this.isLoggedIn && entries[0].isIntersecting) {
+      //   this.active_tab = "tab_home";
+      // }
     },
     handleContactUsIntersect(entries, observer) {
-      // console.log(JSON.stringify(entries));
-      if (!this.isLoggedIn && entries[0].isIntersecting) {
-        this.active_tab = "tab_contactus";
-      }
+      // if (!this.isLoggedIn && entries[0].isIntersecting) {
+      //   this.active_tab = "tab_contactus";
+      // }
+    },
+    handleBenefitsIntersect(entries, observer) {
+      // if (!this.isLoggedIn && entries[0].isIntersecting) {
+      //   this.active_tab = "tab_benefits";
+      // }
     },
     handleServicesIntersect(entries, observer) {
-      // console.log(JSON.stringify(entries));
-      if (!this.isLoggedIn && entries[0].isIntersecting) {
-        this.active_tab = "tab_services";
-      }
+      // if (!this.isLoggedIn && entries[0].isIntersecting) {
+      //   this.active_tab = "tab_services";
+      // }
+    },
+    linkToReviews() {
+      this.setComponent("reviews");
+      this.$vuetify.goTo("#navbar", {
+        offset: 100,
+        duration: 2000,
+        easing: "easeInOutQuad",
+      });
     },
     linkToHome() {
       this.setComponent("home");
@@ -1842,5 +1929,8 @@ a.v-tab {
 }
 .navBar {
   /* z-index: 1000 !important; */
+}
+.v-tab:hover {
+  color: orange !important;
 }
 </style>

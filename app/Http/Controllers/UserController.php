@@ -63,6 +63,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:50',
             'email' => 'required|email',
+            'country' => 'required',
             'password' => 'required|min:5',
             'c_password' => 'required|same:password',
         ]);
@@ -71,7 +72,7 @@ class UserController extends Controller
             return response()->json(['error' => $validator->errors()], 401);
         }
 
-        $data = $request->only(['name', 'email', 'password']);
+        $data = $request->only(['name', 'email','country', 'password']);
         $data['password'] = bcrypt($data['password']);
 
         $user = User::create($data);

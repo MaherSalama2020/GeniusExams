@@ -78,6 +78,17 @@
                       </v-row>
                     </v-card-text>
                     <v-card-actions class="mb-0 mt-0">
+                      <span style="color:#FF9800;">{{certificate.rate}}</span>
+                      <v-rating
+                        dense
+                        v-model="certificate.rate"
+                        background-color="grey darken-1"
+                        empty-icon="$ratingFull"
+                        color="#FF9800"
+                        half-increments
+                        readonly
+                        size="20"
+                      ></v-rating>
                       <v-spacer />
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
@@ -166,6 +177,111 @@
     <!-- <hr class="hr mt-0 mb-0" /> -->
     <template>
       <v-card flat>
+        <v-card-text v-if="sessions.length>0">
+          <v-row no-gutters align="center" justify="center">
+            <v-slide-y-transition>
+              <v-row
+                no-gutters
+                align="center"
+                justify="center"
+                v-if="responseReady&&responseMessageStatus"
+              >
+                <v-col>
+                  <v-alert
+                    type="success"
+                    border="left"
+                    colored-border
+                    color="success accent-4"
+                    elevation="2"
+                    dismissible
+                  >
+                    {{responseMessage}}
+                    <v-btn
+                      text
+                      color="success"
+                      class="ml-2"
+                      @click="alertUserReviewsDialog"
+                    >See your reviews</v-btn>
+                  </v-alert>
+                </v-col>
+              </v-row>
+            </v-slide-y-transition>
+            <v-slide-y-transition>
+              <v-row
+                no-gutters
+                align="center"
+                justify="center"
+                v-if="responseReady&&!responseMessageStatus"
+              >
+                <v-col>
+                  <v-alert
+                    type="error"
+                    border="left"
+                    colored-border
+                    color="error accent-4"
+                    elevation="2"
+                    dismissible
+                  >{{responseMessage}}</v-alert>
+                </v-col>
+              </v-row>
+            </v-slide-y-transition>
+          </v-row>
+          <v-row no-gutters align="center" justify="center" v-if="!rated">
+            <v-form
+              v-model="isValid"
+              ref="reviewForm"
+              v-on:submit.prevent="sendReview"
+              class="col-md-12"
+            >
+              <v-row no-gutters align="center" justify="center">
+                <v-col cols="12" md="1">
+                  <span class="text--lighten-2 caption mr-2">Rate: ({{ default_rating }})</span>
+                </v-col>
+                <v-col cols="12" md="2">
+                  <v-rating
+                    dense
+                    v-model="default_rating"
+                    background-color="grey darken-1"
+                    empty-icon="$ratingFull"
+                    color="#FF9800"
+                    half-increments
+                    hover
+                    size="20"
+                    @input="callToggleReview"
+                  ></v-rating>
+                </v-col>
+              </v-row>
+              <v-slide-y-transition>
+                <v-row v-show="ToggleReview" align="center" justify="center">
+                  <v-col class="col-md-8">
+                    <v-textarea
+                      label="Enter Review"
+                      outlined
+                      required
+                      dense
+                      v-model="review"
+                      :rules="requiredRules"
+                      color="purple"
+                      no-resize
+                    >
+                      <template v-slot:append>
+                        <v-btn
+                          small
+                          @click="sendReview"
+                          color="orange white--text"
+                          :disabled="!isValid"
+                        >
+                          Submit
+                          <v-icon right small color="white">send</v-icon>
+                        </v-btn>
+                      </template>
+                    </v-textarea>
+                  </v-col>
+                </v-row>
+              </v-slide-y-transition>
+            </v-form>
+          </v-row>
+        </v-card-text>
         <v-card-actions>
           <v-row no-gutters align="center" justify="start">
             <v-col col2="12" md="1">
@@ -204,40 +320,19 @@
                 Collapse All
               </v-tooltip>
             </v-col>
-            <v-col cols="12" md="1" v-if="uRate!=0 && isLoggedIn">
-              <span class="text--lighten-2 caption mr-2">Rated: ({{ uRate }})</span>
-            </v-col>
-            <v-col v-if="uRate!=0 && isLoggedIn">
-              <v-rating
-                v-model="uRate"
-                background-color="grey darken-1"
-                empty-icon="$ratingFull"
-                color="#FF9800"
-                half-increments
-                readonly
-                size="20"
-              ></v-rating>
-            </v-col>
-            <v-col cols="12" md="1" v-if="uRate==0&& isLoggedIn">
-              <span class="text--lighten-2 caption mr-2">Rate: ({{ default_rating }})</span>
-            </v-col>
-            <v-col v-if="uRate==0&& isLoggedIn">
-              <v-rating
-                v-model="default_rating"
-                background-color="grey darken-1"
-                empty-icon="$ratingFull"
-                color="#FF9800"
-                half-increments
-                hover
-                size="20"
-                @input="rateCertificate"
-              ></v-rating>
-            </v-col>
           </v-row>
         </v-card-actions>
 
         <v-card-text>
-          <v-expansion-panels ocusable color="warning" v-model="panel" multiple popout>
+          <v-expansion-panels
+            ocusable
+            color="warning"
+            v-model="panel"
+            multiple
+            popout
+            focusable
+            :hover="true"
+          >
             <v-expansion-panel v-for="session in sessions" :key="session.id">
               <v-expansion-panel-header disable-icon-rotate>
                 {{session.exam.name}}&nbsp;{{session.exam.type}}
@@ -268,6 +363,7 @@
                   <v-chip color="orange" dark>{{session.exam.passing_rate}}%</v-chip>
                 </span>
                 <SessionAnswers
+                  class="border-left"
                   :answers="session.answers"
                   :certificate_id="session.certificate_id"
                   :exam_id="session.exam_id"
@@ -290,17 +386,30 @@
       :duration="duration"
       @closeSessionDialog="closeSessionDialog"
     />
+    <UserReviewsDialog
+      :showUserReviewsDialog="showUserReviewsDialog"
+      @closeUserReviewsDialog="closeUserReviewsDialog"
+      :userReviews="userReviews"
+    />
   </div>
 </template>
 <script>
 import SessionDialog from "../components/appcore/SessionDialog";
 import SessionAnswers from "../components/appcore/SessionAnswers";
+import UserReviewsDialog from "../components/appcore/UserReviewsDialog";
+
 import { VueperSlides, VueperSlide } from "vueperslides";
 import "vueperslides/dist/vueperslides.css";
 export default {
   props: ["isLoggedIn"],
   data() {
     return {
+      ToggleReview: false,
+      responseReady: false,
+      responseMessage: "",
+      responseMessageStatus: "",
+      isValid: false,
+      review: "",
       panel: [],
       sessions: [],
       exams: [],
@@ -313,16 +422,24 @@ export default {
       duration: -1,
       type: "",
       passing_rate: "",
-      ceertificate: {},
+      certificate: {},
       certificate_id: 0,
       certificate_name: "",
-      cRate: 0,
-      uRate: 0,
       default_rating: 2.5,
+      userReviews: [],
       user: {},
+      requiredRules: [(v) => !!v || "required!!"],
+      rated: false,
+      showUserReviewsDialog: false,
     };
   },
-  components: { SessionDialog, SessionAnswers, VueperSlides, VueperSlide },
+  components: {
+    SessionDialog,
+    SessionAnswers,
+    VueperSlides,
+    VueperSlide,
+    UserReviewsDialog,
+  },
   beforeMount() {
     if (localStorage.getItem("genius.jwt") != null) {
       this.user = JSON.parse(localStorage.getItem("genius.user"));
@@ -332,19 +449,10 @@ export default {
     let certificate_id = id;
     this.certificate_id = id;
     axios.get(`/api/certificates/${id}`).then((response) => {
-      console.log(response.data);
       this.certificate_name = response.data.name;
       this.certificate = response.data;
-      this.uRate = 0;
-      this.default_rating = 2.5;
-      let filteredRate = this.certificate.rates.filter(
-        (rate) =>
-          rate.user_id == this.user.id &&
-          rate.certificate_id == this.certificate.id
-      );
-      if (filteredRate[0]) this.uRate = filteredRate[0].value;
-      axios.post("/api/rates/crate", { certificate_id }).then((res) => {
-        this.cRate = res.data.rate;
+      axios.post("/api/reviews/crate", { certificate_id }).then((res) => {
+        this.certificate.rate = res.data.rate;
       });
     });
     axios.post("/api/certificates/cexams/", { id }).then((response) => {
@@ -365,6 +473,9 @@ export default {
   // },
 
   methods: {
+    callToggleReview() {
+      this.ToggleReview = !this.ToggleReview;
+    },
     linkToHome() {
       this.$emit("linkToHome");
     },
@@ -431,17 +542,62 @@ export default {
     none() {
       this.panel = [];
     },
-    rateCertificate() {
+    sendReview() {
+      this.responseReady = false;
+      this.responseMessage = "";
+      this.responseMessageStatus = false;
+      this.spinner = true;
       let certificate_id = this.certificate.id;
-      let value = 0;
-      this.uRate = this.default_rating;
-      if (this.uRate == 0) value = this.default_rating;
-      else value = this.uRate;
-      axios.post("/api/rates", { certificate_id, value }).then((response) => {
-        axios.post("/api/rates/crate", { certificate_id }).then((res) => {
-          this.cRate = res.data.rate;
+      let value = this.default_rating;
+      let review = this.review;
+      axios
+        .post("/api/reviews", { certificate_id, review, value })
+        .then((response) => {
+          this.rated = true;
+          this.spinner = false;
+          this.responseReady = true;
+          this.responseMessageStatus = response.data.status;
+          this.responseMessage = response.data.message;
+          axios
+            .post("/api/reviews/crate", { certificate_id })
+            .then((res) => {
+              this.certificate.rate = res.data.rate;
+              this.spinner = false;
+            })
+            .catch(() => {
+              this.spinner = false;
+            });
+          this.$refs.reviewForm.reset();
+        })
+        .catch((error) => {
+          this.spinner = false;
+          this.responseReady = true;
+          this.responseMessageStatus = false;
+          this.responseMessage = "Something went wrong!!";
         });
-      });
+    },
+    alertUserReviewsDialog() {
+      this.spinner = true;
+      let id = this.certificate.id;
+      axios
+        .post(`/api/certificates/creviews`, { id })
+        .then((response) => {
+          let filteredReviews = response.data.filter(
+            (review) =>
+              review.user_id == this.user.id &&
+              review.certificate_id == this.certificate.id
+          );
+          this.userReviews = filteredReviews;
+          // console.log(this.certificate.reviews);
+          this.spinner = false;
+          this.showUserReviewsDialog = true;
+        })
+        .catch((error) => {
+          this.spinner = false;
+        });
+    },
+    closeUserReviewsDialog() {
+      this.showUserReviewsDialog = false;
     },
   },
 };

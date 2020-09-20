@@ -35,11 +35,15 @@ Route::post('/coupons/apply', 'CouponController@ApplyCoupon');
 Route::post('reset-password', 'Auth\AuthController@sendPasswordResetLink');
 // handle reset password form process
 Route::post('reset/password', 'Auth\AuthController@callResetPassword');
-Route::resource('/cart', 'CartController');
-Route::post('/rates/crate', 'RateController@cRate');
+// Route::resource('/cart', 'CartController');
+Route::post('/reviews/crate', 'ReviewController@cRate');
+Route::get('/reviews', 'ReviewController@index');
+Route::post('/reviews/paginate', 'ReviewController@paginate');
 
 Route::group(['middleware' => 'auth:api'], function(){
-    Route::resource('/rates', 'RateController');
+    Route::resource('/reviews', 'ReviewController')->except(['index']);
+    // Route::post('/reviews/delete', 'ReviewController@destroy');
+    // Route::resource('/rates', 'RateController');
     Route::resource('/coupons', 'CouponController');
     Route::post('/coupons/paginate','CouponController@paginate');
     Route::post('/coupons/checkcode','CouponController@checkCode');
@@ -73,6 +77,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('/exams/nequestions', 'ExamController@neQuestions');
     Route::post('/exams/unjoinquestion', 'ExamController@unjoinQuestion');
     Route::post('/exams/joinquestion', 'ExamController@joinQuestion');
+    Route::post('/certificates/creviews', 'CertificateController@cReviews');
     Route::post('/certificates/cexams', 'CertificateController@cExams');
     Route::post('/certificates/ncexams', 'CertificateController@ncExams');
     Route::post('/certificates/unjoinexam', 'CertificateController@unjoinExam');

@@ -400,7 +400,7 @@
                         <template v-slot:loader>
                           <span>submit</span>
                           <span class="custom-loader">
-                            <v-icon light color="orange" right>autorenew</v-icon>
+                            <v-icon light color="orange">autorenew</v-icon>
                           </span>
                         </template>
                       </v-btn>

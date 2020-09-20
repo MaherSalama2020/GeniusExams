@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid fill-height>
     <v-carousel>
       <v-carousel-item :key="i" v-for="i in 5">
         <v-layout row>
