@@ -61,7 +61,7 @@
           >{{headers[item.sequence-1]}}.{{item.name}}</span>-->
           <v-row v-if="item.children" no-gutters align="center" justify="start">
             <span>
-              <h6 class="text-wrap">{{item.sequence}}.&nbsp;{{item.name}}</h6>
+              <span class="text-wrap">{{item.sequence}}.&nbsp;{{item.name}}</span>
             </span>
             <v-img
               v-if="item.children&&item.image"

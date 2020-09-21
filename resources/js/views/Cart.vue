@@ -34,8 +34,8 @@
     <v-container>
       <v-col v-if="!isLoggedIn" class="col-md-7">
         <h4>You need to login or register to continue</h4>
-        <v-btn color="success" @click="enrollLogin">Login</v-btn>
-        <v-btn color="info" @click="enrollRegister">Register</v-btn>
+        <v-btn color="success" @click="enrollLogin" class="hovered-button-green mr-2">Login</v-btn>
+        <v-btn color="info" @click="enrollRegister" class="hovered-button-blue">Register</v-btn>
       </v-col>
     </v-container>
     <v-container v-if="isLoggedIn">
@@ -162,7 +162,13 @@
             <h2 class="font-weight-bold">{{subtotal | dollars}}</h2>
           </v-row>
           <v-row class="mt-1 mb-1" no-gutters>
-            <v-btn large block color="orange white--text" @click="showCheckout">checkout</v-btn>
+            <v-btn
+              large
+              block
+              color="orange white--text"
+              @click="showCheckout"
+              class="hovered-button"
+            >checkout</v-btn>
           </v-row>
           <v-divider class="mt-2 mb-2" />
           <v-slide-y-transition>
@@ -227,6 +233,7 @@
                         @click="applyCoupon"
                         color="orange white--text"
                         :disabled="!isValid"
+                        class="hovered-button"
                       >Apply</v-btn>
                     </template>
                   </v-text-field>
@@ -606,5 +613,20 @@ export default {
   opacity: 0.5;
   position: absolute;
   width: 100%;
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+.hovered-button-green:hover {
+  background-color: transparent !important;
+  color: green !important;
+  border: 1px solid green;
+}
+.hovered-button-blue:hover {
+  background-color: transparent !important;
+  color: blue !important;
+  border: 1px solid blue;
 }
 </style>

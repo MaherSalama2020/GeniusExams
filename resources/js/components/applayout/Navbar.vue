@@ -1,5 +1,5 @@
 <template >
-  <div class="myFont">
+  <span class="myFont">
     <v-app-bar color="orange" dark fixed hide-on-scroll v-show="showParentContent" class="navBar">
       <v-app-bar-nav-icon
         class="mt-6 hidden-md-and-up"
@@ -89,12 +89,29 @@
               overlap
               class="ml-0 mr-0"
             >
-              <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
+              <v-menu
+                :nudge-width="200"
+                offset-y
+                nudge-left
+                open-on-hover
+                rounded
+                bottom
+                transition="slide-x-reverse-transition"
+                :close-on-click="false"
+                :close-on-content-click="false"
+                open-delay="200"
+                max-width="325"
+              >
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon dark medium v-bind="attrs" v-on="on">mdi-heart</v-icon>
                 </template>
-                <v-card>
+                <span>
                   <v-list dense v-if="typeof Whishlist[0]!='undefined'">
+                    <v-subheader>
+                      <v-row no-gutters justify="center">
+                        <v-icon x-large color="orange">mdi-menu-down</v-icon>
+                      </v-row>
+                    </v-subheader>
                     <v-list-item-group
                       color="primary"
                       active-class="pink--text "
@@ -106,13 +123,16 @@
                         :selectable="activeComponentName=='whishlist'"
                         :inactive="activeComponentName=='whishlist'"
                         @click="showSingleCertificate(item.id,'home')"
+                        class="active-menu-item-list"
                       >
                         <v-list-item-avatar tile>
                           <v-img :src="item.image" alt="item.name" />
                         </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title>{{item.name}}</v-list-item-title>
-                          <v-list-item-subtitle class="font-weight-bold">{{item.price | dollars}}</v-list-item-subtitle>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item py-1">{{item.name}}</v-list-item-title>
+                          <v-list-item-subtitle
+                            class="font-weight-bold active-menu-item py-1"
+                          >{{item.price | dollars}}</v-list-item-subtitle>
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-tooltip bottom>
@@ -149,29 +169,50 @@
                       >Go to Whishlist</v-btn>
                     </v-row>-->
                   </v-list>
-                </v-card>
+                </span>
               </v-menu>
             </v-badge>
             <!-- Empty Whishlist -->
             <div class="ml-0 mr-0" v-show="numInWhishlist ==0 && (user_type ==-1 || user_type==0)">
-              <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
+              <v-menu
+                :nudge-width="200"
+                offset-y
+                nudge-right
+                open-on-hover
+                rounded
+                bottom
+                transition="slide-x-reverse-transition"
+                :close-on-click="false"
+                :close-on-content-click="false"
+                open-delay="200"
+                max-width="325"
+              >
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon dark medium v-bind="attrs" v-on="on">mdi-heart-outline</v-icon>
                 </template>
-                <v-card>
+                <span>
                   <v-list dense>
+                    <v-subheader>
+                      <v-row no-gutters justify="center">
+                        <v-icon x-large color="orange">mdi-menu-down</v-icon>
+                      </v-row>
+                    </v-subheader>
                     <v-list-item-group color="primary" active-class="black--text ">
-                      <v-list-item :selectable="true" :inactive="true">
+                      <v-list-item
+                        :selectable="true"
+                        :inactive="true"
+                        class="active-menu-item-list"
+                      >
                         <v-list-item-avatar tile>
                           <v-icon>mdi-heart-outline</v-icon>
                         </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title>Whish List is Empty</v-list-item-title>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item py-1">Whish List is Empty</v-list-item-title>
                         </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
                   </v-list>
-                </v-card>
+                </span>
               </v-menu>
             </div>
             <!-- end of Whishllist -->
@@ -191,12 +232,20 @@
                 rounded
                 bottom
                 data-container="body"
+                transition="slide-x-reverse-transition"
+                open-delay="200"
+                max-width="325"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon dark medium v-bind="attrs" v-on="on">shopping_cart</v-icon>
                 </template>
-                <v-card>
+                <span>
                   <v-list dense v-if="typeof shoppingcart[0]!='undefined'">
+                    <v-subheader>
+                      <v-row no-gutters justify="center">
+                        <v-icon x-large color="orange">mdi-menu-down</v-icon>
+                      </v-row>
+                    </v-subheader>
                     <v-list-item-group
                       color="primary"
                       active-class="pink--text "
@@ -206,19 +255,22 @@
                         v-for="(item) in shoppingcart"
                         :key="item.id+'-certificatesNavBar'"
                         @click="showSingleCertificate(item.id,'home')"
+                        class="active-menu-item-list"
                       >
                         <v-list-item-avatar tile>
                           <v-img :src="item.image" alt="item.name" />
                         </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title>{{item.name}}</v-list-item-title>
-                          <v-list-item-subtitle class="font-weight-bold">{{item.price | dollars}}</v-list-item-subtitle>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item py-1">{{item.name}}</v-list-item-title>
+                          <v-list-item-subtitle
+                            class="active-menu-item font-weight-bold"
+                          >{{item.price | dollars}}</v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
                       <v-divider class="mt-1 mb-1" />
                       <v-list-item :selectable="true" :inactive="true" active-class="black--text">
                         <v-list-item-content>
-                          <v-list-item-title>
+                          <v-list-item-title class="active-menu-item py-1">
                             <p class="font-weight-black ma-0 pa-0">
                               Total:
                               <span style="position:absolute; right:15px">{{total | dollars}}</span>
@@ -233,38 +285,70 @@
                         color="orange white--text"
                         block
                         @click="setComponent('cart')"
+                        class="hovered-button"
                       >Go to cart</v-btn>
                     </v-row>
                   </v-list>
-                </v-card>
+                </span>
               </v-menu>
             </v-badge>
             <!-- Empty Shopping Cart -->
             <div class="ml-8 mr-0" v-if="numInCart==0 && (user_type ==-1 || user_type==0)">
-              <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
+              <v-menu
+                :nudge-width="200"
+                offset-y
+                nudge-right
+                open-on-hover
+                rounded
+                bottom
+                transition="slide-x-reverse-transition"
+                :close-on-click="false"
+                :close-on-content-click="false"
+                open-delay="200"
+                max-width="325"
+              >
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon dark medium v-bind="attrs" v-on="on">mdi-cart-outline</v-icon>
                 </template>
-                <v-card>
+                <span>
                   <v-list dense>
+                    <v-subheader>
+                      <v-row no-gutters justify="center">
+                        <v-icon x-large color="orange">mdi-menu-down</v-icon>
+                      </v-row>
+                    </v-subheader>
                     <v-list-item-group color="primary" active-class="black--text ">
-                      <v-list-item :selectable="true" :inactive="true">
+                      <v-list-item
+                        :selectable="true"
+                        :inactive="true"
+                        class="active-menu-item-list"
+                      >
                         <v-list-item-avatar tile>
                           <v-icon>mdi-cart-outline</v-icon>
                         </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title>Shopping Cart is Empty</v-list-item-title>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item py-1">Shopping Cart is Empty</v-list-item-title>
                         </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
                   </v-list>
-                </v-card>
+                </span>
               </v-menu>
             </div>
             <!-- end of Shopping Cart -->
             <!-- Profile -->
-            <div class="mr-0 ml-8">
-              <v-menu :nudge-width="200" offset-y nudge-left open-on-hover rounded bottom>
+            <div class="mr-1 ml-8">
+              <v-menu
+                :nudge-width="200"
+                offset-y
+                nudge-right
+                open-on-hover
+                rounded
+                bottom
+                transition="slide-x-reverse-transition"
+                open-delay="200"
+                max-width="325"
+              >
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon light medium dark v-bind="attrs" v-on="on">mdi-account</v-icon>
                   <!-- <v-avatar color="purple" v-bind="attrs" v-on="on" size="32px">
@@ -272,38 +356,51 @@
             <v-badge color="error" v-if="numInCart >0" dot></v-badge>
                   </v-avatar>-->
                 </template>
-                <v-card>
+                <span>
                   <v-list dense v-if="!isLoggedIn">
-                    <v-subheader>Account</v-subheader>
+                    <v-subheader>
+                      <v-row no-gutters justify="center">
+                        <v-icon x-large color="orange">mdi-menu-down</v-icon>
+                      </v-row>
+                    </v-subheader>
                     <v-list-item-group
                       color="indigo"
                       active-class="pink--text "
                       v-model="NotLoggedInMenu"
                     >
-                      <v-list-item @click="setComponent('login')" value="NotLoggedInMenu_login">
-                        <v-list-item-icon>
+                      <v-list-item
+                        @click="setComponent('login')"
+                        value="NotLoggedInMenu_login"
+                        class="active-menu-item-list"
+                      >
+                        <v-list-item-icon class>
                           <v-icon>mdi-login</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title>Sign in</v-list-item-title>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item py-1">Sign in</v-list-item-title>
                         </v-list-item-content>
                       </v-list-item>
                       <!-- <v-divider></v-divider> -->
                       <v-list-item
                         @click="setComponent('register')"
                         value="NotLoggedInMenu_register"
+                        class="active-menu-item-list"
                       >
                         <v-list-item-icon>
                           <v-icon>mdi-account-plus</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title>Sign up</v-list-item-title>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item py-1">Sign up</v-list-item-title>
                         </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
                   </v-list>
                   <v-list dense v-else>
-                    <v-subheader>Account</v-subheader>
+                    <v-subheader>
+                      <v-row no-gutters justify="center">
+                        <v-icon x-large color="orange">mdi-menu-down</v-icon>
+                      </v-row>
+                    </v-subheader>
                     <v-list-item-group
                       color="primary"
                       active-class="pink--text "
@@ -313,52 +410,45 @@
                         v-if="user_type == 0 && isLoggedIn"
                         @click="setComponent('userboard')"
                         value="LoggedInMenu_userboard"
+                        class="active-menu-item-list"
                       >
                         <v-list-item-avatar>
                           <v-avatar color="purple" size="48px">
                             <span class="white--text font-weight-bold">{{abreviatedName}}</span>
                           </v-avatar>
                         </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title>Hi, {{name}}</v-list-item-title>
-                          <v-list-item-subtitle>Genius Exams Website</v-list-item-subtitle>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item">Hi, {{name}}</v-list-item-title>
+                          <v-list-item-subtitle class="active-menu-item py-2">Genius Exams Website</v-list-item-subtitle>
                         </v-list-item-content>
-                        <!-- <v-list-item-action>
-                  <v-btn :class="fav ? 'red--text' : ''" icon @click="fav = !fav">
-                    <v-icon>mdi-heart</v-icon>
-                  </v-btn>
-                        </v-list-item-action>-->
                       </v-list-item>
                       <v-divider class="mt-1 mb-1" />
                       <v-list-item
                         v-if="user_type == 1 && isLoggedIn"
                         @click="setComponent('main')"
                         value="LoggedInMenu_main"
+                        class="active-menu-item-list"
                       >
                         <v-list-item-avatar>
                           <v-img src="./images/logo.png" alt="Genius Exams" />
                         </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title>Hi, {{name}}</v-list-item-title>
-                          <v-list-item-subtitle>Genius Exams Website</v-list-item-subtitle>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item">Hi, {{name}}</v-list-item-title>
+                          <v-list-item-subtitle class="active-menu-item py-1">Genius Exams Website</v-list-item-subtitle>
                         </v-list-item-content>
-                        <!-- <v-list-item-action>
-                  <v-btn :class="fav ? 'red--text' : ''" icon @click="fav = !fav">
-                    <v-icon>mdi-heart</v-icon>
-                  </v-btn>
-                        </v-list-item-action>-->
                       </v-list-item>
                       <v-list-item
                         v-if="user_type == 0 && isLoggedIn"
                         @click="alertShoppingCartDialog "
                         value="LoggedInMenu_cart"
+                        class="active-menu-item-list"
                       >
                         <v-list-item-icon>
                           <v-icon color="error" v-if="numInCart>0">mdi-cart</v-icon>
                           <v-icon v-else>mdi-cart-outline</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title>My cart</v-list-item-title>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item py-1">My cart</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-badge
@@ -375,13 +465,14 @@
                         v-if="user_type == 0 && isLoggedIn"
                         @click="alertWhishlistDialog "
                         value="LoggedInMenu_whish"
+                        class="active-menu-item-list"
                       >
                         <v-list-item-icon>
                           <v-icon color="error" v-if="numInWhishlist>0">mdi-heart</v-icon>
                           <v-icon v-else>mdi-heart-outline</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title>Whish List</v-list-item-title>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item py-1">Whish List</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-badge
@@ -398,13 +489,14 @@
                         v-if="user_type == 0 && isLoggedIn"
                         @click="alertSavedlistDialog "
                         value="LoggedInMenu_saved"
+                        class="active-menu-item-list"
                       >
                         <v-list-item-icon>
                           <v-icon color="error" v-if="numInSavedlist>0">mdi-clock</v-icon>
                           <v-icon v-else>mdi-clock-outline</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title>Saved List</v-list-item-title>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item py-1">Saved List</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-badge
@@ -421,26 +513,31 @@
                       <v-list-item
                         @click="setComponent('changepassword'); "
                         value="LoggedInMenu_changepassword"
+                        class="active-menu-item-list"
                       >
                         <v-list-item-icon>
                           <v-icon>mdi-key-change</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title>Change Password</v-list-item-title>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item py-1">Change Password</v-list-item-title>
                         </v-list-item-content>
                       </v-list-item>
                       <!-- <v-divider></v-divider> -->
-                      <v-list-item @click="logout" value="LoggedInMenu_logout">
+                      <v-list-item
+                        @click="logout"
+                        value="LoggedInMenu_logout"
+                        class="active-menu-item-list"
+                      >
                         <v-list-item-icon>
                           <v-icon>mdi-logout</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title>Sign out</v-list-item-title>
+                        <v-list-item-content class="active-menu-item-content">
+                          <v-list-item-title class="active-menu-item py-1">Sign out</v-list-item-title>
                         </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
                   </v-list>
-                </v-card>
+                </span>
               </v-menu>
             </div>
           </v-row>
@@ -462,6 +559,7 @@
               light
               class="py-2"
               color="orange lighten-5"
+              shaped
             >
               <v-tabs
                 show-arrows
@@ -475,7 +573,6 @@
               >
                 <v-tabs-slider></v-tabs-slider>
                 <v-tab
-                  class="font-weight-bold text--black"
                   v-if="user_type==0 && isLoggedIn"
                   :href="`#tab_home`"
                   @click="setComponent('home');   $vuetify.goTo('#navbar', {
@@ -485,7 +582,6 @@
                 })"
                 >Home</v-tab>
                 <v-tab
-                  class="font-weight-bold text--black"
                   v-if="user_type==-1 && !isLoggedIn"
                   :href="`#tab_home`"
                   @click="setComponent('home');   $vuetify.goTo('#navbar', {
@@ -495,7 +591,6 @@
                 })"
                 >Home</v-tab>
                 <v-tab
-                  class="font-weight-bold text--black"
                   v-if="user_type==1 && isLoggedIn"
                   :href="`#tab_home`"
                   @click="active_admin_drawer='admin_drawer_home';   setComponent('home');   $vuetify.goTo('#navbar', {
@@ -505,73 +600,60 @@
                 })"
                 >Home</v-tab>
                 <v-tab
-                  class="font-weight-bold text--black"
                   :href="`#tab_requests`"
                   @click="setComponent('userboard')"
                   v-if="user_type == 0 && isLoggedIn"
                   key="userboard"
                 >Orders</v-tab>
                 <v-tab
-                  class="font-weight-bold text--black"
                   :href="`#tab_cart`"
                   @click="setComponent('cart')"
                   v-if="user_type == -1 || user_type == 0"
                   key="cart"
                 >Cart({{numInCart}})</v-tab>
                 <v-tab
-                  class="font-weight-bold text--black"
                   :href="`#tab_main`"
                   @click="setComponent('main')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Main</v-tab>
                 <v-tab
-                  class="font-weight-bold text--black"
                   :href="`#tab_certificates`"
                   @click="setComponent('certificates')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Certificates</v-tab>
                 <v-tab
-                  class="font-weight-bold text--black"
                   :href="`#tab_orders`"
                   @click="setComponent('orders')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Orders</v-tab>
                 <v-tab
-                  class="font-weight-bold text--black"
                   :href="`#tab_exams`"
                   @click="setComponent('exams')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Exams</v-tab>
                 <v-tab
-                  class="font-weight-bold text--black"
                   :href="`#tab_questions`"
                   @click="setComponent('questions')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Questions</v-tab>
                 <v-tab
-                  class="font-weight-bold text--black"
                   :href="`#tab_users`"
                   @click="setComponent('users')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Users</v-tab>
                 <v-tab
-                  class="font-weight-bold text--black"
                   :href="`#tab_sessions`"
                   @click="setComponent('sessions')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Sessions</v-tab>
                 <v-tab
-                  class="font-weight-bold text--black"
                   :href="`#tab_coupons`"
                   @click="setComponent('coupons')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Coupons</v-tab>
-                <v-tab
-                  class="font-weight-bold text--black"
-                  :href="`#tab_reviews`"
-                  @click="setComponent('reviews')"
-                >Reviews</v-tab>
-                <v-tab
+                <v-tab :href="`#tab_reviews`" @click="setComponent('reviews')">Reviews</v-tab>
+                <v-tab :href="`#tab_allfaqs`" @click="setComponent('allfaqs')">FAQS</v-tab>
+                <!-- <v-tab
                   class="font-weight-bold text--black"
                   :href="`#tab_services`"
                   v-if="user_type !=1"
@@ -580,9 +662,8 @@
                 duration: 2000,
                 easing: 'easeInOutQuad'
               })"
-                >Our Services</v-tab>
+                >Our Services</v-tab>-->
                 <v-tab
-                  class="font-weight-bold text--black"
                   :href="`#tab_contactus`"
                   v-if="user_type !=1"
                   @click="active_user_drawer='user_drawer_home';active_admin_drawer='admin_drawer_home';$vuetify.goTo('#tab_contactus', {
@@ -625,6 +706,7 @@
             right
             color="black"
             @click="toTop"
+            class="hovered-button-black"
           >
             <v-icon large class="arrow">keyboard_arrow_up</v-icon>
           </v-btn>
@@ -659,89 +741,141 @@
       </v-img>
       <v-list dense nav class="pt-3 white--text">
         <v-list-item-group color="primary" v-model="active_admin_drawer" active-class="pink--text ">
-          <v-list-item @click="setComponent('home')" value="admin_drawer_home">
+          <v-list-item
+            @click="setComponent('home')"
+            value="admin_drawer_home"
+            class="active-drawer-item-list"
+          >
             <v-list-item-action>
               <v-icon class="white--text">home</v-icon>
             </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Home</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Home</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="setComponent('main')" value="admin_drawer_main">
+          <v-list-item
+            @click="setComponent('main')"
+            value="admin_drawer_main"
+            class="active-drawer-item-list"
+          >
             <v-list-item-action>
               <v-icon class="white--text">home</v-icon>
             </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Main</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Main</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
-          <v-list-item @click="setComponent('certificates')" value="admin_drawer_certificates">
+          <v-list-item
+            @click="setComponent('certificates')"
+            value="admin_drawer_certificates"
+            class="active-drawer-item-list"
+          >
             <v-list-item-action>
               <v-icon class="white--text">dashboard</v-icon>
             </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Certificates</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Certificates</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
-          <v-list-item @click="setComponent('orders')" value="admin_drawer_requests">
+          <v-list-item
+            @click="setComponent('orders')"
+            value="admin_drawer_requests"
+            class="active-drawer-item-list"
+          >
             <v-list-item-action>
               <v-icon class="white--text">dashboard</v-icon>
             </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Orders</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Orders</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
-          <v-list-item @click="setComponent('exams')" value="admin_drawer_exams">
+          <v-list-item
+            @click="setComponent('exams')"
+            value="admin_drawer_exams"
+            class="active-drawer-item-list"
+          >
             <v-list-item-action>
               <v-icon class="white--text">dashboard</v-icon>
             </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Exams</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Exams</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
-          <v-list-item @click="setComponent('questions')" value="admin_drawer_questions">
+          <v-list-item
+            @click="setComponent('questions')"
+            value="admin_drawer_questions"
+            class="active-drawer-item-list"
+          >
             <v-list-item-action>
               <v-icon class="white--text">dashboard</v-icon>
             </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Questions</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Questions</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
-          <v-list-item @click="setComponent('users')" value="admin_drawer_users">
+          <v-list-item
+            @click="setComponent('users')"
+            value="admin_drawer_users"
+            class="active-drawer-item-list"
+          >
             <v-list-item-action>
               <v-icon class="white--text">dashboard</v-icon>
             </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Users</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Users</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="setComponent('sessions')" value="admin_drawer_sessions">
+          <v-list-item
+            @click="setComponent('sessions')"
+            value="admin_drawer_sessions"
+            class="active-drawer-item-list"
+          >
             <v-list-item-action>
               <v-icon class="white--text">dashboard</v-icon>
             </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Sessions</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Sessions</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="setComponent('coupons')" value="admin_drawer_coupons">
+          <v-list-item
+            @click="setComponent('coupons')"
+            value="admin_drawer_coupons"
+            class="active-drawer-item-list"
+          >
             <v-list-item-action>
               <v-icon class="white--text">dashboard</v-icon>
             </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Coupons</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Coupons</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="setComponent('reviews')" value="admin_drawer_reviews">
+          <v-list-item
+            @click="setComponent('reviews')"
+            value="admin_drawer_reviews"
+            class="active-drawer-item-list"
+          >
             <v-list-item-icon>
               <v-icon class="white--text">preview</v-icon>
             </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Reviews</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Reviews</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+            @click="setComponent('allfaqs')"
+            value="admin_drawer_allfaqs"
+            class="active-drawer-item-list"
+          >
+            <v-list-item-icon>
+              <v-icon class="white--text">preview</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">FAQS</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -778,36 +912,48 @@
       </v-img>
       <v-list dense nav class="pt-3 white--text">
         <v-list-item-group color="primary" v-model="active_user_drawer" active-class="pink--text ">
-          <v-list-item @click="setComponent('home')" value="user_drawer_home">
+          <v-list-item
+            @click="setComponent('home')"
+            value="user_drawer_home"
+            class="active-drawer-item-list"
+          >
             <v-list-item-icon>
               <v-icon class="white--text">home</v-icon>
             </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Home</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Home</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
-          <v-list-item @click="setComponent('userboard')" value="user_drawer_requests">
+          <v-list-item
+            @click="setComponent('userboard')"
+            value="user_drawer_requests"
+            class="active-drawer-item-list"
+          >
             <v-list-item-icon>
               <v-icon class="white--text">mdi-book-multiple</v-icon>
             </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Orders</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Orders</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-group prepend-icon="mdi-cart" :value="false">
             <template v-slot:activator>
-              <v-list-item-title>Shopping Cart</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1">Shopping Cart</v-list-item-title>
             </template>
-            <v-list-item @click="setComponent('cart')" value="user_drawer_cart">
+            <v-list-item
+              @click="setComponent('cart')"
+              value="user_drawer_cart"
+              class="active-drawer-item-list ml-4"
+            >
               <v-list-item-icon v-if="numInCart==0">
                 <v-icon class="white--text">mdi-cart-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-icon v-if="numInCart>0">
                 <v-icon class="white--text">mdi-cart</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title class="white--text">Cart</v-list-item-title>
+              <v-list-item-content class="active-drawer-item-content">
+                <v-list-item-title class="white--text active-drawer-item py-1">Cart</v-list-item-title>
               </v-list-item-content>
               <v-list-item-action>
                 <v-badge
@@ -819,15 +965,19 @@
                 ></v-badge>
               </v-list-item-action>
             </v-list-item>
-            <v-list-item @click="setComponent('cart')" value="user_drawer_whishlist">
+            <v-list-item
+              @click="setComponent('cart')"
+              value="user_drawer_whishlist"
+              class="active-drawer-item-list ml-4"
+            >
               <v-list-item-icon v-if="numInWhishlist==0">
                 <v-icon class="white--text">mdi-heart-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-icon v-if="numInWhishlist>0">
                 <v-icon class="white--text">mdi-heart</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title class="white--text">Whish List</v-list-item-title>
+              <v-list-item-content class="active-drawer-item-content">
+                <v-list-item-title class="white--text active-drawer-item py-1">Whish List</v-list-item-title>
               </v-list-item-content>
               <v-list-item-action>
                 <v-badge
@@ -839,15 +989,19 @@
                 ></v-badge>
               </v-list-item-action>
             </v-list-item>
-            <v-list-item @click="setComponent('cart')" value="user_drawer_savedlist">
+            <v-list-item
+              @click="setComponent('cart')"
+              value="user_drawer_savedlist"
+              class="active-drawer-item-list ml-4"
+            >
               <v-list-item-icon v-if="numInSavedlist==0">
                 <v-icon class="white--text">mdi-clock-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-icon v-if="numInSavedlist>0">
                 <v-icon class="white--text">mdi-clock</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title class="white--text">Saved List</v-list-item-title>
+              <v-list-item-content class="active-drawer-item-content">
+                <v-list-item-title class="white--text active-drawer-item py-1">Saved List</v-list-item-title>
               </v-list-item-content>
               <v-list-item-action>
                 <v-badge
@@ -860,12 +1014,28 @@
               </v-list-item-action>
             </v-list-item>
           </v-list-group>
-          <v-list-item @click="setComponent('reviews')" value="user_drawer_reviews">
+          <v-list-item
+            @click="setComponent('reviews')"
+            value="user_drawer_reviews"
+            class="active-drawer-item-list"
+          >
             <v-list-item-icon>
               <v-icon class="white--text">preview</v-icon>
             </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title class="white--text">Reviews</v-list-item-title>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Reviews</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+            @click="setComponent('allfaqs')"
+            value="user_drawer_allfaqs"
+            class="active-drawer-item-list"
+          >
+            <v-list-item-icon>
+              <v-icon class="white--text">preview</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">FAQS</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
@@ -876,7 +1046,7 @@
         <div>&copy; {{ new Date().getFullYear() }}</div>
       </v-footer>
     </v-navigation-drawer>
-    <v-main>
+    <v-main class="pa-0 ma-0">
       <v-app fluid>
         <v-flex style="margin-top:105px">
           <component
@@ -888,6 +1058,7 @@
             :isLoggedIn="isLoggedIn"
             :certificates="certificates"
             :reference_singlecertificate="reference_singlecertificate"
+            @linkToTerms="linkToTerms"
             @linkToHome="linkToHome"
             @linkToCart="linkToCart"
             @linkToOrders="linkToOrders"
@@ -918,19 +1089,43 @@
           id="tab_benefits"
           v-intersect="handleBenefitsIntersect"
         />
-        <Services
+        <FAQS
+          @linkToHome="linkToHome"
+          @linkToAllFAQS="linkToAllFAQS"
+          v-show="showParentContent"
+          class="myFont mt-10"
+          id="tab_FAQS"
+          v-intersect="handleFAQSIntersect"
+        />
+        <!-- <Services
           v-show="showParentContent"
           class="myFont mt-10"
           id="tab_services"
           v-intersect="handleServicesIntersect"
-        />
+        />-->
         <ContactUs
           v-show="showParentContent"
           class="myFont mt-10"
           id="tab_contactus"
           v-intersect="handleContactUsIntersect"
         />
-        <Footer v-show="showParentContent" class="myFont mt-10" id="footer" />
+        <SubFooter
+          v-show="showParentContent"
+          class="myFont mt-10"
+          id="subfooter"
+          :isLoggedIn="isLoggedIn"
+          :availableCertificatesLength="certificates.length"
+          @linkToHome="linkToHome"
+          @linkToOrders="linkToOrders"
+          @linkToCart="linkToCart"
+          @linkToReviews="linkToReviews"
+          @linkToAllFAQS="linkToAllFAQS"
+          @linkToTerms="linkToTerms"
+          @linkToAbout="linkToAbout"
+        />
+        <!-- <Terms @linkToHome="linkToHome" />
+        <About @linkToHome="linkToHome" />-->
+        <Footer v-show="showParentContent" class="myFont mt-10 mb-0" id="footer" />
         <ShoppingCartDialog
           :showShoppingCartDialog="showShoppingCartDialog"
           @closeShoppingCartDialog="closeShoppingCartDialog"
@@ -948,7 +1143,7 @@
         />
       </v-app>
     </v-main>
-  </div>
+  </span>
 </template>
 
 
@@ -971,6 +1166,9 @@ import UserBoard from "../../views/UserBoard";
 import ShoppingCartDialog from "../appcore/ShoppingCartDialog";
 import Cart from "../../views/Cart";
 import Reviews from "../../views/Reviews";
+import AllFAQS from "../../views/AllFAQS";
+import Terms from "../../views/Terms";
+import About from "../../views/About";
 import WhishlistDialog from "../appcore/WhishlistDialog";
 import SavedlistDialog from "../appcore/SavedlistDialog";
 import Home from "../../views/Home";
@@ -984,8 +1182,10 @@ import ScrollAnimation from "../../directives/scrollanimation";
 Vue.directive("scrollanimation", ScrollAnimation);
 
 import Benefits from "./Benefits";
-import Services from "./Services";
+import FAQS from "./FAQS";
+// import Services from "./Services";
 import ContactUs from "./ContactUs";
+import SubFooter from "./SubFooter";
 import Footer from "./Footer";
 
 export default {
@@ -1042,9 +1242,13 @@ export default {
     Questions,
     Orders,
     Benefits,
-    Services,
+    FAQS,
+    AllFAQS,
+    Terms,
+    About,
     ContactUs,
     Footer,
+    SubFooter,
     Cart,
     ShoppingCartDialog,
     WhishlistDialog,
@@ -1409,6 +1613,42 @@ export default {
       this.activeComponentName = value;
       if (this.user_type == 1) {
         switch (value) {
+          case "terms":
+            this.showParentContent = true;
+            this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "";
+            this.active_user_drawer = "";
+            this.activeComponent = Terms;
+            this.active_admin_drawer = "";
+            this.$router.push({ name: "terms" }).catch((err) => {});
+            break;
+          case "about":
+            this.showParentContent = true;
+            this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "";
+            this.active_user_drawer = "";
+            this.activeComponent = About;
+            this.active_admin_drawer = "";
+            this.$router.push({ name: "about" }).catch((err) => {});
+            break;
+          case "allfaqs":
+            this.showParentContent = true;
+            this.active_tab = "tab_allfaqs";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "";
+            this.active_user_drawer = "";
+            this.activeComponent = AllFAQS;
+            this.active_admin_drawer = "admin_drawer_allfaqs";
+            this.$router.push({ name: "allfaqs" }).catch((err) => {});
+            break;
           case "reviews":
             this.showParentContent = true;
             this.active_tab = "tab_reviews";
@@ -1622,6 +1862,42 @@ export default {
         }
       } else if (this.user_type == 0) {
         switch (value) {
+          case "terms":
+            this.showParentContent = true;
+            this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "";
+            this.active_user_drawer = "";
+            this.activeComponent = Terms;
+            this.active_admin_drawer = "";
+            this.$router.push({ name: "terms" }).catch((err) => {});
+            break;
+          case "about":
+            this.showParentContent = true;
+            this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "";
+            this.active_user_drawer = "";
+            this.activeComponent = About;
+            this.active_admin_drawer = "";
+            this.$router.push({ name: "about" }).catch((err) => {});
+            break;
+          case "allfaqs":
+            this.showParentContent = true;
+            this.active_tab = "tab_allfaqs";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "";
+            this.active_user_drawer = "";
+            this.activeComponent = AllFAQS;
+            this.active_user_drawer = "user_drawer_allfaqs";
+            this.$router.push({ name: "allfaqs" }).catch((err) => {});
+            break;
           case "reviews":
             this.showParentContent = true;
             this.active_tab = "tab_reviews";
@@ -1712,6 +1988,42 @@ export default {
       } else if (this.user_type == -1) {
         // alert(value);
         switch (value) {
+          case "terms":
+            this.showParentContent = true;
+            this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "";
+            this.active_user_drawer = "";
+            this.activeComponent = Terms;
+            this.active_admin_drawer = "";
+            this.$router.push({ name: "terms" }).catch((err) => {});
+            break;
+          case "about":
+            this.showParentContent = true;
+            this.active_tab = "tab_home";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "";
+            this.active_user_drawer = "";
+            this.activeComponent = About;
+            this.active_admin_drawer = "";
+            this.$router.push({ name: "about" }).catch((err) => {});
+            break;
+          case "allfaqs":
+            this.showParentContent = true;
+            this.active_tab = "tab_allfaqs";
+            this.NotLoggedInMenu = "";
+            this.ShoppingCartMenu = "";
+            this.WhishListMenu = "";
+            this.LoggedInMenu = "";
+            this.active_user_drawer = "";
+            this.activeComponent = AllFAQS;
+            // this.active_admin_drawer = "admin_drawer_faqs";
+            this.$router.push({ name: "allfaqs" }).catch((err) => {});
+            break;
           case "reviews":
             this.showParentContent = true;
             this.active_tab = "tab_reviews";
@@ -1721,7 +2033,7 @@ export default {
             this.LoggedInMenu = "";
             this.active_user_drawer = "";
             this.activeComponent = Reviews;
-            // this.$router.push({ name: "reviews" }).catch((err) => {});
+            this.$router.push({ name: "reviews" }).catch((err) => {});
             break;
           case "home":
             this.showParentContent = true;
@@ -1731,7 +2043,7 @@ export default {
             this.ShoppingCartMenu = "";
             this.WhishListMenu = "";
             this.activeComponent = Home;
-            // this.$router.push({ name: "home" }).catch((err) => {});
+            this.$router.push({ name: "home" }).catch((err) => {});
             break;
           case "register":
             this.showParentContent = false;
@@ -1781,7 +2093,7 @@ export default {
             this.ShoppingCartMenu = "";
             this.WhishListMenu = "";
             this.activeComponent = Home;
-            // this.$router.push({ name: "home" }).catch((err) => {});
+            this.$router.push({ name: "home" }).catch((err) => {});
             break;
         }
       }
@@ -1801,27 +2113,46 @@ export default {
       //   this.active_tab = "tab_benefits";
       // }
     },
-    handleServicesIntersect(entries, observer) {
+    handleFAQSIntersect(entries, observer) {
       // if (!this.isLoggedIn && entries[0].isIntersecting) {
-      //   this.active_tab = "tab_services";
+      //   this.active_tab = "tab_faqs";
       // }
     },
-    linkToReviews() {
-      this.setComponent("reviews");
-      this.$vuetify.goTo("#navbar", {
-        offset: 100,
-        duration: 2000,
-        easing: "easeInOutQuad",
-      });
-    },
+
     linkToHome() {
       this.setComponent("home");
+    },
+    linkToOrders() {
+      this.setComponent("userboard");
     },
     linkToCart() {
       this.setComponent("cart");
     },
-    linkToOrders() {
-      this.setComponent("userboard");
+    linkToReviews(from) {
+      if (from == "Benefits") {
+        this.$vuetify.goTo("#navbar", {
+          offset: 100,
+          duration: 2000,
+          easing: "easeInOutQuad",
+        });
+      }
+      this.setComponent("reviews");
+    },
+    linkToAllFAQS(from) {
+      if (from == "FAQS") {
+        this.$vuetify.goTo("#navbar", {
+          offset: 100,
+          duration: 2000,
+          easing: "easeInOutQuad",
+        });
+      }
+      this.setComponent("allfaqs");
+    },
+    linkToTerms() {
+      this.setComponent("terms");
+    },
+    linkToAbout() {
+      this.setComponent("about");
     },
     linkToLogin() {
       this.NotLoggedInMenu = "NotLoggedInMenu_login";
@@ -1890,6 +2221,7 @@ export default {
 }
 a.v-tab {
   text-decoration: none;
+  color: black !important;
 }
 .arrow:hover {
   animation: moveRightToLeft -2s 1s infinite linear;
@@ -1932,5 +2264,44 @@ a.v-tab {
 }
 .v-tab:hover {
   color: orange !important;
+  background-color: rgb(248, 228, 190) !important;
+}
+.active-menu-item {
+  font-size: 18px !important;
+}
+.active-menu-item-content:hover {
+  transition: 0.2s;
+  transform: translateX(5px);
+  color: coral;
+}
+.active-menu-item:hover {
+}
+.active-menu-item-list:hover {
+  background-color: rgb(248, 228, 190) !important;
+}
+
+.active-drawer-item {
+  font-size: 18px !important;
+}
+.active-drawer-item-content:hover {
+  transition: 0.2s;
+  transform: translateX(5px);
+  color: coral;
+}
+.active-drawer-item:hover {
+}
+.active-drawer-item-list:hover {
+  background-color: #ffcc80 !important;
+}
+
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+.hovered-button-black:hover {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid black;
 }
 </style>

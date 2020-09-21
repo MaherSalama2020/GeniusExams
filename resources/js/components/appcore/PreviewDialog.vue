@@ -23,28 +23,69 @@
             <v-icon>mdi-minus</v-icon>
           </v-btn>
         </v-card-title>-->
+        <v-card-actions>
+          <v-row no-gutters align="center" justify="start">
+            <v-col col2="12" md="1">
+              <v-tooltip top v-if="open.length==0">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    class="ml-4"
+                    fab
+                    small
+                    dark
+                    @click="all"
+                    color="black white--text"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-icon>add</v-icon>
+                  </v-btn>
+                </template>
+                Expand All
+              </v-tooltip>
+              <v-tooltip top v-if="open.length>0">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    class="ml-4"
+                    fab
+                    small
+                    dark
+                    @click="none"
+                    color="black  white--text"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-icon>mdi-minus</v-icon>
+                  </v-btn>
+                </template>
+                Collapse All
+              </v-tooltip>
+            </v-col>
+          </v-row>
+        </v-card-actions>
         <v-card-text>
           <v-treeview
             :open-all="openall"
             v-model="selection"
+            :open.sync="open"
             dense
-            activatable
             hoverable
             :items="items"
             item-key="name"
             transition
             shaped
-            color="warning"
-            selected-color="orange"
+            color="orange"
             open-on-click
-            expand-icon="mdi-chevron-down"
-            selection-type="leaf"
+            expand-icon="mdi-arrow-down-drop-circle-outline"
             return-object
             item-disabled="locked"
-            class="border-left"
           >
             <template v-slot:prepend="{ item }">
               <v-icon v-if="item.children">question_answer</v-icon>
+              <v-icon
+                v-else-if="!item.children&&item.selectedOption==item.id"
+                v-bind:class="{'orange--text':!item.children&&item.selectedOption==item.id}"
+              >book</v-icon>
               <v-icon v-else>book</v-icon>
             </template>
             <template slot="label" slot-scope="{ item}">
@@ -57,7 +98,7 @@
                 align="center"
                 justify="start"
               >
-                <u>
+                <u class="orange--text expansion-panel-header font-weight-bold">
                   <strong class="text-wrap">{{headers[item.sequence-1]}}.&nbsp;{{item.name}}</strong>
                 </u>
                 <v-img
@@ -71,12 +112,13 @@
               </v-row>
               <v-row
                 no-gutters
-                class="text-wrap"
                 v-if="!item.children&&item.selectedOption!=item.id"
                 align="center"
                 justify="start"
               >
-                <span>{{headers[item.sequence-1]}}.&nbsp;{{item.name}}</span>
+                <span
+                  class="text-wrap expansion-panel-header font-weight-bold"
+                >{{headers[item.sequence-1]}}.&nbsp;{{item.name}}</span>
                 <v-img
                   v-if="!item.children&&item.image"
                   max-width="45"
@@ -86,8 +128,16 @@
                   @click="alertImageDialog(item.image)"
                 ></v-img>
               </v-row>
-              <v-row no-gutters v-if="item.children" align="center" justify="start">
-                <h5 class="text-wrap">{{item.sequence}}.&nbsp;{{item.name}}</h5>
+              <v-row
+                no-gutters
+                v-if="item.children"
+                align="center"
+                justify="start"
+                @click="popLastOpened(item)"
+              >
+                <span
+                  class="text-wrap expansion-panel-header font-weight-bold"
+                >{{item.sequence}}.&nbsp;{{item.name}}</span>
                 <v-img
                   v-if="item.children&&item.image"
                   max-width="45"
@@ -129,12 +179,13 @@ export default {
   components: { ImageDialog },
   data() {
     return {
+      open: [],
       selectedImageToShow: "",
       showImageDialog: false,
       selection: [],
       items: [],
       headers: ["A", "B", "C", "D", "E", "F"],
-      openall: true,
+      openall: false,
     };
   },
   methods: {
@@ -154,10 +205,14 @@ export default {
       this.$emit("closePreviewDialog");
     },
     all() {
-      this.openall = true;
+      this.open = this.items;
     },
     none() {
-      this.openall = false;
+      this.open = [];
+    },
+    popLastOpened(item) {
+      this.open = [];
+      this.open[0] = JSON.stringify(item);
     },
   },
   watch: {

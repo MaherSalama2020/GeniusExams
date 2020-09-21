@@ -36,7 +36,11 @@ class SessionController extends Controller
         //
         $user=Auth::user();
         $certificate_id=$request->certificate_id;
-        return response()->json(Session::with(['answers','user','exam','certificate'])->where('user_id',$user->id)->where('certificate_id',$certificate_id)->orderBy('id','desc')->get(),200);
+        $sessions=Session::with(['answers','user','exam','certificate'])->where('user_id',$user->id)->where('certificate_id',$certificate_id)->orderBy('id','desc')->get();
+        foreach($sessions as $session){
+            $session['humans']=$session->created_at->diffForHumans();
+        }
+        return response()->json($sessions,200);
     }
     /**
      * Show the form for creating a new resource.

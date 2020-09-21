@@ -170,6 +170,7 @@ export default {
   },
   methods: {
     fetchReviews(page_number) {
+      this.spinner = true;
       let page_url = "/api/reviews/paginate?page=" + page_number;
       let selected_per_page = this.selected_per_page;
 
@@ -178,8 +179,12 @@ export default {
         .then((response) => {
           this.reviews = response.data.data;
           this.makePagination(response.data.meta, response.data.links);
+          this.spinner = false;
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          this.spinner = false;
+        });
     },
     makePagination(meta, links) {
       let pagination = {

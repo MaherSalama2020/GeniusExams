@@ -22,9 +22,14 @@
       >
         <v-col>
           <v-row class="ml-14" no-gutters>
-            <v-btn x-small icon @click="linkToHome">
-              <v-icon color="white">home</v-icon>
-            </v-btn>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn x-small icon @click="linkToHome" v-bind="attrs" v-on="on">
+                  <v-icon color="white">home</v-icon>
+                </v-btn>
+              </template>
+              home
+            </v-tooltip>
             <v-icon small color="white" class="mr-1 ml-1">arrow_forward</v-icon>
             <span class="activeBreadcrumb" @click="linkToOrders">Orders</span>
             <v-icon small color="white" class="mr-1 ml-1">arrow_forward</v-icon>
@@ -99,6 +104,7 @@
                             @click="ExamSelected(exam.id)"
                             v-bind="attrs"
                             v-on="on"
+                            class="hovered-button-black"
                           >
                             <v-icon class="arrow">double_arrow</v-icon>
                           </v-btn>
@@ -288,7 +294,7 @@
               <v-tooltip top v-if="panel.length==0&&sessions.length>0">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    class="ml-4"
+                    class="ml-4 hovered-button-black"
                     fab
                     small
                     dark
@@ -305,7 +311,7 @@
               <v-tooltip top v-if="panel.length>0&&sessions.length>0">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    class="ml-4"
+                    class="ml-4 hovered-button-black"
                     fab
                     small
                     dark
@@ -324,35 +330,52 @@
         </v-card-actions>
 
         <v-card-text>
-          <v-expansion-panels
-            ocusable
-            color="warning"
-            v-model="panel"
-            multiple
-            popout
-            focusable
-            :hover="true"
-          >
-            <v-expansion-panel v-for="session in sessions" :key="session.id">
-              <v-expansion-panel-header disable-icon-rotate>
-                {{session.exam.name}}&nbsp;{{session.exam.type}}
+          <v-expansion-panels color="warning" v-model="panel" multiple popout :hover="true">
+            <v-expansion-panel
+              v-for="(session,index) in sessions"
+              :key="session.id"
+              active-class="orange lighten-5 underline-from-top"
+            >
+              <v-expansion-panel-header
+                :disable-icon-rotate="session.exam.type=='Exam'"
+                class="expansion-panel-header font-weight-bold"
+              >
+                <span class="expansion-panel-title">
+                  {{index+1}}-&nbsp;{{session.exam.name}}&nbsp;
+                  <span
+                    v-if="session.exam.type=='Exam'"
+                    style="color:red"
+                  >{{session.exam.type}}</span>
+                  <span
+                    v-if="session.exam.type=='Practical Test'"
+                    style="color:green"
+                  >{{session.exam.type}}</span>
+                </span>
                 <v-spacer />
-                {{new Date(session.created_at).toLocaleDateString()}}
-                <template
-                  v-slot:actions
-                  v-if="session.exam.type=='Exam'"
-                >
+                {{session.humans}}
+                <!-- {{new Date(session.created_at).toLocaleDateString()}} -->
+                <template v-slot:actions>
                   <v-icon
+                    class="ml-2"
+                    color="orange"
+                    v-if="session.exam.type=='Practical Test'"
+                  >mdi-arrow-down-drop-circle-outline</v-icon>
+                  <v-icon
+                    class="ml-2"
                     color="teal"
-                    v-if="session.result>=session.exam.passing_rate && session.exam.type=='Exam'"
+                    v-if="session.exam.type=='Exam'&&session.result>=session.exam.passing_rate && session.exam.type=='Exam'"
                   >mdi-check</v-icon>
                   <v-icon
+                    class="ml-2"
                     color="error"
-                    v-if="session.result<session.exam.passing_rate && session.exam.type=='Exam'"
+                    v-if="session.exam.type=='Exam'&&session.result<session.exam.passing_rate && session.exam.type=='Exam'"
                   >mdi-alert-circle</v-icon>
                 </template>
               </v-expansion-panel-header>
-              <v-expansion-panel-content>
+              <v-expansion-panel-content
+                color="white"
+                class="black--text underline-from-top expansion-panel-text"
+              >
                 <!-- <v-chip :color="getTypeColor(session.exam.type)" dark>{{ session.exam.type}}</v-chip> -->
                 <span>
                   Result:
@@ -363,7 +386,6 @@
                   <v-chip color="orange" dark>{{session.exam.passing_rate}}%</v-chip>
                 </span>
                 <SessionAnswers
-                  class="border-left"
                   :answers="session.answers"
                   :certificate_id="session.certificate_id"
                   :exam_id="session.exam_id"
@@ -684,5 +706,10 @@ export default {
 }
 .small-text {
   font-size: 11px;
+}
+.hovered-button-black:hover {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid black;
 }
 </style>

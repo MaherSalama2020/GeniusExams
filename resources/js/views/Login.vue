@@ -80,18 +80,25 @@
                   </template>
                 </v-text-field>
                 <v-card-actions>
-                  <v-btn text color="info" @click="loginForgotPassword">Forgot your password?</v-btn>
+                  <v-btn
+                    text
+                    color="info"
+                    @click="loginForgotPassword"
+                    :ripple="false"
+                    class="hovered-button-undeline"
+                  >Forgot your password?</v-btn>
                   <v-spacer />
                   <v-btn
                     :disabled="!isValid"
                     color="orange white--text"
                     @click="handleSubmit"
                     :loading="loading"
+                    class="hovered-button px-10"
                   >
                     Sign in
-                    <v-icon right>login</v-icon>
+                    <!-- <v-icon right>login</v-icon> -->
                     <template v-slot:loader>
-                      <span>Sign in</span>
+                      <span>Signing..</span>
                       <span class="custom-loader">
                         <v-icon light color="white">autorenew</v-icon>
                       </span>
@@ -104,14 +111,35 @@
           <v-row>
             <h6 class="mx-auto mt-5">
               Don't have an account?
-              <v-btn text color="info" @click="linkToRegister">Sign up</v-btn>
+              <v-btn
+                text
+                color="info"
+                @click="linkToRegister"
+                :ripple="false"
+                class="hovered-button-undeline"
+              >Sign up</v-btn>
             </h6>
           </v-row>
           <v-footer color="white" app padless>
             <v-col class="text-center" cols="12">
-              <v-btn text @click="linkToHome">&copy;{{ new Date().getFullYear() }} —Genius</v-btn>
-              <v-btn text @click="alertContactUsDialog">Contact</v-btn>
-              <v-btn text>Privacy&terms</v-btn>
+              <v-btn
+                text
+                @click="linkToHome"
+                :ripple="false"
+                class="hovered-button-undeline"
+              >&copy;{{ new Date().getFullYear() }} —Genius</v-btn>
+              <v-btn
+                text
+                @click="alertContactUsDialog"
+                :ripple="false"
+                class="hovered-button-undeline"
+              >Contact</v-btn>
+              <v-btn
+                text
+                @click="linkToTerms"
+                :ripple="false"
+                class="hovered-button-undeline"
+              >Privacy&terms</v-btn>
             </v-col>
           </v-footer>
         </v-col>
@@ -226,6 +254,9 @@ export default {
           });
       });
     },
+    linkToTerms() {
+      this.$emit("linkToTerms");
+    },
     linkToHome() {
       this.$emit("linkToHome");
     },
@@ -245,7 +276,7 @@ export default {
   },
 };
 </script>
-<style >
+<style scoped>
 .genius {
   font-family: "Krona One", sans-serif !important;
 }
@@ -259,5 +290,14 @@ export default {
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-position: top left;
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+.hovered-button-undeline:hover {
+  text-decoration: underline;
+  text-decoration-color: blue;
 }
 </style>

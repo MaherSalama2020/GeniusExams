@@ -14,6 +14,10 @@ import Checkout from './views/Checkout'
 import Confirmation from './views/Confirmation'
 import UserBoard from './views/UserBoard'
 import Cart from './views/Cart'
+import Reviews from './views/Reviews'
+import AllFAQS from './views/AllFAQS'
+import Terms from './views/Terms';
+import About from './views/About';
 import StartSession from './views/StartSession'
 import Admin from './views/Admin'
 import $ from 'jquery'
@@ -49,6 +53,26 @@ const router = new VueRouter({
             path: '/cart',
             name: 'cart',
             component: Cart,
+        },
+        {
+            path: '/reviews',
+            name: 'reviews',
+            component: Reviews,
+        },
+        {
+            path: '/allfaqs',
+            name: 'allfaqs',
+            component: AllFAQS,
+        },
+        {
+            path: '/terms',
+            name: 'terms',
+            component: Terms,
+        },
+        {
+            path: '/about',
+            name: 'about',
+            component: About,
         },
         {
             path: '/certificates/:id',

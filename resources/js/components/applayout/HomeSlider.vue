@@ -111,6 +111,14 @@ export default {
   background: rgba(0, 0, 0, 0.25);
   color: #ff9800;
 }
+.small-title {
+  color: white;
+  font-size: 1.1vw;
+}
+.small-medium-title {
+  color: white;
+  font-size: 24px;
+}
 .medium-title {
   color: white;
   font-size: 2vw;

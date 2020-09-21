@@ -30,6 +30,28 @@
         display: inline;
         margin-bottom: 0 !important;
     }
+        /* Scrollbar */
+        /* width */
+        ::-webkit-scrollbar {
+        width: 15px !important;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px grey !important;
+        border-radius: 10px !important;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+        background: orange !important;
+        border-radius: 10px !important;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+        background: #ff9800 !important;
+        }
     </style>
 </head>
 <body>

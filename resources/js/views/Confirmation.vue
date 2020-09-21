@@ -31,7 +31,11 @@
         </h2>
       </v-row>
       <v-row no-gutters align="center" justify="center">
-        <v-btn class="ml-auto" color="orange white--text" @click="showExams">See your Orders</v-btn>
+        <v-btn
+          class="ml-auto hovered-button"
+          color="orange white--text"
+          @click="showExams"
+        >See your Orders</v-btn>
       </v-row>
     </v-container>
   </div>
@@ -81,5 +85,10 @@ export default {
   opacity: 0.5;
   position: absolute;
   width: 100%;
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
 }
 </style>

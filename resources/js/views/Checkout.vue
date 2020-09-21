@@ -53,7 +53,11 @@
             v-if="subtotal==-1 || subtotal>0"
           ></v-row>
           <v-row justify="start" align="start" no-gutters class="w-50" v-if="subtotal==0">
-            <v-btn color="orange white--text" @click="placeFreeShoppingCart">Place Free Order</v-btn>
+            <v-btn
+              color="orange white--text"
+              @click="placeFreeShoppingCart"
+              class="hovered-button"
+            >Place Free Order</v-btn>
           </v-row>
           <!-- <div v-show="showpaypal === true & loadding === true" class="container">
           <div class="row text-center">
@@ -373,6 +377,11 @@ export default {
   opacity: 0.5;
   position: absolute;
   width: 100%;
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
 }
 </style>
 

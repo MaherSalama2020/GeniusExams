@@ -79,7 +79,7 @@
                       <v-btn
                         absolute
                         color="black lighten-1"
-                        class="white--text"
+                        class="white--text hovered-button-black"
                         fab
                         small
                         right
@@ -97,7 +97,7 @@
                   <v-btn
                     absolute
                     color="black lighten-1"
-                    class="white--text"
+                    class="white--text hovered-button-black"
                     fab
                     small
                     right
@@ -110,7 +110,7 @@
                   <v-btn
                     absolute
                     color="black lighten-1"
-                    class="white--text"
+                    class="white--text hovered-button-black"
                     fab
                     small
                     right
@@ -371,5 +371,12 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 1; /* number of lines to show */
   -webkit-box-orient: vertical;
+}
+</style>
+<style scoped>
+.hovered-button-black:hover {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid black;
 }
 </style>

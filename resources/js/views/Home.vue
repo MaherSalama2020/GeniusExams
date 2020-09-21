@@ -20,7 +20,7 @@
       >Cart ({{ numInCart }})</v-btn>
     </v-row>-->
     <v-row no-gutters justify="center" align="center" id="home_certifiacates">
-      <v-col cols="12" sm="auto" md="auto" lg="auto">
+      <v-col cols="12" sm="auto" md="auto" lg="auto" class="underline-from-center">
         <span class="big-dot mr-2">.</span>
         <span class="big-dot mr-2">.</span>
         <span class="medium-title black--text font-weight-bold">What to train next</span>
@@ -100,7 +100,7 @@
                       <v-btn
                         absolute
                         color="black"
-                        class="white--text"
+                        class="white--text hovered-button-black"
                         fab
                         small
                         right
@@ -114,7 +114,7 @@
                       <v-btn
                         absolute
                         color="black"
-                        class="white--text"
+                        class="white--text hovered-button-black"
                         fab
                         small
                         right
@@ -190,7 +190,7 @@
                     <v-btn
                       block
                       color="black"
-                      class="white--text"
+                      class="white--text hovered-button-black"
                       large
                       v-if="inCart.find((item)=> item== certificate.id)>-1?false:true"
                       @click="addToCart(certificate.id)"
@@ -198,7 +198,7 @@
                     <v-btn
                       block
                       color="black"
-                      class="white--text"
+                      class="white--text hovered-button-black"
                       large
                       v-if="inCart.find((item)=> item== certificate.id)>-1?true:false"
                       @click="removeFromCart(certificate.id)"
@@ -477,5 +477,10 @@ export default {
 }
 .large-text {
   font-size: 36px;
+}
+.hovered-button-black:hover {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid black;
 }
 </style>

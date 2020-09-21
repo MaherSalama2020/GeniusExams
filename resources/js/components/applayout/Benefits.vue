@@ -2,7 +2,7 @@
   <v-container fluid class="home-hero">
     <v-col pa-5>
       <v-row no-gutters justify="center" align="start">
-        <v-col cols="12" sm="auto" md="auto" lg="auto">
+        <v-col cols="12" sm="auto" md="auto" lg="auto" class="underline-from-center">
           <span class="big-dot mr-2">.</span>
           <span class="big-dot mr-2">.</span>
           <span class="medium-title mr-6 ml-4">BENEFITS</span>
@@ -57,7 +57,7 @@
       <v-row no-gutters justify="center" align="center" class="hidden-sm-and-down">
         <v-col>
           <v-row no-gutters justify="center" align="center">
-            <div class="big-title ml-10 border-bottom">Students' Reviews</div>
+            <div class="big-title ml-10 border-bottom underline-from-top">Students' Reviews</div>
             <v-spacer />
             <v-btn
               color="orange"
@@ -130,6 +130,7 @@
 <script>
 import { VueperSlides, VueperSlide } from "vueperslides";
 import "vueperslides/dist/vueperslides.css";
+
 export default {
   data() {
     return {
@@ -175,7 +176,7 @@ export default {
   },
   methods: {
     linkToReviews() {
-      this.$emit("linkToReviews");
+      this.$emit("linkToReviews", "Benefits");
     },
   },
 };
@@ -196,6 +197,15 @@ export default {
   color: #82b1ff !important;
   font-size: 1.1vw;
 }
+.gradient_button {
+  background: -moz-linear-gradient(top, #0000ff 0%, #a742c6 100%);
+  background: -webkit-linear-gradient(top, #0000ff 0%, #a742c6 100%);
+  background: linear-gradient(to bottom, #0000ff 0%, #a742c6 100%);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 .gradient_icon {
   background: -moz-linear-gradient(top, #0000ff 0%, #a742c6 100%);
   background: -webkit-linear-gradient(top, #0000ff 0%, #a742c6 100%);
@@ -205,15 +215,22 @@ export default {
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.gradient-borders {
+  border-style: solid !important;
+  border-width: 4px !important;
+  border: 10px solid;
+  border-image-source: linear-gradient(45deg, #a742c6, #0000ff);
+  border-image-slice: 1;
+}
 .border-bottom {
   border-bottom-style: solid !important;
   border-bottom-color: coral !important;
-  border-bottom-width: 7px !important;
+  border-bottom-width: 4px !important;
 }
 .border-left {
   border-left-style: solid !important;
   border-left-color: coral !important;
-  border-left-width: 7px !important;
+  border-left-width: 4px !important;
 }
 blockquote {
   background: transparent;
@@ -249,5 +266,122 @@ blockquote p {
   display: -webkit-box;
   -webkit-line-clamp: 5; /* number of lines to show */
   -webkit-box-orient: vertical;
+}
+/* from left */
+.underline-from-left {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow: hidden;
+}
+.underline-from-left:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 100%;
+  bottom: 0;
+  background: coral;
+  height: 4px;
+  -webkit-transition-property: right;
+  transition-property: right;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+.underline-from-left:hover:before {
+  right: 0;
+}
+/*  from right */
+.underline-from-right {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow: hidden;
+}
+.underline-from-right:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 100%;
+  right: 0;
+  bottom: 0;
+  background: coral;
+  height: 4px;
+  -webkit-transition-property: left;
+  transition-property: left;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+.underline-from-right:hover:before {
+  left: 0;
+}
+/*  from center */
+.underline-from-center {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow: hidden;
+}
+.underline-from-center:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 51%;
+  right: 51%;
+  bottom: 0;
+  background: coral;
+  height: 4px;
+  -webkit-transition-property: left right;
+  transition-property: left right;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+.underline-from-center:hover:before {
+  left: 0;
+  right: 0;
+}
+/* from top */
+.underline-from-top {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow: hidden;
+}
+.underline-from-top:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 100%;
+  left: 0;
+  background: coral;
+  width: 4px;
+  -webkit-transition-property: bottom;
+  transition-property: bottom;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+.underline-from-top:hover:before {
+  bottom: 0;
 }
 </style>

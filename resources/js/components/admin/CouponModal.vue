@@ -207,7 +207,7 @@
             <template v-slot:loader>
               <span>Adding...</span>
               <span class="custom-loader">
-                <v-icon light color="white" right>autorenew</v-icon>
+                <v-icon light color="white">autorenew</v-icon>
               </span>
             </template>
           </v-btn>
