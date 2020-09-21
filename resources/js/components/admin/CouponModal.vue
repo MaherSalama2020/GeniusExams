@@ -331,7 +331,7 @@ export default {
       let email = "";
       // alert(this.coupon.email);
       if (this.isRegistered == "NotRegistered") email = this.email;
-      else if (this.isRegistered == "Registered") this.coupon.email;
+      else if (this.isRegistered == "Registered") email = this.data.email;
       let code = this.coupon.code;
       let type = this.coupon.type;
       let value = this.coupon.value;
