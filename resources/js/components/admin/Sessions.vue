@@ -5,8 +5,13 @@
         <div class="col-md-12">
           <v-card>
             <v-card-title>
-              <v-btn @click="all" color="orange white--text" v-if="panel.length==0">all</v-btn>
-              <v-btn @click="none" color="orange white--text" v-else>none</v-btn>
+              <v-btn
+                class="hovered-button"
+                @click="all"
+                color="orange white--text"
+                v-if="panel.length==0"
+              >all</v-btn>
+              <v-btn class="hovered-button" @click="none" color="orange white--text" v-else>none</v-btn>
               <!-- <div>{{ panel }}</div> -->
               <!-- <button class="btn btn-primary" @click="newUser">Add New User</button> -->
               <v-spacer />
@@ -222,3 +227,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+</style>

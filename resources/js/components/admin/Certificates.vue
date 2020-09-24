@@ -5,7 +5,10 @@
         <div class="col-md-12">
           <v-card>
             <v-card-title>
-              <v-btn class="orange white--text" @click="showAddingDialog">Add New Certificate</v-btn>
+              <v-btn
+                class="orange white--text hovered-button"
+                @click="showAddingDialog"
+              >Add New Certificate</v-btn>
               <v-spacer />
               <v-text-field
                 v-model="search"
@@ -38,6 +41,7 @@
                   <td class="text-xs-right">
                     <v-img
                       :src="item.image"
+                      :alt="item.name"
                       max-height="125"
                       max-width="125"
                       contain
@@ -309,3 +313,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+</style>

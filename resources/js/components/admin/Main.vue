@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <v-col class>
+      <v-col>
         <v-row gutters style="height: 150px; ">
           <v-col>
             <v-card class="mx-auto" color="orange" dark max-width="400" shaped>

@@ -67,7 +67,11 @@
         <!-- <v-divider></v-divider> -->
         <v-card-actions>
           <v-spacer />
-          <v-btn color="orange darken-1 white--text" @click="closeShoppingCartDialog">Keep Shopping</v-btn>
+          <v-btn
+            color="orange white--text"
+            @click="closeShoppingCartDialog"
+            class="hovered-button"
+          >Keep Shopping</v-btn>
           <!-- <v-btn color="orange darken-1" text @click="checkout">Checkout</v-btn> -->
         </v-card-actions>
       </v-card>
@@ -130,5 +134,10 @@ export default {
 td {
   height: 75;
   vertical-align: middle;
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
 }
 </style>

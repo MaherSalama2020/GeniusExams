@@ -13,7 +13,7 @@
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card>
         <v-toolbar dark color="orange">
-          <v-btn icon dark @click="closeAddingQuestions">
+          <v-btn icon dark @click="closeAddingQuestions" class="hovered-button-close">
             <v-icon class="close">mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>{{data.name}}</v-toolbar-title>
@@ -23,7 +23,11 @@
           <v-icon>mdi-clock</v-icon>
           <span class="ml-1">{{data.duration}} Minutes</span>
           <v-spacer></v-spacer>
-          <v-btn dark @click="closeAddingQuestions" class="white orange--text ml-8 mr-2">Close</v-btn>
+          <v-btn
+            dark
+            @click="closeAddingQuestions"
+            class="white orange--text ml-8 mr-2 hovered-button-close"
+          >Close</v-btn>
 
           <!-- <v-toolbar-items>
             <v-btn dark text @click="close">Save</v-btn>
@@ -167,6 +171,7 @@
                 :disabled="!isValid"
                 color="orange white--text"
                 @click="joinQuestion"
+                class="hovered-button"
               >Join Question</v-btn>
               <v-btn
                 block
@@ -174,6 +179,7 @@
                 :disabled="!isValid"
                 color="orange white--text"
                 @click="addQuestion"
+                class="hovered-button"
               >Add Question</v-btn>
               <v-btn
                 block
@@ -181,6 +187,7 @@
                 :disabled="!isValid"
                 color="orange white--text"
                 @click="saveQuestion"
+                class="hovered-button"
               >Save Question</v-btn>
             </v-col>
           </v-row>
@@ -250,8 +257,9 @@
                             @click="editQuestion(toggle, question)"
                             v-bind="attrs"
                             v-on="on"
+                            class="hovered-button hovered-button-scale"
                           >
-                            <v-icon right>edit</v-icon>
+                            <v-icon>edit</v-icon>
                           </v-btn>
                         </template>
                         Edit Question
@@ -259,7 +267,6 @@
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
-                            class="ml-1"
                             fab
                             x-small
                             :color="active ? 'orange' : 'orange'"
@@ -267,8 +274,9 @@
                             @click="showConfirmDialog(question.id)"
                             v-bind="attrs"
                             v-on="on"
+                            class="ml-3 hovered-button hovered-button-scale"
                           >
-                            <v-icon right>mdi-delete</v-icon>
+                            <v-icon>mdi-delete</v-icon>
                           </v-btn>
                         </template>
                         Delete Question
@@ -276,7 +284,6 @@
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
-                            class="ml-1"
                             x-small
                             fab
                             :color="active ? 'orange' : 'orange'"
@@ -284,8 +291,9 @@
                             @click="showOptions(question)"
                             v-bind="attrs"
                             v-on="on"
+                            class="ml-3 hovered-button hovered-button-scale"
                           >
-                            <v-icon right>subject</v-icon>
+                            <v-icon>subject</v-icon>
                           </v-btn>
                         </template>
                         Options
@@ -428,7 +436,7 @@ export default {
         formData.append("image", this.attachment);
         let headers = { "Content-Type": "multipart/form-data" };
         axios
-          .post("/api/upload-file", formData, { headers })
+          .post("/api/questions/upload-file", formData, { headers })
           .then((response) => {
             this.attachment = null;
             this.imageChanged = true;
@@ -662,6 +670,19 @@ export default {
   color: white;
   cursor: pointer;
   transform: rotate(90deg);
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+.hovered-button-scale:hover {
+  transform: scale(1.5);
+}
+.hovered-button-close:hover {
+  background-color: transparent !important;
+  color: white !important;
+  border: 1px solid white;
 }
 </style>
 

@@ -47,6 +47,7 @@
             class="pa-2"
           >
             <v-text-field
+              dense
               prepend-inner-icon="mdi-email"
               color="purple"
               v-model="email"
@@ -57,6 +58,7 @@
               autofocus
             ></v-text-field>
             <v-text-field
+              dense
               prepend-inner-icon="subject"
               color="purple"
               v-model="subject"
@@ -67,6 +69,7 @@
               required
             ></v-text-field>
             <v-textarea
+              dense
               no-resize
               color="purple"
               v-model="message"
@@ -79,13 +82,19 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn :disabled="!valid" color="orange white--text" @click="send" :loading="loading">
+          <v-btn
+            class="hovered-button"
+            :disabled="!valid"
+            color="orange white--text"
+            @click="send"
+            :loading="loading"
+          >
             Send
-            <v-icon right>send</v-icon>
+            <v-icon small>send</v-icon>
             <template v-slot:loader>
               <span>Send</span>
               <span class="custom-loader">
-                <v-icon light color="white">autorenew</v-icon>
+                <v-icon light color="white" small>autorenew</v-icon>
               </span>
             </template>
           </v-btn>
@@ -163,5 +172,10 @@ export default {
   color: orange;
   cursor: pointer;
   transform: rotate(90deg);
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
 }
 </style>

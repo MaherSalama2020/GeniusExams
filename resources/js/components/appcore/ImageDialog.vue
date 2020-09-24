@@ -14,7 +14,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="orange white--text" @click="closeImageDialog">OK</v-btn>
+          <v-btn color="orange white--text hovered-button" @click="closeImageDialog">OK</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -43,5 +43,10 @@ export default {
   color: orange;
   cursor: pointer;
   transform: rotate(90deg);
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
 }
 </style>

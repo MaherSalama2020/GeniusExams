@@ -26,7 +26,7 @@
       </v-snackbar>
       <v-card>
         <v-toolbar dark color="orange">
-          <v-btn icon light @click="showConfirmDialog">
+          <v-btn icon light @click="showConfirmDialog" class="hovered-button-close">
             <v-icon color="white" class="close">mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>{{examName}}&nbsp;{{type}}</v-toolbar-title>
@@ -43,7 +43,12 @@
             />
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn dark @click="showConfirmDialog" class="white orange--text ml-8 mr-2">Close</v-btn>
+          <v-btn
+            light
+            @click="showConfirmDialog"
+            class="white orange--text ml-8 mr-2 hovered-button-close"
+          >Close</v-btn>
+
           <!-- <v-toolbar-items>
             <v-btn dark text @click="closeSessionDialog">Save</v-btn>
           </v-toolbar-items>-->
@@ -251,7 +256,7 @@
                 </v-row>
                 <v-row>
                   <span v-if="type=='Practical Test'">
-                    <v-tooltip bottom v-if="!alertShowCorrectAnswer">
+                    <v-tooltip top v-if="!alertShowCorrectAnswer">
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn
                           class="ml-5 mt-2 mb-2 text-center"
@@ -267,7 +272,7 @@
                       </template>
                       View Correct Answer
                     </v-tooltip>
-                    <v-tooltip bottom v-else>
+                    <v-tooltip top v-else>
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn
                           class="ml-5 mt-2 mb-2 text-center"
@@ -285,7 +290,7 @@
                     </v-tooltip>
                   </span>
                   <!-- <v-tooltip bottom v-if="!ViewMarkedAnswers && !alertShowMark"> -->
-                  <v-tooltip bottom v-if=" !alertShowMark">
+                  <v-tooltip top v-if=" !alertShowMark">
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         class="ml-5 mt-2 mb-2 text-center"
@@ -302,7 +307,7 @@
                     Mark Question
                   </v-tooltip>
                   <!-- <v-tooltip bottom v-if="!ViewMarkedAnswers && alertShowMark"> -->
-                  <v-tooltip bottom v-if="alertShowMark">
+                  <v-tooltip top v-if="alertShowMark">
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         class="ml-5 mt-2 mb-2 text-center"
@@ -325,7 +330,7 @@
                       return answer.alertShowMark == true;
                     }).length>0"
                   >-->
-                  <v-tooltip bottom>
+                  <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         class="ml-2 mt-2 mb-2 text-center"
@@ -347,7 +352,7 @@
                       return answer.alertShowMark == true;
                     }).length>0"
                   >-->
-                  <v-tooltip bottom>
+                  <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         class="ml-5 mt-2 mb-2 text-center"
@@ -364,7 +369,7 @@
                     Go to first question
                   </v-tooltip>
                   <v-spacer />
-                  <v-tooltip bottom>
+                  <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         class="mr-5 mt-2"
@@ -382,7 +387,7 @@
                     </template>
                     Review your Answers
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         class="mr-5 mt-2"
@@ -1113,5 +1118,17 @@ export default {
   to {
     transform: rotate(360deg);
   }
+}
+</style>
+<style scoped>
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+.hovered-button-close:hover {
+  background-color: transparent !important;
+  color: white !important;
+  border: 1px solid white;
 }
 </style>

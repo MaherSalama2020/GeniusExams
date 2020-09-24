@@ -147,9 +147,9 @@ class CertificateController extends Controller
     {
         if($request->hasFile('image')){
             $name = time()."_".$request->file('image')->getClientOriginalName();
-            $request->file('image')->move(public_path('images'), $name);
+            $request->file('image')->move(public_path('images/certificates'), $name);
         }
-        return response()->json(asset("images/$name"),201);
+        return response()->json(asset("images/certificates/$name"),201);
     }
     
     public function destroy(Certificate $certificate)

@@ -63,7 +63,7 @@
               <input
                 class="form-control"
                 type="file"
-                id="file"
+                id="questionfile"
                 @change="attachFile"
                 style="display: none"
                 accept="image/*"
@@ -79,12 +79,14 @@
             :disabled="!isValid"
             color="orange white--text"
             @click="saveQuestion"
+            class="hovered-button"
           >Save Question</v-btn>
           <v-btn
             v-else
             :disabled="!isValid"
             color="orange white--text"
             @click="addQuestion"
+            class="hovered-button"
           >Add Question</v-btn>
         </v-card-actions>
       </v-card>
@@ -154,7 +156,7 @@ export default {
         formData.append("image", this.attachment);
         let headers = { "Content-Type": "multipart/form-data" };
         axios
-          .post("/api/upload-file", formData, { headers })
+          .post("/api/questions/upload-file", formData, { headers })
           .then((response) => {
             this.data.image = response.data;
             let image = response.data;
@@ -225,5 +227,10 @@ export default {
     rgba(0, 0, 0, 0.75),
     rgba(0, 0, 0, 0)
   );
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
 }
 </style>

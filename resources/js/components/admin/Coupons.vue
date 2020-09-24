@@ -5,7 +5,10 @@
         <div class="col-md-12">
           <v-card>
             <v-card-title>
-              <v-btn class="orange white--text" @click="showAddingDialog">Add New Coupon</v-btn>
+              <v-btn
+                class="orange white--text hovered-button"
+                @click="showAddingDialog"
+              >Add New Coupon</v-btn>
               <v-spacer />
               <v-text-field
                 v-model="search"
@@ -283,3 +286,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+</style>

@@ -18,7 +18,7 @@
     >
       <v-card>
         <v-toolbar dark color="orange">
-          <v-btn icon dark @click="closeOptionsDialog">
+          <v-btn icon dark @click="closeOptionsDialog" class="hovered-button-close">
             <v-icon class="close">mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>Options of question</v-toolbar-title>
@@ -48,7 +48,11 @@
             Next
             <v-icon class>skip_next</v-icon>
           </v-btn>
-          <v-btn dark @click="closeOptionsDialog" class="white orange--text ml-8 mr-2">Close</v-btn>
+          <v-btn
+            dark
+            @click="closeOptionsDialog"
+            class="white orange--text ml-8 mr-2 hovered-button hovered-button-close"
+          >Close</v-btn>
         </v-toolbar>
         <v-card-text>
           <h5 class="mt-3 ml-3">
@@ -229,7 +233,11 @@
                 </v-btn-toggle>
               </v-col>
               <v-col cols="12" md="2">
-                <v-btn color="orange white--text" @click="cancelEditOption">Cancel</v-btn>
+                <v-btn
+                  color="orange white--text"
+                  @click="cancelEditOption"
+                  class="hovered-button"
+                >Cancel</v-btn>
               </v-col>
               <v-col cols="12" md="4">
                 <v-btn
@@ -238,6 +246,7 @@
                   :disabled="!isValid"
                   color="orange white--text"
                   @click="addOption($event)"
+                  class="hovered-button"
                 >Add</v-btn>
                 <v-btn
                   v-else
@@ -245,6 +254,7 @@
                   :disabled="!isValid"
                   color="orange white--text"
                   @click="addOption($event)"
+                  class="hovered-button"
                 >Save</v-btn>
               </v-col>
             </v-row>
@@ -385,7 +395,7 @@ export default {
         formData.append("image", this.attachment);
         let headers = { "Content-Type": "multipart/form-data" };
         axios
-          .post("/api/upload-file", formData, { headers })
+          .post("/api/options/upload-file", formData, { headers })
           .then((response) => {
             this.attachment = null;
             this.imageChanged = true;
@@ -655,5 +665,18 @@ export default {
   100% {
     transform: translate(4px, 0);
   }
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+.hovered-button-scale:hover {
+  transform: scale(1.5);
+}
+.hovered-button-close:hover {
+  background-color: transparent !important;
+  color: white !important;
+  border: 1px solid white;
 }
 </style>

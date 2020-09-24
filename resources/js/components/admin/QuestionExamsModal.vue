@@ -13,15 +13,24 @@
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card>
         <v-toolbar dark color="orange">
-          <v-btn icon dark @click="closeQuestionExams">
+          <v-btn icon dark @click="closeQuestionExams" class="hovered-button-close">
             <v-icon class="close">mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>Exams which include this question</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn dark @click="closeQuestionExams" class="white orange--text ml-8 mr-2">Close</v-btn>
+          <v-btn
+            dark
+            @click="closeQuestionExams"
+            class="white orange--text ml-8 mr-2 hovered-button-close"
+          >Close</v-btn>
         </v-toolbar>
-        <h2>{{data.name}}</h2>
-        <v-form ref="examForm" v-model="isValid" @keyup.native.enter="isValid && joinExam($event)">
+        <h2 class="ml-10 mt-10">{{data.name}}</h2>
+        <v-form
+          class="ml-10"
+          ref="examForm"
+          v-model="isValid"
+          @keyup.native.enter="isValid && joinExam($event)"
+        >
           <div class="form-row">
             <div class="col-md-4">
               <v-select
@@ -56,7 +65,12 @@
               />
             </div>
             <div class="col-md-4">
-              <v-btn :disabled="!isValid" color="orange white--text" @click="joinExam">Join Question</v-btn>
+              <v-btn
+                :disabled="!isValid"
+                color="orange white--text"
+                @click="joinExam"
+                class="hovered-button"
+              >Join Question</v-btn>
             </div>
           </div>
         </v-form>
@@ -101,8 +115,9 @@
                             @click="showConfirmDialog(exam.id)"
                             v-bind="attrs"
                             v-on="on"
+                            class="hovered-button hovered-button-scale"
                           >
-                            <v-icon right>mdi-delete</v-icon>
+                            <v-icon>mdi-delete</v-icon>
                           </v-btn>
                         </template>
                         Unjoin Exam
@@ -281,5 +296,18 @@ export default {
   color: orange;
   cursor: pointer;
   transform: rotate(90deg);
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+.hovered-button-scale:hover {
+  transform: scale(1.5);
+}
+.hovered-button-close:hover {
+  background-color: transparent !important;
+  color: white !important;
+  border: 1px solid white;
 }
 </style>

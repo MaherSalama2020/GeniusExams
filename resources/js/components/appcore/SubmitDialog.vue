@@ -8,8 +8,13 @@
         <v-card-text>Are you sure to finish your exam?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="orange" text @click="closeSubmitDialog">Cancel</v-btn>
-          <v-btn color="orange white--text" @click="submit">OK</v-btn>
+          <v-btn
+            small
+            color="orange white--text"
+            @click="closeSubmitDialog"
+            class="hovered-button"
+          >Cancel</v-btn>
+          <v-btn small color="orange white--text" @click="submit" class="hovered-button">OK</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -31,3 +36,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+</style>

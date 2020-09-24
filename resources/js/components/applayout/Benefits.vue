@@ -145,7 +145,7 @@ export default {
       },
       Benefits_slides: [
         {
-          icon: "mdi-camcorder",
+          icon: "mdi-video",
           title: "Self placed online video",
           description:
             "Allow you to learn from the comfort of your home and begin and end whenever you want.",

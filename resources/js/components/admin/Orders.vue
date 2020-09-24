@@ -5,7 +5,11 @@
         <div class="col-md-12">
           <v-card>
             <v-card-title>
-              <v-btn color="orange white--text" @click="showAddingDialog">Add New Order</v-btn>
+              <v-btn
+                color="orange white--text"
+                @click="showAddingDialog"
+                class="hovered-button"
+              >Add New Order</v-btn>
               <v-spacer />
               <v-text-field
                 v-model="search"
@@ -58,17 +62,19 @@
                   </td>
                   <td>{{new Date(item.created_at).toLocaleDateString()}}</td>
                   <td v-if="item.is_finished == 0">
-                    <button
-                      class="btn btn-success"
+                    <v-btn
+                      color="success"
+                      class="hovered-button-green"
                       @click="finish(index = orders.findIndex(x => x.id ===item.id))"
-                    >Finish</button>
+                    >Finish</v-btn>
                   </td>
                   <td v-else>
-                    <button
+                    <v-btn
                       disabled
-                      class="btn btn-success"
+                      color="error"
+                      class="hovered-button-red"
                       @click="finish(index = orders.findIndex(x => x.id ===item.id))"
-                    >Finish</button>
+                    >Finish</v-btn>
                   </td>
                   <td>
                     <v-icon
@@ -347,3 +353,20 @@ export default {
   },
 };
 </script>
+<style scoped>
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+.hovered-button-green:hover {
+  background-color: transparent !important;
+  color: green !important;
+  border: 1px solid green;
+}
+.hovered-button-red:hover {
+  background-color: transparent !important;
+  color: red !important;
+  border: 1px solid red;
+}
+</style>

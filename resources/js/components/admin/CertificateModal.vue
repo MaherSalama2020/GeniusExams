@@ -97,6 +97,7 @@
                 id="cImage"
                 class="col-md-3"
                 :src="data.image"
+                :alt="data.name"
                 v-show="data.image"
                 @dblclick="alertImageDialog"
               />
@@ -112,7 +113,7 @@
               <input
                 class="form-control"
                 type="file"
-                id="file"
+                id="certificatefile"
                 @change="attachFile"
                 style="display: none"
                 accept="image/*"
@@ -128,12 +129,14 @@
             :disabled="!isValid"
             color="orange white--text"
             @click="saveCertificate"
+            class="hovered-button"
           >Save Certificate</v-btn>
           <v-btn
             v-else
             :disabled="!isValid"
             color="orange white--text"
             @click="addCertificate"
+            class="hovered-button"
           >Add Certificate</v-btn>
         </v-card-actions>
       </v-card>
@@ -203,12 +206,15 @@ export default {
       // alert(event.target.files[0].name);
       if (event.target.files[0]) {
         this.spinner = true;
+        let selectedImage = this.selectedImage;
         var formData = new FormData();
         this.attachment = event.target.files[0];
         formData.append("image", this.attachment);
         let headers = { "Content-Type": "multipart/form-data" };
         axios
-          .post("/api/upload-file", formData, { headers })
+          .post("/api/certificates/upload-file", selectedImage, formData, {
+            headers,
+          })
           .then((response) => {
             this.data.image = response.data;
             let image = response.data;
@@ -300,5 +306,10 @@ export default {
     rgba(0, 0, 0, 0.75),
     rgba(0, 0, 0, 0)
   );
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
 }
 </style>

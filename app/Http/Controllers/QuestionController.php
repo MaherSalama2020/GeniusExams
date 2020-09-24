@@ -28,7 +28,14 @@ class QuestionController extends Controller
             },'exams'])->paginate($per_page);
         return QuestionResource::collection($questions);
     }
-
+    public function uploadFile(Request $request)
+    {
+        if($request->hasFile('image')){
+            $name = time()."_".$request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('images/questions'), $name);
+        }
+        return response()->json(asset("images/questions/$name"),201);
+    }
     /**
      * Store a newly created resource in storage.
      *

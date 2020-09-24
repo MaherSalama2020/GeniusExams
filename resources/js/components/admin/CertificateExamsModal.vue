@@ -16,12 +16,12 @@
       </template>-->
       <v-card>
         <v-toolbar dark color="orange">
-          <v-btn icon dark @click="close">
+          <v-btn icon dark @click="close" class="hovered-button-close">
             <v-icon class="close">mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>Exams in {{data.name}}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn dark @click="close" class="white orange--text ml-8 mr-2">Close</v-btn>
+          <v-btn dark @click="close" class="white orange--text ml-8 mr-2 hovered-button-close">Close</v-btn>
         </v-toolbar>
         <v-form v-model="isValid" class="ml-2">
           <div class="form-row">
@@ -42,7 +42,12 @@
               ></v-select>
             </div>
             <div class="col-md-4">
-              <v-btn :disabled="!isValid" color="orange white--text" @click="joinExam">Join Exam</v-btn>
+              <v-btn
+                :disabled="!isValid"
+                color="orange white--text"
+                @click="joinExam"
+                class="hovered-button"
+              >Join Exam</v-btn>
             </div>
           </div>
         </v-form>
@@ -89,8 +94,9 @@
                             @click="showConfirmDialog(exam.id)"
                             v-bind="attrs"
                             v-on="on"
+                            class="hovered-button-scale hovered-button"
                           >
-                            <v-icon right>mdi-delete</v-icon>
+                            <v-icon>mdi-delete</v-icon>
                           </v-btn>
                         </template>
                         Unjoin Exam
@@ -265,5 +271,18 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 5; /* number of lines to show */
   -webkit-box-orient: vertical;
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+.hovered-button-scale:hover {
+  transform: scale(1.5);
+}
+.hovered-button-close:hover {
+  background-color: transparent !important;
+  color: white !important;
+  border: 1px solid white;
 }
 </style>

@@ -205,7 +205,7 @@
                     <v-btn
                       text
                       color="success"
-                      class="ml-2"
+                      class="ml-2 hovered-button-undeline"
                       @click="alertUserReviewsDialog"
                     >See your reviews</v-btn>
                   </v-alert>
@@ -276,10 +276,8 @@
                           @click="sendReview"
                           color="orange white--text"
                           :disabled="!isValid"
-                        >
-                          Submit
-                          <v-icon right small color="white">send</v-icon>
-                        </v-btn>
+                          class="hovered-button"
+                        >Submit</v-btn>
                       </template>
                     </v-textarea>
                   </v-col>
@@ -711,5 +709,14 @@ export default {
   background-color: white !important;
   color: black !important;
   border: 1px solid black;
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+.hovered-button-undeline:hover {
+  text-decoration: underline;
+  text-decoration-color: green;
 }
 </style>

@@ -7,7 +7,7 @@
         <v-spacer></v-spacer>
         <span class="mr-15">
           <a :href="icon.link" target="_blank" v-for="icon in icons" :key="icon.icon">
-            <v-btn class="mx-4 white--text hovered-button" dark icon>
+            <v-btn class="mx-4 white--text hovered-button-scale" dark icon>
               <v-icon size="24px">{{ icon.icon}}</v-icon>
             </v-btn>
           </a>
@@ -57,7 +57,7 @@ a:hover {
 a:active {
   color: coral;
 }
-.hovered-button:hover {
+.hovered-button-scale:hover {
   transform: scale(1.5);
 }
 </style>

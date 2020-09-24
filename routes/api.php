@@ -23,7 +23,7 @@ Route::post('checkemail', 'UserController@checkEmail');
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
 Route::get('/certificates', 'CertificateController@index');
-Route::post('/upload-file', 'CertificateController@uploadFile');
+Route::post('/certificates/upload-file', 'CertificateController@uploadFile');
 Route::get('/certificates/{certificate}', 'CertificateController@show');
 // Route::post('/forgot_password', 'UserController@forgot_password');
 
@@ -73,6 +73,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('/questions/unjoinexam', 'QuestionController@unjoinExam');
     Route::post('/questions/joinexam', 'QuestionController@joinExam');
     Route::post('/questions/updatepivot', 'QuestionController@updatePivot');
+    Route::post('/questions/upload-file', 'QuestionController@uploadFile');
+
     Route::post('/exams/equestions', 'ExamController@eQuestions');
     Route::post('/exams/nequestions', 'ExamController@neQuestions');
     Route::post('/exams/unjoinquestion', 'ExamController@unjoinQuestion');
@@ -84,9 +86,12 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('/certificates/joinexam', 'CertificateController@joinExam');
     Route::resource('/options', 'OptionController');
     Route::post('/options/updatesequences', 'OptionController@updateSequences');
+    Route::post('/options/upload-file', 'OptionController@uploadFile');
+
     Route::resource('/answers', 'AnswerController');
     Route::resource('/sessions/', 'SessionController');
     Route::post('/sessions/csessions', 'SessionController@cSessions');
     Route::post('sessions/paginate','SessionController@paginate');
 
+    Route::post('/slider/upload-file', 'SliderController@uploadFile');
 });

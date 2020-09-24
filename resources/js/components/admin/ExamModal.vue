@@ -113,8 +113,15 @@
             :disabled="!isValid"
             color="orange white--text"
             @click="saveExam"
+            class="hovered-button"
           >Save Exam</v-btn>
-          <v-btn v-else :disabled="!isValid" color="orange white--text" @click="addExam">Add Exam</v-btn>
+          <v-btn
+            v-else
+            :disabled="!isValid"
+            color="orange white--text"
+            @click="addExam"
+            class="hovered-button"
+          >Add Exam</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -328,5 +335,10 @@ export default {
     rgba(0, 0, 0, 0.75),
     rgba(0, 0, 0, 0)
   );
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
 }
 </style>

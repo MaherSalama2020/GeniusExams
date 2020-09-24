@@ -55,7 +55,7 @@
         <!-- <v-divider></v-divider> -->
         <v-card-actions>
           <v-spacer />
-          <v-btn color="orange darken-1" text @click="closeSavedlistDialog">OK</v-btn>
+          <v-btn color="orange white--text" @click="closeSavedlistDialog" class="hovered-button">OK</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -116,5 +116,10 @@ export default {
 td {
   height: 75;
   vertical-align: middle;
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
 }
 </style>

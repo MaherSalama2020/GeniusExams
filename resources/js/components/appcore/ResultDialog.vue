@@ -29,7 +29,12 @@
         <v-card-text v-if="text4 && type!='Exam'">{{text4}}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="orange white--text" @click="closeResultDialog">OK</v-btn>
+          <v-btn
+            small
+            color="orange white--text"
+            @click="closeResultDialog"
+            class="hovered-button"
+          >OK</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -72,5 +77,10 @@ export default {
     rgba(0, 0, 0, 0.75),
     rgba(0, 0, 0, 0)
   );
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
 }
 </style>

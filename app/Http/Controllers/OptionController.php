@@ -16,6 +16,14 @@ class OptionController extends Controller
         //
         return response()->json(Option::orderBy('sequence','asc')->get(),200);
     }
+    public function uploadFile(Request $request)
+    {
+        if($request->hasFile('image')){
+            $name = time()."_".$request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('images/options'), $name);
+        }
+        return response()->json(asset("images/options/$name"),201);
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -84,7 +84,7 @@ export default {
           image: "/images/slider/bg6.jpg",
         },
         {
-          image: "/images/slider/bg6.jpg",
+          image: "/images/slider/bg7.jpg",
         },
       ],
     };

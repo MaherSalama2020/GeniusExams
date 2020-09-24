@@ -177,12 +177,15 @@
                 rounded
                 background-color="orange"
                 active-class="orange white--text"
+                v-model="data.is_used"
               >
-                <v-btn v-model="data.is_used">
-                  <span class="font-weight-bold" style="color:black;" v-if="data.is_used">Expired</span>
-                  <span v-if="!data.is_used">Available</span>
-                  <v-icon v-if="data.is_used" color="success">mdi-check</v-icon>
-                  <v-icon v-else color="error">mdi-close</v-icon>
+                <v-btn :value="1">
+                  <span class="font-weight-bold text--black">Expired</span>
+                  <v-icon color="error">mdi-close</v-icon>
+                </v-btn>
+                <v-btn :value="0">
+                  <span class="font-weight-bold text--black">Available</span>
+                  <v-icon color="success">mdi-check</v-icon>
                 </v-btn>
               </v-btn-toggle>
             </v-row>
@@ -195,6 +198,7 @@
             :disabled="!isValid"
             color="orange white--text"
             @click="saveCoupon"
+            class="hovered-button"
           >Save Coupon</v-btn>
           <v-btn
             v-else
@@ -202,6 +206,7 @@
             color="orange white--text"
             @click="addCoupon"
             :loading="submitLoader"
+            class="hovered-button"
           >
             Add Coupon
             <template v-slot:loader>
@@ -441,5 +446,10 @@ export default {
   to {
     transform: rotate(360deg);
   }
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
 }
 </style>

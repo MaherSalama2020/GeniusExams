@@ -24,6 +24,7 @@
                 @click="editOption(option)"
                 v-bind="attrs"
                 v-on="on"
+                class="hovered-button hovered-button-scale"
               >
                 <v-icon>edit</v-icon>
               </v-btn>
@@ -40,6 +41,7 @@
                 @click="$emit('on-delete', option)"
                 v-bind="attrs"
                 v-on="on"
+                class="ml-3 mr-3 hovered-button hovered-button-scale"
               >
                 <v-icon>delete</v-icon>
               </v-btn>
@@ -73,6 +75,7 @@
                 @click="editOption(option)"
                 v-bind="attrs"
                 v-on="on"
+                class="hovered-button hovered-button-scale"
               >
                 <v-icon>edit</v-icon>
               </v-btn>
@@ -89,6 +92,7 @@
                 @click="$emit('on-delete', option)"
                 v-bind="attrs"
                 v-on="on"
+                class="ml-3 mr-3 hovered-button hovered-button-scale"
               >
                 <v-icon>delete</v-icon>
               </v-btn>
@@ -171,5 +175,15 @@ export default {
 }
 img {
   cursor: pointer;
+}
+</style>
+<style scoped>
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+.hovered-button-scale:hover {
+  transform: scale(1.5);
 }
 </style>

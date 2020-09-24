@@ -49,7 +49,14 @@
             <span class="ml-2" v-if="isLoggedIn && user.is_admin">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn small icon @click="deleteReview(review)" v-bind="attrs" v-on="on">
+                  <v-btn
+                    class="hovered-button-scale"
+                    small
+                    icon
+                    @click="deleteReview(review)"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
                     <v-icon color="black">mdi-delete-outline</v-icon>
                   </v-btn>
                 </template>
@@ -59,7 +66,14 @@
             <span class="ml-2" v-if="isLoggedIn && user.is_admin && !review.happy">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn small icon @click="happyReview(review)" v-bind="attrs" v-on="on">
+                  <v-btn
+                    class="hovered-button-scale"
+                    small
+                    icon
+                    @click="happyReview(review)"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
                     <v-icon color="black">mdi-emoticon-excited</v-icon>
                   </v-btn>
                 </template>
@@ -69,7 +83,14 @@
             <span class="ml-2" v-if="isLoggedIn && user.is_admin && review.happy">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn small icon @click="happyReview(review)" v-bind="attrs" v-on="on">
+                  <v-btn
+                    class="hovered-button-scale"
+                    small
+                    icon
+                    @click="happyReview(review)"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
                     <v-icon color="black">mdi-emoticon-sad</v-icon>
                   </v-btn>
                 </template>
@@ -78,9 +99,14 @@
             </span>
             <span
               style="color:green;"
+              class="ml-2"
               v-if="isLoggedIn && user.is_admin && review.happy"
             >Happy Review</span>
-            <span style="color:red;" v-if="isLoggedIn && user.is_admin && !review.happy">Sad Review</span>
+            <span
+              class="ml-2"
+              style="color:red;"
+              v-if="isLoggedIn && user.is_admin && !review.happy"
+            >Sad Review</span>
             <v-spacer />
             <span class="font-weight-bold">{{review.humans}}</span>
             <span>
@@ -237,5 +263,8 @@ export default {
 .text--name {
   color: coral !important;
   font-size: 1.3rem;
+}
+.hovered-button-scale:hover {
+  transform: scale(1.5);
 }
 </style>

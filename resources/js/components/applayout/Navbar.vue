@@ -96,7 +96,7 @@
                 open-on-hover
                 rounded
                 bottom
-                transition="slide-x-reverse-transition"
+                transition="scroll-y-transition"
                 :close-on-click="false"
                 :close-on-content-click="false"
                 open-delay="200"
@@ -173,7 +173,7 @@
               </v-menu>
             </v-badge>
             <!-- Empty Whishlist -->
-            <div class="ml-0 mr-0" v-show="numInWhishlist ==0 && (user_type ==-1 || user_type==0)">
+            <div v-show="numInWhishlist ==0 && (user_type ==-1 || user_type==0)">
               <v-menu
                 :nudge-width="200"
                 offset-y
@@ -181,7 +181,7 @@
                 open-on-hover
                 rounded
                 bottom
-                transition="slide-x-reverse-transition"
+                transition="scroll-y-transition"
                 :close-on-click="false"
                 :close-on-content-click="false"
                 open-delay="200"
@@ -232,7 +232,7 @@
                 rounded
                 bottom
                 data-container="body"
-                transition="slide-x-reverse-transition"
+                transition="scroll-y-transition"
                 open-delay="200"
                 max-width="325"
               >
@@ -301,7 +301,7 @@
                 open-on-hover
                 rounded
                 bottom
-                transition="slide-x-reverse-transition"
+                transition="scroll-y-transition"
                 :close-on-click="false"
                 :close-on-content-click="false"
                 open-delay="200"
@@ -345,7 +345,7 @@
                 open-on-hover
                 rounded
                 bottom
-                transition="slide-x-reverse-transition"
+                transition="scroll-y-transition"
                 open-delay="200"
                 max-width="325"
               >
@@ -612,6 +612,11 @@
                   key="cart"
                 >Cart({{numInCart}})</v-tab>
                 <v-tab
+                  :href="`#tab_slider`"
+                  @click="setComponent('slider')"
+                  v-if="user_type == 1 && isLoggedIn"
+                >Slider</v-tab>
+                <v-tab
                   :href="`#tab_main`"
                   @click="setComponent('main')"
                   v-if="user_type == 1 && isLoggedIn"
@@ -651,8 +656,26 @@
                   @click="setComponent('coupons')"
                   v-if="user_type == 1 && isLoggedIn"
                 >Coupons</v-tab>
-                <v-tab :href="`#tab_reviews`" @click="setComponent('reviews')">Reviews</v-tab>
-                <v-tab :href="`#tab_allfaqs`" @click="setComponent('allfaqs')">FAQS</v-tab>
+                <v-tab
+                  :href="`#tab_reviews`"
+                  @click="
+                active_user_drawer='user_drawer_reviews';active_admin_drawer='admin_drawer_reviews';$vuetify.goTo('#tab_benefits', {
+                  offset: 100,
+                  duration: 2000,
+                  easing: 'easeInOutQuad'
+                })
+                "
+                >Reviews</v-tab>
+                <v-tab
+                  :href="`#tab_allfaqs`"
+                  @click="
+                active_user_drawer='user_drawer_allfaqs';active_admin_drawer='admin_drawer_allfaqs';$vuetify.goTo('#tab_FAQS', {
+                  offset: 100,
+                  duration: 2000,
+                  easing: 'easeInOutQuad'
+                })
+                "
+                >FAQS</v-tab>
                 <!-- <v-tab
                   class="font-weight-bold text--black"
                   :href="`#tab_services`"
@@ -731,7 +754,7 @@
       v-show="showParentContent"
       class="drawer"
     >
-      <v-img :aspect-ratio="16/9" src="images/header.jpg">
+      <v-img :aspect-ratio="16/9" src="images/logo.png" contain>
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
           <v-col>
             <div class="subheading">{{user.name}}</div>
@@ -754,12 +777,24 @@
             </v-list-item-content>
           </v-list-item>
           <v-list-item
+            @click="setComponent('slider')"
+            value="admin_drawer_slider"
+            class="active-drawer-item-list"
+          >
+            <v-list-item-action>
+              <v-icon class="white--text">mdi-image</v-icon>
+            </v-list-item-action>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1">Slider</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
             @click="setComponent('main')"
             value="admin_drawer_main"
             class="active-drawer-item-list"
           >
             <v-list-item-action>
-              <v-icon class="white--text">home</v-icon>
+              <v-icon class="white--text">mdi-arrange-bring-forward</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
               <v-list-item-title class="white--text active-drawer-item py-1">Main</v-list-item-title>
@@ -772,7 +807,7 @@
             class="active-drawer-item-list"
           >
             <v-list-item-action>
-              <v-icon class="white--text">dashboard</v-icon>
+              <v-icon class="white--text">mdi-seal</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
               <v-list-item-title class="white--text active-drawer-item py-1">Certificates</v-list-item-title>
@@ -785,7 +820,7 @@
             class="active-drawer-item-list"
           >
             <v-list-item-action>
-              <v-icon class="white--text">dashboard</v-icon>
+              <v-icon class="white--text">mdi-receipt</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
               <v-list-item-title class="white--text active-drawer-item py-1">Orders</v-list-item-title>
@@ -798,7 +833,7 @@
             class="active-drawer-item-list"
           >
             <v-list-item-action>
-              <v-icon class="white--text">dashboard</v-icon>
+              <v-icon class="white--text">mdi-comment-text-outline</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
               <v-list-item-title class="white--text active-drawer-item py-1">Exams</v-list-item-title>
@@ -811,7 +846,7 @@
             class="active-drawer-item-list"
           >
             <v-list-item-action>
-              <v-icon class="white--text">dashboard</v-icon>
+              <v-icon class="white--text">mdi-comment-question-outline</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
               <v-list-item-title class="white--text active-drawer-item py-1">Questions</v-list-item-title>
@@ -824,7 +859,7 @@
             class="active-drawer-item-list"
           >
             <v-list-item-action>
-              <v-icon class="white--text">dashboard</v-icon>
+              <v-icon class="white--text">mdi-account-multiple</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
               <v-list-item-title class="white--text active-drawer-item py-1">Users</v-list-item-title>
@@ -836,7 +871,7 @@
             class="active-drawer-item-list"
           >
             <v-list-item-action>
-              <v-icon class="white--text">dashboard</v-icon>
+              <v-icon class="white--text">mdi-run-fast</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
               <v-list-item-title class="white--text active-drawer-item py-1">Sessions</v-list-item-title>
@@ -848,7 +883,7 @@
             class="active-drawer-item-list"
           >
             <v-list-item-action>
-              <v-icon class="white--text">dashboard</v-icon>
+              <v-icon class="white--text">mdi-cash</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
               <v-list-item-title class="white--text active-drawer-item py-1">Coupons</v-list-item-title>
@@ -872,7 +907,7 @@
             class="active-drawer-item-list"
           >
             <v-list-item-icon>
-              <v-icon class="white--text">preview</v-icon>
+              <v-icon class="white--text">mdi-help</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="active-drawer-item-content">
               <v-list-item-title class="white--text active-drawer-item py-1">FAQS</v-list-item-title>
@@ -1148,6 +1183,7 @@
 
 
 <script>
+import Slider from "../admin/slider";
 import Main from "../admin/Main";
 import Users from "../admin/Users";
 import Sessions from "../admin/Sessions";
@@ -1233,6 +1269,7 @@ export default {
     };
   },
   components: {
+    Slider,
     Main,
     Users,
     Sessions,
@@ -1671,6 +1708,19 @@ export default {
             this.active_user_drawer = "user_drawer_cart";
             this.activeComponent = Cart;
             this.$router.push({ name: "cart" }).catch((err) => {});
+            break;
+          case "slider":
+            this.showParentContent = true;
+            this.active_tab = "tab_slider";
+            this.NotLoggedInMenu = "";
+            this.WhishListMenu = "";
+            this.ShoppingCartMenu = "";
+            this.LoggedInMenu = "";
+            this.active_admin_drawer = "admin_drawer_slider";
+            this.activeComponent = Slider;
+            // this.$router.push({
+            //   name: "slider",
+            // });
             break;
           case "main":
             this.showParentContent = true;
@@ -2303,5 +2353,8 @@ a.v-tab {
   background-color: white !important;
   color: black !important;
   border: 1px solid black;
+}
+.hovered-button-scale:hover {
+  transform: scale(1.25);
 }
 </style>

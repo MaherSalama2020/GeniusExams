@@ -29,7 +29,7 @@
               <v-tooltip top v-if="open.length==0">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    class="ml-4"
+                    class="ml-4 hovered-button-black"
                     fab
                     small
                     dark
@@ -46,7 +46,7 @@
               <v-tooltip top v-if="open.length>0">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    class="ml-4"
+                    class="ml-4 hovered-button-black"
                     fab
                     small
                     dark
@@ -152,7 +152,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="orange white--text" @click="closePreviewDialog">OK</v-btn>
+          <v-btn color="orange white--text" @click="closePreviewDialog" class="hovered-button">OK</v-btn>
         </v-card-actions>
       </v-card>
       <ImageDialog
@@ -303,5 +303,15 @@ export default {
     rgba(0, 0, 0, 0.75),
     rgba(0, 0, 0, 0)
   );
+}
+.hovered-button:hover {
+  background-color: transparent !important;
+  color: orange !important;
+  border: 1px solid orange;
+}
+.hovered-button-black:hover {
+  background-color: transparent !important;
+  color: black !important;
+  border: 1px solid black;
 }
 </style>
