@@ -22,7 +22,7 @@ class CertificatesTableSeeder extends Seeder
                 'ratedNO' => 0,
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                 tempor incididunt ut labore et dolore magna aliqua consequat.',
-                'image' => 'http://localhost:8000/images/exam.jpeg',
+                'image' => 'http://knowledgewavws.org/images/exam.jpeg',
                 'created_at' => new DateTime,
                 'updated_at' => null,
             ],
@@ -35,7 +35,7 @@ class CertificatesTableSeeder extends Seeder
                 'ratedNO' => 0,
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                 tempor incididunt ut labore et dolore magna aliqua consequat.',
-                'image' => 'http://localhost:8000/images/exam.jpeg',
+                'image' => 'http://knowledgewavws.org/images/exam.jpeg',
                 'created_at' => new DateTime,
                 'updated_at' => null,
             ],

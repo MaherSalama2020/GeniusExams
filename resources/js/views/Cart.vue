@@ -5,7 +5,11 @@
         <v-card color="orange" dark>
           <v-card-text>
             Processing
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+            <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+            ></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -34,26 +38,45 @@
     <v-container>
       <v-col v-if="!isLoggedIn" class="col-md-7">
         <h4>You need to login or register to continue</h4>
-        <v-btn color="success" @click="enrollLogin" class="hovered-button-green mr-2">Login</v-btn>
-        <v-btn color="info" @click="enrollRegister" class="hovered-button-blue">Register</v-btn>
+        <v-btn
+          color="success"
+          @click="enrollLogin"
+          class="hovered-button-green mr-2"
+          >Login</v-btn
+        >
+        <v-btn color="info" @click="enrollRegister" class="hovered-button-blue"
+          >Register</v-btn
+        >
       </v-col>
     </v-container>
     <v-container v-if="isLoggedIn">
       <!-- Shopping Cart -->
-      <v-row no-gutters v-if="shoppingcart && numInCart>0">
+      <v-row no-gutters v-if="shoppingcart && numInCart > 0">
         <v-col class="col-md-8">
           <v-row no-gutters>
-            <h4 class="headline font-weight-bold">{{numInCart}}</h4>
-            <h4 class="headline font-weight-bold" v-if="numInCart==1">. Certificate in Cart</h4>
-            <h4 class="headline font-weight-bold" v-if="numInCart>1">. Certificates in Cart</h4>
+            <h4 class="headline font-weight-bold">{{ numInCart }}</h4>
+            <h4 class="headline font-weight-bold" v-if="numInCart == 1">
+              . Certificate in Cart
+            </h4>
+            <h4 class="headline font-weight-bold" v-if="numInCart > 1">
+              . Certificates in Cart
+            </h4>
           </v-row>
-          <v-row v-if="numInCart===0" no-gutters>
+          <v-row v-if="numInCart === 0" no-gutters>
             <p>You haven't added any certificates to your cart.</p>
           </v-row>
           <v-row no-gutters>
             <v-col class="col-md-12">
-              <v-card v-for="item in shoppingcart" :key="item.id+'-forsaleInCart'" class="mb-1">
-                <v-card-text v-bind:class="{'error lighten-4':findInProgress(item, item.id)}">
+              <v-card
+                v-for="item in shoppingcart"
+                :key="item.id + '-forsaleInCart'"
+                class="mb-1"
+              >
+                <v-card-text
+                  v-bind:class="{
+                    'error lighten-4': findInProgress(item, item.id),
+                  }"
+                >
                   <v-slide-y-transition>
                     <v-row
                       no-gutters
@@ -69,7 +92,9 @@
                           color="error accent-4"
                           elevation="2"
                           dismissible
-                        >You already have this certificate ({{item.name}}) in progress, please remove it from cart.</v-alert>
+                          >You already have this certificate ({{ item.name }})
+                          in progress, please remove it from cart.</v-alert
+                        >
                       </v-col>
                     </v-row>
                   </v-slide-y-transition>
@@ -82,9 +107,13 @@
                         <h5
                           class="headline font-weight-bold mouse-over orange--text"
                           @click="showSingleCertificate(item.id)"
-                        >{{item.name}}</h5>
+                        >
+                          {{ item.name }}
+                        </h5>
                       </v-row>
-                      <v-row class="caption pa-4 pt-0" no-gutters>{{item.description}}</v-row>
+                      <v-row class="caption pa-4 pt-0" no-gutters>{{
+                        item.description
+                      }}</v-row>
                     </v-col>
                     <v-col class="col-md-1">
                       <v-row justify="end" no-gutters>
@@ -138,7 +167,7 @@
                     </v-col>
                     <v-col class="col-md-2">
                       <v-row justify="center" align="start" no-gutters>
-                        <h5 style="color:red;">{{item.price | dollars}}</h5>
+                        <h5 style="color: red">{{ item.price | dollars }}</h5>
                       </v-row>
                     </v-col>
                   </v-row>
@@ -149,17 +178,28 @@
         </v-col>
         <v-col class="col-md-4 pa-4">
           <v-row class="mb-1 mt-0" no-gutters>
-            <span v-bind:class="{'text-decoration-line-through error--text': subtotal!=-1}">Total:</span>
+            <span
+              v-bind:class="{
+                'text-decoration-line-through error--text': subtotal != -1,
+              }"
+              >Total:</span
+            >
           </v-row>
           <v-row class="mt-1 mb-1" no-gutters>
             <h2
               class="font-weight-bold"
-              v-bind:class="{'text-decoration-line-through error--text': subtotal!=-1}"
-            >{{total | dollars}}</h2>
+              v-bind:class="{
+                'text-decoration-line-through error--text': subtotal != -1,
+              }"
+            >
+              {{ total | dollars }}
+            </h2>
           </v-row>
-          <v-row class="mb-1 mt-0" no-gutters v-if="subtotal!=-1">SubTotal:</v-row>
-          <v-row class="mt-1 mb-1" no-gutters v-if="subtotal!=-1">
-            <h2 class="font-weight-bold">{{subtotal | dollars}}</h2>
+          <v-row class="mb-1 mt-0" no-gutters v-if="subtotal != -1"
+            >SubTotal:</v-row
+          >
+          <v-row class="mt-1 mb-1" no-gutters v-if="subtotal != -1">
+            <h2 class="font-weight-bold">{{ subtotal | dollars }}</h2>
           </v-row>
           <v-row class="mt-1 mb-1" no-gutters>
             <v-btn
@@ -168,7 +208,8 @@
               color="orange white--text"
               @click="showCheckout"
               class="hovered-button"
-            >checkout</v-btn>
+              >checkout</v-btn
+            >
           </v-row>
           <v-divider class="mt-2 mb-2" />
           <v-slide-y-transition>
@@ -176,7 +217,7 @@
               no-gutters
               align="center"
               justify="center"
-              v-if="responseReady&&responseMessageStatus"
+              v-if="responseReady && responseMessageStatus"
             >
               <v-col>
                 <v-alert
@@ -186,7 +227,8 @@
                   color="success accent-4"
                   elevation="2"
                   dismissible
-                >{{responseMessage}}</v-alert>
+                  >{{ responseMessage }}</v-alert
+                >
               </v-col>
             </v-row>
           </v-slide-y-transition>
@@ -195,7 +237,7 @@
               no-gutters
               align="center"
               justify="center"
-              v-if="responseReady&&!responseMessageStatus"
+              v-if="responseReady && !responseMessageStatus"
             >
               <v-col>
                 <v-alert
@@ -205,7 +247,8 @@
                   color="error accent-4"
                   elevation="2"
                   dismissible
-                >{{responseMessage}}</v-alert>
+                  >{{ responseMessage }}</v-alert
+                >
               </v-col>
             </v-row>
           </v-slide-y-transition>
@@ -234,7 +277,8 @@
                         color="orange white--text"
                         :disabled="!isValid"
                         class="hovered-button"
-                      >Apply</v-btn>
+                        >Apply</v-btn
+                      >
                     </template>
                   </v-text-field>
                 </v-col>
@@ -249,12 +293,16 @@
           <v-row no-gutters>
             <h4 class="headline font-weight-bold">Saved for later</h4>
           </v-row>
-          <v-row v-if="numInSavedlist===0" no-gutters>
+          <v-row v-if="numInSavedlist === 0" no-gutters>
             <p>You haven't saved any certificatesfor later.</p>
           </v-row>
-          <v-row v-if="numInSavedlist>0" no-gutters>
+          <v-row v-if="numInSavedlist > 0" no-gutters>
             <v-col class="col-md-12">
-              <v-card v-for="item in Savedlist" :key="item.id+'-savedlistCart'" class="mb-1">
+              <v-card
+                v-for="item in Savedlist"
+                :key="item.id + '-savedlistCart'"
+                class="mb-1"
+              >
                 <v-card-text>
                   <v-row no-gutters>
                     <v-col class="col-md-2">
@@ -265,9 +313,13 @@
                         <h5
                           class="font-weight-bold mouse-over orange--text"
                           @click="showSingleCertificate(item.id)"
-                        >{{item.name}}</h5>
+                        >
+                          {{ item.name }}
+                        </h5>
                       </v-row>
-                      <v-row no-gutters class="ml-2">{{item.description}}</v-row>
+                      <v-row no-gutters class="ml-2">{{
+                        item.description
+                      }}</v-row>
                     </v-col>
                     <v-col class="col-md-1">
                       <v-row justify="end" no-gutters>
@@ -289,7 +341,13 @@
                       <v-row justify="end" no-gutters>
                         <v-tooltip bottom>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn icon small @click="addToCart(item.id)" v-bind="attrs" v-on="on">
+                            <v-btn
+                              icon
+                              small
+                              @click="addToCart(item.id)"
+                              v-bind="attrs"
+                              v-on="on"
+                            >
                               <v-icon>mdi-cart-plus</v-icon>
                             </v-btn>
                           </template>
@@ -299,7 +357,7 @@
                     </v-col>
                     <v-col class="col-md-2">
                       <v-row justify="center" align="start" no-gutters>
-                        <h5 style="color:red;">{{item.price | dollars}}</h5>
+                        <h5 style="color: red">{{ item.price | dollars }}</h5>
                       </v-row>
                     </v-col>
                   </v-row>
@@ -315,12 +373,16 @@
           <v-row no-gutters>
             <h4 class="headline font-weight-bold">Recently wishlisted</h4>
           </v-row>
-          <v-row v-if="numInWhishlist===0" no-gutters>
+          <v-row v-if="numInWhishlist === 0" no-gutters>
             <p>You haven't added any certificates to your wishlist.</p>
           </v-row>
-          <v-row v-if="numInWhishlist>0" no-gutters>
+          <v-row v-if="numInWhishlist > 0" no-gutters>
             <v-col class="col-md-12">
-              <v-card v-for="item in Whishlist" :key="item.id+'-whishlistCart'" class="mb-1">
+              <v-card
+                v-for="item in Whishlist"
+                :key="item.id + '-whishlistCart'"
+                class="mb-1"
+              >
                 <v-card-text>
                   <v-row no-gutters>
                     <v-col class="col-md-2">
@@ -331,9 +393,13 @@
                         <h5
                           class="font-weight-bold mouse-over orange--text"
                           @click="showSingleCertificate(item.id)"
-                        >{{item.name}}</h5>
+                        >
+                          {{ item.name }}
+                        </h5>
                       </v-row>
-                      <v-row no-gutters class="ml-2">{{item.description}}</v-row>
+                      <v-row no-gutters class="ml-2">{{
+                        item.description
+                      }}</v-row>
                     </v-col>
                     <v-col class="col-md-1">
                       <v-row justify="end" no-gutters>
@@ -355,7 +421,13 @@
                       <v-row justify="end" no-gutters>
                         <v-tooltip bottom>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn icon small @click="addToCart(item.id)" v-bind="attrs" v-on="on">
+                            <v-btn
+                              icon
+                              small
+                              @click="addToCart(item.id)"
+                              v-bind="attrs"
+                              v-on="on"
+                            >
                               <v-icon>mdi-cart-plus</v-icon>
                             </v-btn>
                           </template>
@@ -365,7 +437,7 @@
                     </v-col>
                     <v-col class="col-md-2">
                       <v-row justify="center" align="start" no-gutters>
-                        <h5 style="color:red;">{{item.price | dollars}}</h5>
+                        <h5 style="color: red">{{ item.price | dollars }}</h5>
                       </v-row>
                     </v-col>
                   </v-row>
@@ -583,37 +655,13 @@ export default {
 };
 </script>
 <style scoped>
-.inactiveBreadcrumb {
-  color: grey;
-}
-.activeBreadcrumb {
-  color: whitesmoke;
-  cursor: pointer;
-}
-.activeBreadcrumb:hover {
-  text-decoration: underline;
-}
 .mouse-over {
   cursor: pointer;
 }
 .mouse-over:hover {
   text-decoration: underline;
 }
-.hero-section {
-  background: #ababab;
-  height: 20vh;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-top: -20px;
-}
-.v-card--reveal {
-  align-items: center;
-  bottom: 0;
-  justify-content: center;
-  opacity: 0.5;
-  position: absolute;
-  width: 100%;
-}
+
 .hovered-button:hover {
   background-color: transparent !important;
   color: orange !important;

@@ -5,7 +5,11 @@
         <v-card color="orange" dark>
           <v-card-text>
             Processing
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+            <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+            ></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -24,7 +28,9 @@
             Home
           </v-tooltip>
           <v-icon small color="white" class="mr-1 ml-1">arrow_forward</v-icon>
-          <span class="activeBreadcrumb" @click="linkToCart">Shopping Cart</span>
+          <span class="activeBreadcrumb" @click="linkToCart"
+            >Shopping Cart</span
+          >
           <v-icon small color="white" class="mr-1 ml-1">arrow_forward</v-icon>
           <span class="inactiveBreadcrumb">Checkout</span>
         </v-row>
@@ -40,7 +46,7 @@
           <v-btn color="success" @click="enrollLogin">Login</v-btn>
           <v-btn color="info" @click="enrollRegister">Register</v-btn>
         </v-col>
-        <v-col v-if="isLoggedIn " class="col-md-7">
+        <v-col v-if="isLoggedIn" class="col-md-7">
           <v-row no-gutters>
             <h4 class="font-weight-bold">Checkout</h4>
           </v-row>
@@ -50,14 +56,21 @@
             no-gutters
             class="w-50"
             ref="paypal"
-            v-if="subtotal==-1 || subtotal>0"
+            v-if="subtotal == -1 || subtotal > 0"
           ></v-row>
-          <v-row justify="start" align="start" no-gutters class="w-50" v-if="subtotal==0">
+          <v-row
+            justify="start"
+            align="start"
+            no-gutters
+            class="w-50"
+            v-if="subtotal == 0"
+          >
             <v-btn
               color="orange white--text"
               @click="placeFreeShoppingCart"
               class="hovered-button"
-            >Place Free Order</v-btn>
+              >Place Free Order</v-btn
+            >
           </v-row>
           <!-- <div v-show="showpaypal === true & loadding === true" class="container">
           <div class="row text-center">
@@ -67,14 +80,18 @@
           </div>
           </div>-->
           <!-- Shopping Cart -->
-          <v-row no-gutters v-if="shoppingcart && numInCart>0" class="mt-6">
+          <v-row no-gutters v-if="shoppingcart && numInCart > 0" class="mt-6">
             <v-col class="col-md-12">
               <v-row no-gutters>
                 <h4 class="font-weight-bold">Order Details</h4>
               </v-row>
               <v-row no-gutters>
                 <v-col class="col-md-12">
-                  <v-card v-for="item in shoppingcart" :key="item.id+'-forsaleInCart'" class="mb-0">
+                  <v-card
+                    v-for="item in shoppingcart"
+                    :key="item.id + '-forsaleInCart'"
+                    class="mb-0"
+                  >
                     <v-card-text>
                       <v-row no-gutters>
                         <v-col class="col-md-1">
@@ -82,13 +99,15 @@
                         </v-col>
                         <v-col class="col-md-8">
                           <v-row no-gutters class="ml-2">
-                            <h5 class="font-weight-bold">{{item.name}}</h5>
+                            <h5 class="font-weight-bold">{{ item.name }}</h5>
                           </v-row>
-                          <v-row no-gutters class="ml-2">{{item.description}}</v-row>
+                          <v-row no-gutters class="ml-2">{{
+                            item.description
+                          }}</v-row>
                         </v-col>
                         <v-col class="col-md-2">
                           <v-row justify="center" align="start" no-gutters>
-                            <h5>{{item.price | dollars}}</h5>
+                            <h5>{{ item.price | dollars }}</h5>
                           </v-row>
                         </v-col>
                       </v-row>
@@ -100,31 +119,37 @@
           </v-row>
           <!-- end Shopping Cart -->
         </v-col>
-        <v-col v-if="isLoggedIn " class="col-md-5">
+        <v-col v-if="isLoggedIn" class="col-md-5">
           <v-card class="ml-6 pa-6">
             <h4 class="font-weight-bold">Summary</h4>
             <v-card tile flat class="d-flex">
               <v-card flat tile>Original Price:</v-card>
-              <v-card flat tile class="ml-auto">{{total | dollars}}</v-card>
+              <v-card flat tile class="ml-auto">{{ total | dollars }}</v-card>
             </v-card>
             <v-divider class="mt-w mb-2" />
             <v-card tile flat class="d-flex">
-              <v-card tile flat v-if="subtotal==-1" class="font-weight-bold">Total:</v-card>
+              <v-card tile flat v-if="subtotal == -1" class="font-weight-bold"
+                >Total:</v-card
+              >
               <v-card
                 tile
                 flat
-                v-if="subtotal==-1"
+                v-if="subtotal == -1"
                 class="font-weight-bold ml-auto"
-              >{{total | dollars}}</v-card>
+                >{{ total | dollars }}</v-card
+              >
             </v-card>
             <v-card flat tile class="d-flex">
-              <v-card flat tile v-if="subtotal>=0" class="font-weight-bold">Total:</v-card>
+              <v-card flat tile v-if="subtotal >= 0" class="font-weight-bold"
+                >Total:</v-card
+              >
               <v-card
                 flat
                 tile
-                v-if="subtotal>=0"
+                v-if="subtotal >= 0"
                 class="font-weight-bold ml-auto"
-              >{{subtotal | dollars}}</v-card>
+                >{{ subtotal | dollars }}</v-card
+              >
             </v-card>
           </v-card>
         </v-col>
@@ -347,36 +372,11 @@ export default {
   top: 30%;
   right: 10%;
 }
-.inactiveBreadcrumb {
-  color: grey;
-}
-.activeBreadcrumb {
-  color: whitesmoke;
-  cursor: pointer;
-}
-.activeBreadcrumb:hover {
-  text-decoration: underline;
-}
 .mouse-over {
   cursor: pointer;
 }
 .mouse-over:hover {
   text-decoration: underline;
-}
-.hero-section {
-  background: #ababab;
-  height: 20vh;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-top: -20px;
-}
-.v-card--reveal {
-  align-items: center;
-  bottom: 0;
-  justify-content: center;
-  opacity: 0.5;
-  position: absolute;
-  width: 100%;
 }
 .hovered-button:hover {
   background-color: transparent !important;

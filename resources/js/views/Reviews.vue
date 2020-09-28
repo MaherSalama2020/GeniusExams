@@ -5,7 +5,11 @@
         <v-card color="orange" dark>
           <v-card-text>
             Processing
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+            <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+            ></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -32,20 +36,22 @@
       </v-col>
     </div>
     <v-row no-gutters justify="start" align="center">
-      <div class="big-title ml-10 border-bottom black--text">Students' Reviews</div>
+      <div class="big-title ml-10 border-bottom black--text">
+        Students' Reviews
+      </div>
     </v-row>
     <span class="mx-10">
       <v-row
         justify="center"
         align="center"
         class="my-1 mx-15"
-        v-for=" review in reviews"
-        :key="review.id+'-reviews'"
+        v-for="review in reviews"
+        :key="review.id + '-reviews'"
       >
         <v-col>
           <v-row no-gutters align="center" class="mb-1">
             BY
-            <span class="text--name ml-1">{{review.user.name}}</span>
+            <span class="text--name ml-1">{{ review.user.name }}</span>
             <span class="ml-2" v-if="isLoggedIn && user.is_admin">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
@@ -63,7 +69,10 @@
                 Delete Review
               </v-tooltip>
             </span>
-            <span class="ml-2" v-if="isLoggedIn && user.is_admin && !review.happy">
+            <span
+              class="ml-2"
+              v-if="isLoggedIn && user.is_admin && !review.happy"
+            >
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -80,7 +89,10 @@
                 Mark as Happy
               </v-tooltip>
             </span>
-            <span class="ml-2" v-if="isLoggedIn && user.is_admin && review.happy">
+            <span
+              class="ml-2"
+              v-if="isLoggedIn && user.is_admin && review.happy"
+            >
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -98,17 +110,19 @@
               </v-tooltip>
             </span>
             <span
-              style="color:green;"
+              style="color: green"
               class="ml-2"
               v-if="isLoggedIn && user.is_admin && review.happy"
-            >Happy Review</span>
+              >Happy Review</span
+            >
             <span
               class="ml-2"
-              style="color:red;"
+              style="color: red"
               v-if="isLoggedIn && user.is_admin && !review.happy"
-            >Sad Review</span>
+              >Sad Review</span
+            >
             <v-spacer />
-            <span class="font-weight-bold">{{review.humans}}</span>
+            <span class="font-weight-bold">{{ review.humans }}</span>
             <span>
               <v-rating
                 dense
@@ -125,10 +139,12 @@
           <v-row no-gutters class="border-left">
             <v-col>
               <v-row no-gutters justify="start" align="center" class="ml-1">
-                <span class="text--name ml-1">{{review.certificate.name}}</span>
+                <span class="text--name ml-1">{{
+                  review.certificate.name
+                }}</span>
               </v-row>
               <v-row no-gutters justify="start" align="center" class="ml-1">
-                <span class="ml-1">{{review.review}}</span>
+                <span class="ml-1">{{ review.review }}</span>
               </v-row>
             </v-col>
           </v-row>

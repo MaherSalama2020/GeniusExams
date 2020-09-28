@@ -11,7 +11,11 @@
         <v-card color="orange" dark>
           <v-card-text>
             Processing
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+            <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+            ></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -24,7 +28,13 @@
           <v-row class="ml-14" no-gutters>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn x-small icon @click="linkToHome" v-bind="attrs" v-on="on">
+                <v-btn
+                  x-small
+                  icon
+                  @click="linkToHome"
+                  v-bind="attrs"
+                  v-on="on"
+                >
                   <v-icon color="white">home</v-icon>
                 </v-btn>
               </template>
@@ -33,7 +43,7 @@
             <v-icon small color="white" class="mr-1 ml-1">arrow_forward</v-icon>
             <span class="activeBreadcrumb" @click="linkToOrders">Orders</span>
             <v-icon small color="white" class="mr-1 ml-1">arrow_forward</v-icon>
-            <span class="inactiveBreadcrumb">{{certificate_name}}</span>
+            <span class="inactiveBreadcrumb">{{ certificate_name }}</span>
           </v-row>
           <v-row class="ml-15 mt-3" no-gutters>
             <h3 class="white--text">Orders</h3>
@@ -52,38 +62,59 @@
             fixed-height="200px"
             fixed-width="400px"
           >
-            <vueper-slide v-for="exam in exams " :key="exam.id">
+            <vueper-slide v-for="exam in exams" :key="exam.id">
               <template v-slot:content>
                 <transition appear name="slide-in">
                   <v-card rounded class="ma-0" height="200" width="400">
                     <v-card-title>
-                      <v-chip :color="getTypeColor(exam.type)" dark>{{ exam.type}}</v-chip>
+                      <v-chip :color="getTypeColor(exam.type)" dark>{{
+                        exam.type
+                      }}</v-chip>
                       <v-chip
                         color="orange"
                         dark
                         v-if="exam.passing_rate"
                         class="ml-1"
-                      >Passing rate: {{ exam.passing_rate}}%</v-chip>
+                        >Passing rate: {{ exam.passing_rate }}%</v-chip
+                      >
                     </v-card-title>
                     <v-card-text class="textover font-weight-black">
-                      <h4>{{exam.name}}</h4>
+                      <h4>{{ exam.name }}</h4>
                       <v-row justify="end" align="center">
-                        <span class="ml-auto textover caption font-weight-light mt-0 mb-0">
+                        <span
+                          class="ml-auto textover caption font-weight-light mt-0 mb-0"
+                        >
                           <v-icon small>mdi-counter</v-icon>
-                          <span class="small-text">{{exam.questions.length}}</span>
-                          <span class="small-text" v-if="exam.questions.length>1">Questions</span>
-                          <span class="small-text" v-if="exam.questions.length<=1">Question</span>
+                          <span class="small-text">{{
+                            exam.questions.length
+                          }}</span>
+                          <span
+                            class="small-text"
+                            v-if="exam.questions.length > 1"
+                            >Questions</span
+                          >
+                          <span
+                            class="small-text"
+                            v-if="exam.questions.length <= 1"
+                            >Question</span
+                          >
                         </span>
-                        <span class="ml-2 mr-2 textover caption font-weight-light mt-0 mb-0">
+                        <span
+                          class="ml-2 mr-2 textover caption font-weight-light mt-0 mb-0"
+                        >
                           <v-icon small>mdi-clock</v-icon>
-                          <span class="small-text">{{exam.duration}}</span>
-                          <span class="small-text" v-if="exam.duration>1">Minutes</span>
-                          <span class="small-text" v-if="exam.duration<=1">Minute</span>
+                          <span class="small-text">{{ exam.duration }}</span>
+                          <span class="small-text" v-if="exam.duration > 1"
+                            >Minutes</span
+                          >
+                          <span class="small-text" v-if="exam.duration <= 1"
+                            >Minute</span
+                          >
                         </span>
                       </v-row>
                     </v-card-text>
                     <v-card-actions class="mb-0 mt-0">
-                      <span style="color:#FF9800;">{{certificate.rate}}</span>
+                      <span style="color: #ff9800">{{ certificate.rate }}</span>
                       <v-rating
                         dense
                         v-model="certificate.rate"
@@ -183,14 +214,14 @@
     <!-- <hr class="hr mt-0 mb-0" /> -->
     <template>
       <v-card flat>
-        <v-card-text v-if="sessions.length>0">
+        <v-card-text v-if="sessions.length > 0">
           <v-row no-gutters align="center" justify="center">
             <v-slide-y-transition>
               <v-row
                 no-gutters
                 align="center"
                 justify="center"
-                v-if="responseReady&&responseMessageStatus"
+                v-if="responseReady && responseMessageStatus"
               >
                 <v-col>
                   <v-alert
@@ -201,13 +232,14 @@
                     elevation="2"
                     dismissible
                   >
-                    {{responseMessage}}
+                    {{ responseMessage }}
                     <v-btn
                       text
                       color="success"
                       class="ml-2 hovered-button-undeline"
                       @click="alertUserReviewsDialog"
-                    >See your reviews</v-btn>
+                      >See your reviews</v-btn
+                    >
                   </v-alert>
                 </v-col>
               </v-row>
@@ -217,7 +249,7 @@
                 no-gutters
                 align="center"
                 justify="center"
-                v-if="responseReady&&!responseMessageStatus"
+                v-if="responseReady && !responseMessageStatus"
               >
                 <v-col>
                   <v-alert
@@ -227,7 +259,8 @@
                     color="error accent-4"
                     elevation="2"
                     dismissible
-                  >{{responseMessage}}</v-alert>
+                    >{{ responseMessage }}</v-alert
+                  >
                 </v-col>
               </v-row>
             </v-slide-y-transition>
@@ -241,7 +274,9 @@
             >
               <v-row no-gutters align="center" justify="center">
                 <v-col cols="12" md="1">
-                  <span class="text--lighten-2 caption mr-2">Rate: ({{ default_rating }})</span>
+                  <span class="text--lighten-2 caption mr-2"
+                    >Rate: ({{ default_rating }})</span
+                  >
                 </v-col>
                 <v-col cols="12" md="2">
                   <v-rating
@@ -277,7 +312,8 @@
                           color="orange white--text"
                           :disabled="!isValid"
                           class="hovered-button"
-                        >Submit</v-btn>
+                          >Submit</v-btn
+                        >
                       </template>
                     </v-textarea>
                   </v-col>
@@ -289,7 +325,7 @@
         <v-card-actions>
           <v-row no-gutters align="center" justify="start">
             <v-col col2="12" md="1">
-              <v-tooltip top v-if="panel.length==0&&sessions.length>0">
+              <v-tooltip top v-if="panel.length == 0 && sessions.length > 0">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     class="ml-4 hovered-button-black"
@@ -306,7 +342,7 @@
                 </template>
                 Expand All
               </v-tooltip>
-              <v-tooltip top v-if="panel.length>0&&sessions.length>0">
+              <v-tooltip top v-if="panel.length > 0 && sessions.length > 0">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     class="ml-4 hovered-button-black"
@@ -328,46 +364,63 @@
         </v-card-actions>
 
         <v-card-text>
-          <v-expansion-panels color="warning" v-model="panel" multiple popout :hover="true">
+          <v-expansion-panels
+            color="warning"
+            v-model="panel"
+            multiple
+            popout
+            :hover="true"
+          >
             <v-expansion-panel
-              v-for="(session,index) in sessions"
+              v-for="(session, index) in sessions"
               :key="session.id"
               active-class="orange lighten-5 underline-from-top"
             >
               <v-expansion-panel-header
-                :disable-icon-rotate="session.exam.type=='Exam'"
+                :disable-icon-rotate="session.exam.type == 'Exam'"
                 class="expansion-panel-header font-weight-bold"
               >
                 <span class="expansion-panel-title">
-                  {{index+1}}-&nbsp;{{session.exam.name}}&nbsp;
+                  {{ index + 1 }}-&nbsp;{{ session.exam.name }}&nbsp;
+                  <span v-if="session.exam.type == 'Exam'" style="color: red">{{
+                    session.exam.type
+                  }}</span>
                   <span
-                    v-if="session.exam.type=='Exam'"
-                    style="color:red"
-                  >{{session.exam.type}}</span>
-                  <span
-                    v-if="session.exam.type=='Practical Test'"
-                    style="color:green"
-                  >{{session.exam.type}}</span>
+                    v-if="session.exam.type == 'Practical Test'"
+                    style="color: green"
+                    >{{ session.exam.type }}</span
+                  >
                 </span>
                 <v-spacer />
-                {{session.humans}}
+                {{ session.humans }}
                 <!-- {{new Date(session.created_at).toLocaleDateString()}} -->
                 <template v-slot:actions>
                   <v-icon
                     class="ml-2"
                     color="orange"
-                    v-if="session.exam.type=='Practical Test'"
-                  >mdi-arrow-down-drop-circle-outline</v-icon>
+                    v-if="session.exam.type == 'Practical Test'"
+                    >mdi-arrow-down-drop-circle-outline</v-icon
+                  >
                   <v-icon
                     class="ml-2"
                     color="teal"
-                    v-if="session.exam.type=='Exam'&&session.result>=session.exam.passing_rate && session.exam.type=='Exam'"
-                  >mdi-check</v-icon>
+                    v-if="
+                      session.exam.type == 'Exam' &&
+                      session.result >= session.exam.passing_rate &&
+                      session.exam.type == 'Exam'
+                    "
+                    >mdi-check</v-icon
+                  >
                   <v-icon
                     class="ml-2"
                     color="error"
-                    v-if="session.exam.type=='Exam'&&session.result<session.exam.passing_rate && session.exam.type=='Exam'"
-                  >mdi-alert-circle</v-icon>
+                    v-if="
+                      session.exam.type == 'Exam' &&
+                      session.result < session.exam.passing_rate &&
+                      session.exam.type == 'Exam'
+                    "
+                    >mdi-alert-circle</v-icon
+                  >
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content
@@ -377,11 +430,13 @@
                 <!-- <v-chip :color="getTypeColor(session.exam.type)" dark>{{ session.exam.type}}</v-chip> -->
                 <span>
                   Result:
-                  <v-chip color="orange" dark>{{session.result}}%</v-chip>
+                  <v-chip color="orange" dark>{{ session.result }}%</v-chip>
                 </span>
-                <span v-if="session.exam.type=='Exam'">
+                <span v-if="session.exam.type == 'Exam'">
                   Passing Rate:
-                  <v-chip color="orange" dark>{{session.exam.passing_rate}}%</v-chip>
+                  <v-chip color="orange" dark
+                    >{{ session.exam.passing_rate }}%</v-chip
+                  >
                 </span>
                 <SessionAnswers
                   :answers="session.answers"
@@ -623,31 +678,6 @@ export default {
 };
 </script>
 <style scoped>
-.inactiveBreadcrumb {
-  color: grey;
-}
-.activeBreadcrumb {
-  color: whitesmoke;
-  cursor: pointer;
-}
-.activeBreadcrumb:hover {
-  text-decoration: underline;
-}
-.hero-section {
-  background: #ababab;
-  height: 20vh;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-top: -20px;
-}
-.v-card--reveal {
-  align-items: center;
-  bottom: 0;
-  justify-content: center;
-  opacity: 0.5;
-  position: absolute;
-  width: 100%;
-}
 .textover {
   overflow: hidden;
   text-overflow: ellipsis;

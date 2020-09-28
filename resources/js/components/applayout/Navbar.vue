@@ -1,6 +1,13 @@
 <template >
   <span class="myFont">
-    <v-app-bar color="orange" dark fixed hide-on-scroll v-show="showParentContent" class="navBar">
+    <v-app-bar
+      color="orange"
+      dark
+      fixed
+      hide-on-scroll
+      v-show="showParentContent"
+      class="navBar"
+    >
       <v-app-bar-nav-icon
         class="mt-6 hidden-md-and-up"
         large
@@ -31,8 +38,13 @@
                   <v-card dark color="orange" flat>
                     <v-list-item two-line>
                       <v-list-item-content>
-                        <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
-                        <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
+                        <v-list-item-title class="headline mb-1"
+                          >Headline 5</v-list-item-title
+                        >
+                        <v-list-item-subtitle
+                          >Greyhound divisely hello coldly
+                          fonwderfully</v-list-item-subtitle
+                        >
                       </v-list-item-content>
                     </v-list-item>
                   </v-card>
@@ -49,8 +61,13 @@
                   <v-card dark color="orange" flat>
                     <v-list-item two-line>
                       <v-list-item-content>
-                        <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
-                        <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
+                        <v-list-item-title class="headline mb-1"
+                          >Headline 5</v-list-item-title
+                        >
+                        <v-list-item-subtitle
+                          >Greyhound divisely hello coldly
+                          fonwderfully</v-list-item-subtitle
+                        >
                       </v-list-item-content>
                     </v-list-item>
                   </v-card>
@@ -67,8 +84,13 @@
                   <v-card dark color="orange" flat>
                     <v-list-item two-line>
                       <v-list-item-content>
-                        <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
-                        <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
+                        <v-list-item-title class="headline mb-1"
+                          >Headline 5</v-list-item-title
+                        >
+                        <v-list-item-subtitle
+                          >Greyhound divisely hello coldly
+                          fonwderfully</v-list-item-subtitle
+                        >
                       </v-list-item-content>
                     </v-list-item>
                   </v-card>
@@ -85,7 +107,7 @@
             <v-badge
               color="green"
               :content="numInWhishlist"
-              v-if="numInWhishlist >0 && (user_type ==-1 || user_type==0) "
+              v-if="numInWhishlist > 0 && (user_type == -1 || user_type == 0)"
               overlap
               class="ml-0 mr-0"
             >
@@ -103,10 +125,12 @@
                 max-width="325"
               >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-icon dark medium v-bind="attrs" v-on="on">mdi-heart</v-icon>
+                  <v-icon dark medium v-bind="attrs" v-on="on"
+                    >mdi-heart</v-icon
+                  >
                 </template>
                 <span>
-                  <v-list dense v-if="typeof Whishlist[0]!='undefined'">
+                  <v-list dense v-if="typeof Whishlist[0] != 'undefined'">
                     <v-subheader>
                       <v-row no-gutters justify="center">
                         <v-icon x-large color="orange">mdi-menu-down</v-icon>
@@ -118,21 +142,24 @@
                       v-model="WhishListMenu"
                     >
                       <v-list-item
-                        v-for="(item) in Whishlist"
-                        :key="item.id+'-certificatesNavBar'"
-                        :selectable="activeComponentName=='whishlist'"
-                        :inactive="activeComponentName=='whishlist'"
-                        @click="showSingleCertificate(item.id,'home')"
+                        v-for="item in Whishlist"
+                        :key="item.id + '-certificatesNavBar'"
+                        :selectable="activeComponentName == 'whishlist'"
+                        :inactive="activeComponentName == 'whishlist'"
+                        @click="showSingleCertificate(item.id, 'home')"
                         class="active-menu-item-list"
                       >
                         <v-list-item-avatar tile>
                           <v-img :src="item.image" alt="item.name" />
                         </v-list-item-avatar>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item py-1">{{item.name}}</v-list-item-title>
+                          <v-list-item-title class="active-menu-item py-1">{{
+                            item.name
+                          }}</v-list-item-title>
                           <v-list-item-subtitle
                             class="font-weight-bold active-menu-item py-1"
-                          >{{item.price | dollars}}</v-list-item-subtitle>
+                            >{{ item.price | dollars }}</v-list-item-subtitle
+                          >
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-tooltip bottom>
@@ -173,7 +200,11 @@
               </v-menu>
             </v-badge>
             <!-- Empty Whishlist -->
-            <div v-show="numInWhishlist ==0 && (user_type ==-1 || user_type==0)">
+            <div
+              v-show="
+                numInWhishlist == 0 && (user_type == -1 || user_type == 0)
+              "
+            >
               <v-menu
                 :nudge-width="200"
                 offset-y
@@ -188,7 +219,9 @@
                 max-width="325"
               >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-icon dark medium v-bind="attrs" v-on="on">mdi-heart-outline</v-icon>
+                  <v-icon dark medium v-bind="attrs" v-on="on"
+                    >mdi-heart-outline</v-icon
+                  >
                 </template>
                 <span>
                   <v-list dense>
@@ -197,7 +230,10 @@
                         <v-icon x-large color="orange">mdi-menu-down</v-icon>
                       </v-row>
                     </v-subheader>
-                    <v-list-item-group color="primary" active-class="black--text ">
+                    <v-list-item-group
+                      color="primary"
+                      active-class="black--text "
+                    >
                       <v-list-item
                         :selectable="true"
                         :inactive="true"
@@ -207,7 +243,9 @@
                           <v-icon>mdi-heart-outline</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item py-1">Whish List is Empty</v-list-item-title>
+                          <v-list-item-title class="active-menu-item py-1"
+                            >Whish List is Empty</v-list-item-title
+                          >
                         </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
@@ -220,7 +258,7 @@
             <v-badge
               color="green"
               :content="numInCart"
-              v-if="numInCart >0 && (user_type ==-1 || user_type==0)"
+              v-if="numInCart > 0 && (user_type == -1 || user_type == 0)"
               overlap
               class="ml-8 mr-0"
             >
@@ -237,10 +275,12 @@
                 max-width="325"
               >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-icon dark medium v-bind="attrs" v-on="on">shopping_cart</v-icon>
+                  <v-icon dark medium v-bind="attrs" v-on="on"
+                    >shopping_cart</v-icon
+                  >
                 </template>
                 <span>
-                  <v-list dense v-if="typeof shoppingcart[0]!='undefined'">
+                  <v-list dense v-if="typeof shoppingcart[0] != 'undefined'">
                     <v-subheader>
                       <v-row no-gutters justify="center">
                         <v-icon x-large color="orange">mdi-menu-down</v-icon>
@@ -252,48 +292,64 @@
                       v-model="ShoppingCartMenu"
                     >
                       <v-list-item
-                        v-for="(item) in shoppingcart"
-                        :key="item.id+'-certificatesNavBar'"
-                        @click="showSingleCertificate(item.id,'home')"
+                        v-for="item in shoppingcart"
+                        :key="item.id + '-certificatesNavBar'"
+                        @click="showSingleCertificate(item.id, 'home')"
                         class="active-menu-item-list"
                       >
                         <v-list-item-avatar tile>
                           <v-img :src="item.image" alt="item.name" />
                         </v-list-item-avatar>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item py-1">{{item.name}}</v-list-item-title>
+                          <v-list-item-title class="active-menu-item py-1">{{
+                            item.name
+                          }}</v-list-item-title>
                           <v-list-item-subtitle
                             class="active-menu-item font-weight-bold"
-                          >{{item.price | dollars}}</v-list-item-subtitle>
+                            >{{ item.price | dollars }}</v-list-item-subtitle
+                          >
                         </v-list-item-content>
                       </v-list-item>
                       <v-divider class="mt-1 mb-1" />
-                      <v-list-item :selectable="true" :inactive="true" active-class="black--text">
+                      <v-list-item
+                        :selectable="true"
+                        :inactive="true"
+                        active-class="black--text"
+                      >
                         <v-list-item-content>
                           <v-list-item-title class="active-menu-item py-1">
                             <p class="font-weight-black ma-0 pa-0">
                               Total:
-                              <span style="position:absolute; right:15px">{{total | dollars}}</span>
+                              <span style="position: absolute; right: 15px">{{
+                                total | dollars
+                              }}</span>
                             </p>
                           </v-list-item-title>
                         </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
                     <v-divider class="mt-1 mb-1" />
-                    <v-row class="ml-2 mr-2 mt-2" v-if="activeComponentName!='cart'">
+                    <v-row
+                      class="ml-2 mr-2 mt-2"
+                      v-if="activeComponentName != 'cart'"
+                    >
                       <v-btn
                         color="orange white--text"
                         block
                         @click="setComponent('cart')"
                         class="hovered-button"
-                      >Go to cart</v-btn>
+                        >Go to cart</v-btn
+                      >
                     </v-row>
                   </v-list>
                 </span>
               </v-menu>
             </v-badge>
             <!-- Empty Shopping Cart -->
-            <div class="ml-8 mr-0" v-if="numInCart==0 && (user_type ==-1 || user_type==0)">
+            <div
+              class="ml-8 mr-0"
+              v-if="numInCart == 0 && (user_type == -1 || user_type == 0)"
+            >
               <v-menu
                 :nudge-width="200"
                 offset-y
@@ -308,7 +364,9 @@
                 max-width="325"
               >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-icon dark medium v-bind="attrs" v-on="on">mdi-cart-outline</v-icon>
+                  <v-icon dark medium v-bind="attrs" v-on="on"
+                    >mdi-cart-outline</v-icon
+                  >
                 </template>
                 <span>
                   <v-list dense>
@@ -317,7 +375,10 @@
                         <v-icon x-large color="orange">mdi-menu-down</v-icon>
                       </v-row>
                     </v-subheader>
-                    <v-list-item-group color="primary" active-class="black--text ">
+                    <v-list-item-group
+                      color="primary"
+                      active-class="black--text "
+                    >
                       <v-list-item
                         :selectable="true"
                         :inactive="true"
@@ -327,7 +388,9 @@
                           <v-icon>mdi-cart-outline</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item py-1">Shopping Cart is Empty</v-list-item-title>
+                          <v-list-item-title class="active-menu-item py-1"
+                            >Shopping Cart is Empty</v-list-item-title
+                          >
                         </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
@@ -350,7 +413,9 @@
                 max-width="325"
               >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-icon light medium dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+                  <v-icon light medium dark v-bind="attrs" v-on="on"
+                    >mdi-account</v-icon
+                  >
                   <!-- <v-avatar color="purple" v-bind="attrs" v-on="on" size="32px">
             <span class="white--text font-weight-bold">{{abreviatedName}}</span>
             <v-badge color="error" v-if="numInCart >0" dot></v-badge>
@@ -377,7 +442,9 @@
                           <v-icon>mdi-login</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item py-1">Sign in</v-list-item-title>
+                          <v-list-item-title class="active-menu-item py-1"
+                            >Sign in</v-list-item-title
+                          >
                         </v-list-item-content>
                       </v-list-item>
                       <!-- <v-divider></v-divider> -->
@@ -390,7 +457,9 @@
                           <v-icon>mdi-account-plus</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item py-1">Sign up</v-list-item-title>
+                          <v-list-item-title class="active-menu-item py-1"
+                            >Sign up</v-list-item-title
+                          >
                         </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
@@ -414,12 +483,18 @@
                       >
                         <v-list-item-avatar>
                           <v-avatar color="purple" size="48px">
-                            <span class="white--text font-weight-bold">{{abreviatedName}}</span>
+                            <span class="white--text font-weight-bold">{{
+                              abreviatedName
+                            }}</span>
                           </v-avatar>
                         </v-list-item-avatar>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item">Hi, {{name}}</v-list-item-title>
-                          <v-list-item-subtitle class="active-menu-item py-2">Genius Exams Website</v-list-item-subtitle>
+                          <v-list-item-title class="active-menu-item"
+                            >Hi, {{ name }}</v-list-item-title
+                          >
+                          <v-list-item-subtitle class="active-menu-item py-2"
+                            >Genius Exams Website</v-list-item-subtitle
+                          >
                         </v-list-item-content>
                       </v-list-item>
                       <v-divider class="mt-1 mb-1" />
@@ -433,28 +508,36 @@
                           <v-img src="./images/logo.png" alt="Genius Exams" />
                         </v-list-item-avatar>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item">Hi, {{name}}</v-list-item-title>
-                          <v-list-item-subtitle class="active-menu-item py-1">Genius Exams Website</v-list-item-subtitle>
+                          <v-list-item-title class="active-menu-item"
+                            >Hi, {{ name }}</v-list-item-title
+                          >
+                          <v-list-item-subtitle class="active-menu-item py-1"
+                            >Genius Exams Website</v-list-item-subtitle
+                          >
                         </v-list-item-content>
                       </v-list-item>
                       <v-list-item
                         v-if="user_type == 0 && isLoggedIn"
-                        @click="alertShoppingCartDialog "
+                        @click="alertShoppingCartDialog"
                         value="LoggedInMenu_cart"
                         class="active-menu-item-list"
                       >
                         <v-list-item-icon>
-                          <v-icon color="error" v-if="numInCart>0">mdi-cart</v-icon>
+                          <v-icon color="error" v-if="numInCart > 0"
+                            >mdi-cart</v-icon
+                          >
                           <v-icon v-else>mdi-cart-outline</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item py-1">My cart</v-list-item-title>
+                          <v-list-item-title class="active-menu-item py-1"
+                            >My cart</v-list-item-title
+                          >
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-badge
                             color="error"
                             :content="numInCart"
-                            v-if="numInCart >0 && isLoggedIn"
+                            v-if="numInCart > 0 && isLoggedIn"
                             overlap
                             class="ml-4 mr-4"
                           ></v-badge>
@@ -463,22 +546,26 @@
 
                       <v-list-item
                         v-if="user_type == 0 && isLoggedIn"
-                        @click="alertWhishlistDialog "
+                        @click="alertWhishlistDialog"
                         value="LoggedInMenu_whish"
                         class="active-menu-item-list"
                       >
                         <v-list-item-icon>
-                          <v-icon color="error" v-if="numInWhishlist>0">mdi-heart</v-icon>
+                          <v-icon color="error" v-if="numInWhishlist > 0"
+                            >mdi-heart</v-icon
+                          >
                           <v-icon v-else>mdi-heart-outline</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item py-1">Whish List</v-list-item-title>
+                          <v-list-item-title class="active-menu-item py-1"
+                            >Whish List</v-list-item-title
+                          >
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-badge
                             color="error"
                             :content="numInWhishlist"
-                            v-if="numInWhishlist >0 && isLoggedIn"
+                            v-if="numInWhishlist > 0 && isLoggedIn"
                             overlap
                             class="ml-4 mr-4"
                           ></v-badge>
@@ -487,31 +574,38 @@
 
                       <v-list-item
                         v-if="user_type == 0 && isLoggedIn"
-                        @click="alertSavedlistDialog "
+                        @click="alertSavedlistDialog"
                         value="LoggedInMenu_saved"
                         class="active-menu-item-list"
                       >
                         <v-list-item-icon>
-                          <v-icon color="error" v-if="numInSavedlist>0">mdi-clock</v-icon>
+                          <v-icon color="error" v-if="numInSavedlist > 0"
+                            >mdi-clock</v-icon
+                          >
                           <v-icon v-else>mdi-clock-outline</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item py-1">Saved List</v-list-item-title>
+                          <v-list-item-title class="active-menu-item py-1"
+                            >Saved List</v-list-item-title
+                          >
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-badge
                             color="error"
                             :content="numInSavedlist"
-                            v-if="numInSavedlist >0 && isLoggedIn"
+                            v-if="numInSavedlist > 0 && isLoggedIn"
                             overlap
                             class="ml-4 mr-4"
                           ></v-badge>
                         </v-list-item-action>
                       </v-list-item>
-                      <v-divider class="mt-1 mb-1" v-if="user_type == 0 && isLoggedIn" />
+                      <v-divider
+                        class="mt-1 mb-1"
+                        v-if="user_type == 0 && isLoggedIn"
+                      />
 
                       <v-list-item
-                        @click="setComponent('changepassword'); "
+                        @click="setComponent('changepassword')"
                         value="LoggedInMenu_changepassword"
                         class="active-menu-item-list"
                       >
@@ -519,7 +613,9 @@
                           <v-icon>mdi-key-change</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item py-1">Change Password</v-list-item-title>
+                          <v-list-item-title class="active-menu-item py-1"
+                            >Change Password</v-list-item-title
+                          >
                         </v-list-item-content>
                       </v-list-item>
                       <!-- <v-divider></v-divider> -->
@@ -532,7 +628,9 @@
                           <v-icon>mdi-logout</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="active-menu-item-content">
-                          <v-list-item-title class="active-menu-item py-1">Sign out</v-list-item-title>
+                          <v-list-item-title class="active-menu-item py-1"
+                            >Sign out</v-list-item-title
+                          >
                         </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
@@ -573,109 +671,139 @@
               >
                 <v-tabs-slider></v-tabs-slider>
                 <v-tab
-                  v-if="user_type==0 && isLoggedIn"
+                  v-if="user_type == 0 && isLoggedIn"
                   :href="`#tab_home`"
-                  @click="setComponent('home');   $vuetify.goTo('#navbar', {
-                  offset: 100,
-                  duration: 2000,
-                  easing: 'easeInOutQuad'
-                })"
-                >Home</v-tab>
+                  @click="
+                    setComponent('home');
+                    $vuetify.goTo('#navbar', {
+                      offset: 100,
+                      duration: 2000,
+                      easing: 'easeInOutQuad',
+                    });
+                  "
+                  >Home</v-tab
+                >
                 <v-tab
-                  v-if="user_type==-1 && !isLoggedIn"
+                  v-if="user_type == -1 && !isLoggedIn"
                   :href="`#tab_home`"
-                  @click="setComponent('home');   $vuetify.goTo('#navbar', {
-                  offset: 100,
-                  duration: 2000,
-                  easing: 'easeInOutQuad'
-                })"
-                >Home</v-tab>
+                  @click="
+                    setComponent('home');
+                    $vuetify.goTo('#navbar', {
+                      offset: 100,
+                      duration: 2000,
+                      easing: 'easeInOutQuad',
+                    });
+                  "
+                  >Home</v-tab
+                >
                 <v-tab
-                  v-if="user_type==1 && isLoggedIn"
+                  v-if="user_type == 1 && isLoggedIn"
                   :href="`#tab_home`"
-                  @click="active_admin_drawer='admin_drawer_home';   setComponent('home');   $vuetify.goTo('#navbar', {
-                  offset: 100,
-                  duration: 2000,
-                  easing: 'easeInOutQuad'
-                })"
-                >Home</v-tab>
+                  @click="
+                    active_admin_drawer = 'admin_drawer_home';
+                    setComponent('home');
+                    $vuetify.goTo('#navbar', {
+                      offset: 100,
+                      duration: 2000,
+                      easing: 'easeInOutQuad',
+                    });
+                  "
+                  >Home</v-tab
+                >
                 <v-tab
                   :href="`#tab_requests`"
                   @click="setComponent('userboard')"
                   v-if="user_type == 0 && isLoggedIn"
                   key="userboard"
-                >Orders</v-tab>
+                  >Orders</v-tab
+                >
                 <v-tab
                   :href="`#tab_cart`"
                   @click="setComponent('cart')"
                   v-if="user_type == -1 || user_type == 0"
                   key="cart"
-                >Cart({{numInCart}})</v-tab>
+                  >Cart({{ numInCart }})</v-tab
+                >
                 <v-tab
                   :href="`#tab_slider`"
                   @click="setComponent('slider')"
                   v-if="user_type == 1 && isLoggedIn"
-                >Slider</v-tab>
+                  >Slider</v-tab
+                >
                 <v-tab
                   :href="`#tab_main`"
                   @click="setComponent('main')"
                   v-if="user_type == 1 && isLoggedIn"
-                >Main</v-tab>
+                  >Main</v-tab
+                >
                 <v-tab
                   :href="`#tab_certificates`"
                   @click="setComponent('certificates')"
                   v-if="user_type == 1 && isLoggedIn"
-                >Certificates</v-tab>
+                  >Certificates</v-tab
+                >
                 <v-tab
                   :href="`#tab_orders`"
                   @click="setComponent('orders')"
                   v-if="user_type == 1 && isLoggedIn"
-                >Orders</v-tab>
+                  >Orders</v-tab
+                >
                 <v-tab
                   :href="`#tab_exams`"
                   @click="setComponent('exams')"
                   v-if="user_type == 1 && isLoggedIn"
-                >Exams</v-tab>
+                  >Exams</v-tab
+                >
                 <v-tab
                   :href="`#tab_questions`"
                   @click="setComponent('questions')"
                   v-if="user_type == 1 && isLoggedIn"
-                >Questions</v-tab>
+                  >Questions</v-tab
+                >
                 <v-tab
                   :href="`#tab_users`"
                   @click="setComponent('users')"
                   v-if="user_type == 1 && isLoggedIn"
-                >Users</v-tab>
+                  >Users</v-tab
+                >
                 <v-tab
                   :href="`#tab_sessions`"
                   @click="setComponent('sessions')"
                   v-if="user_type == 1 && isLoggedIn"
-                >Sessions</v-tab>
+                  >Sessions</v-tab
+                >
                 <v-tab
                   :href="`#tab_coupons`"
                   @click="setComponent('coupons')"
                   v-if="user_type == 1 && isLoggedIn"
-                >Coupons</v-tab>
+                  >Coupons</v-tab
+                >
                 <v-tab
                   :href="`#tab_reviews`"
                   @click="
-                active_user_drawer='user_drawer_reviews';active_admin_drawer='admin_drawer_reviews';$vuetify.goTo('#tab_benefits', {
-                  offset: 100,
-                  duration: 2000,
-                  easing: 'easeInOutQuad'
-                })
-                "
-                >Reviews</v-tab>
+                    active_user_drawer = 'user_drawer_reviews';
+                    active_admin_drawer = 'admin_drawer_reviews';
+                    $vuetify.goTo('#tab_benefits', {
+                      offset: 100,
+                      duration: 2000,
+                      easing: 'easeInOutQuad',
+                    });
+                  "
+                  >Reviews</v-tab
+                >
                 <v-tab
                   :href="`#tab_allfaqs`"
                   @click="
-                active_user_drawer='user_drawer_allfaqs';active_admin_drawer='admin_drawer_allfaqs';$vuetify.goTo('#tab_FAQS', {
-                  offset: 100,
-                  duration: 2000,
-                  easing: 'easeInOutQuad'
-                })
-                "
-                >FAQS</v-tab>
+                    active_user_drawer = 'user_drawer_allfaqs';
+                    active_admin_drawer = 'admin_drawer_allfaqs';
+                    $vuetify.goTo('#tab_FAQS', {
+                      offset: 100,
+                      duration: 2000,
+                      easing: 'easeInOutQuad',
+                    });
+                  "
+                  >FAQS</v-tab
+                >
                 <!-- <v-tab
                   class="font-weight-bold text--black"
                   :href="`#tab_services`"
@@ -688,13 +816,18 @@
                 >Our Services</v-tab>-->
                 <v-tab
                   :href="`#tab_contactus`"
-                  v-if="user_type !=1"
-                  @click="active_user_drawer='user_drawer_home';active_admin_drawer='admin_drawer_home';$vuetify.goTo('#tab_contactus', {
-                offset: 100,
-                duration: 2000,
-                easing: 'easeInOutQuad'
-              })"
-                >Contact us</v-tab>
+                  v-if="user_type != 1"
+                  @click="
+                    active_user_drawer = 'user_drawer_home';
+                    active_admin_drawer = 'admin_drawer_home';
+                    $vuetify.goTo('#tab_contactus', {
+                      offset: 100,
+                      duration: 2000,
+                      easing: 'easeInOutQuad',
+                    });
+                  "
+                  >Contact us</v-tab
+                >
                 <!-- <v-spacer />
                 <v-divider class="ma-0 pa-0 grey lighten-2" vertical></v-divider>
                 <v-tab
@@ -745,7 +878,7 @@
       mini-variant
       expand-on-hover
       width="250"
-      style="z-index:1000"
+      style="z-index: 1000"
       v-model="drawer"
       app
       color="orange"
@@ -754,16 +887,20 @@
       v-show="showParentContent"
       class="drawer"
     >
-      <v-img :aspect-ratio="16/9" src="images/logo.png" contain>
+      <v-img :aspect-ratio="16 / 9" src="images/logo.png" contain>
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
           <v-col>
-            <div class="subheading">{{user.name}}</div>
-            <div class="body-1">{{user.email}}</div>
+            <div class="subheading">{{ user.name }}</div>
+            <div class="body-1">{{ user.email }}</div>
           </v-col>
         </v-row>
       </v-img>
       <v-list dense nav class="pt-3 white--text">
-        <v-list-item-group color="primary" v-model="active_admin_drawer" active-class="pink--text ">
+        <v-list-item-group
+          color="primary"
+          v-model="active_admin_drawer"
+          active-class="pink--text "
+        >
           <v-list-item
             @click="setComponent('home')"
             value="admin_drawer_home"
@@ -773,7 +910,9 @@
               <v-icon class="white--text">home</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Home</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Home</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <v-list-item
@@ -785,7 +924,9 @@
               <v-icon class="white--text">mdi-image</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Slider</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Slider</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <v-list-item
@@ -797,7 +938,9 @@
               <v-icon class="white--text">mdi-arrange-bring-forward</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Main</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Main</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
@@ -810,7 +953,9 @@
               <v-icon class="white--text">mdi-seal</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Certificates</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Certificates</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
@@ -823,7 +968,9 @@
               <v-icon class="white--text">mdi-receipt</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Orders</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Orders</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
@@ -836,7 +983,9 @@
               <v-icon class="white--text">mdi-comment-text-outline</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Exams</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Exams</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
@@ -849,7 +998,9 @@
               <v-icon class="white--text">mdi-comment-question-outline</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Questions</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Questions</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
@@ -862,7 +1013,9 @@
               <v-icon class="white--text">mdi-account-multiple</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Users</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Users</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <v-list-item
@@ -874,7 +1027,9 @@
               <v-icon class="white--text">mdi-run-fast</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Sessions</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Sessions</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <v-list-item
@@ -886,7 +1041,9 @@
               <v-icon class="white--text">mdi-cash</v-icon>
             </v-list-item-action>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Coupons</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Coupons</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <v-list-item
@@ -898,7 +1055,9 @@
               <v-icon class="white--text">preview</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Reviews</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Reviews</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <v-list-item
@@ -910,7 +1069,9 @@
               <v-icon class="white--text">mdi-help</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">FAQS</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >FAQS</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -928,7 +1089,7 @@
       mini-variant
       expand-on-hover
       width="250"
-      style="background-color:#e7e8ea"
+      style="background-color: #e7e8ea"
       v-model="drawer"
       app
       color="orange"
@@ -937,16 +1098,20 @@
       v-show="showParentContent"
       class="drawer"
     >
-      <v-img :aspect-ratio="16/9" src="images/header.jpg">
+      <v-img :aspect-ratio="16 / 9" src="images/header.jpg">
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
           <v-col>
-            <div class="subheading">{{user.name}}</div>
-            <div class="body-1">{{user.email}}</div>
+            <div class="subheading">{{ user.name }}</div>
+            <div class="body-1">{{ user.email }}</div>
           </v-col>
         </v-row>
       </v-img>
       <v-list dense nav class="pt-3 white--text">
-        <v-list-item-group color="primary" v-model="active_user_drawer" active-class="pink--text ">
+        <v-list-item-group
+          color="primary"
+          v-model="active_user_drawer"
+          active-class="pink--text "
+        >
           <v-list-item
             @click="setComponent('home')"
             value="user_drawer_home"
@@ -956,7 +1121,9 @@
               <v-icon class="white--text">home</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Home</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Home</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
@@ -969,86 +1136,96 @@
               <v-icon class="white--text">mdi-book-multiple</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Orders</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Orders</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
-          <v-list-group prepend-icon="mdi-cart" :value="false">
+          <!-- <v-list-group prepend-icon="mdi-cart" :value="false">
             <template v-slot:activator>
-              <v-list-item-title class="white--text active-drawer-item py-1">Shopping Cart</v-list-item-title>
-            </template>
-            <v-list-item
-              @click="setComponent('cart')"
-              value="user_drawer_cart"
-              class="active-drawer-item-list ml-4"
-            >
-              <v-list-item-icon v-if="numInCart==0">
-                <v-icon class="white--text">mdi-cart-outline</v-icon>
-              </v-list-item-icon>
-              <v-list-item-icon v-if="numInCart>0">
-                <v-icon class="white--text">mdi-cart</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content class="active-drawer-item-content">
-                <v-list-item-title class="white--text active-drawer-item py-1">Cart</v-list-item-title>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-badge
-                  color="error"
-                  :content="numInCart"
-                  v-if="numInCart >0 && isLoggedIn"
-                  overlap
-                  class="ml-4 mr-4"
-                ></v-badge>
-              </v-list-item-action>
-            </v-list-item>
-            <v-list-item
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Shopping Cart</v-list-item-title
+              >
+            </template> -->
+          <v-list-item
+            @click="setComponent('cart')"
+            value="user_drawer_cart"
+            class="active-drawer-item-list"
+          >
+            <v-list-item-icon v-if="numInCart == 0">
+              <v-icon class="white--text">mdi-cart-outline</v-icon>
+            </v-list-item-icon>
+            <v-list-item-icon v-if="numInCart > 0">
+              <v-icon class="white--text">mdi-cart</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content class="active-drawer-item-content">
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Cart</v-list-item-title
+              >
+            </v-list-item-content>
+            <v-list-item-action>
+              <v-badge
+                color="error"
+                :content="numInCart"
+                v-if="numInCart > 0 && isLoggedIn"
+                overlap
+                class="ml-4 mr-4"
+              ></v-badge>
+            </v-list-item-action>
+          </v-list-item>
+          <!-- <v-list-item
               @click="setComponent('cart')"
               value="user_drawer_whishlist"
               class="active-drawer-item-list ml-4"
             >
-              <v-list-item-icon v-if="numInWhishlist==0">
+              <v-list-item-icon v-if="numInWhishlist == 0">
                 <v-icon class="white--text">mdi-heart-outline</v-icon>
               </v-list-item-icon>
-              <v-list-item-icon v-if="numInWhishlist>0">
+              <v-list-item-icon v-if="numInWhishlist > 0">
                 <v-icon class="white--text">mdi-heart</v-icon>
               </v-list-item-icon>
               <v-list-item-content class="active-drawer-item-content">
-                <v-list-item-title class="white--text active-drawer-item py-1">Whish List</v-list-item-title>
+                <v-list-item-title class="white--text active-drawer-item py-1"
+                  >Whish List</v-list-item-title
+                >
               </v-list-item-content>
               <v-list-item-action>
                 <v-badge
                   color="error"
                   :content="numInWhishlist"
-                  v-if="numInWhishlist >0 && isLoggedIn"
+                  v-if="numInWhishlist > 0 && isLoggedIn"
                   overlap
                   class="ml-4 mr-4"
                 ></v-badge>
               </v-list-item-action>
-            </v-list-item>
-            <v-list-item
+            </v-list-item> -->
+          <!-- <v-list-item
               @click="setComponent('cart')"
               value="user_drawer_savedlist"
               class="active-drawer-item-list ml-4"
             >
-              <v-list-item-icon v-if="numInSavedlist==0">
+              <v-list-item-icon v-if="numInSavedlist == 0">
                 <v-icon class="white--text">mdi-clock-outline</v-icon>
               </v-list-item-icon>
-              <v-list-item-icon v-if="numInSavedlist>0">
+              <v-list-item-icon v-if="numInSavedlist > 0">
                 <v-icon class="white--text">mdi-clock</v-icon>
               </v-list-item-icon>
               <v-list-item-content class="active-drawer-item-content">
-                <v-list-item-title class="white--text active-drawer-item py-1">Saved List</v-list-item-title>
+                <v-list-item-title class="white--text active-drawer-item py-1"
+                  >Saved List</v-list-item-title
+                >
               </v-list-item-content>
               <v-list-item-action>
                 <v-badge
                   color="error"
                   :content="numInSavedlist"
-                  v-if="numInSavedlist >0 && isLoggedIn"
+                  v-if="numInSavedlist > 0 && isLoggedIn"
                   overlap
                   class="ml-4 mr-4"
                 ></v-badge>
               </v-list-item-action>
-            </v-list-item>
-          </v-list-group>
+            </v-list-item> -->
+          <!-- </v-list-group> -->
           <v-list-item
             @click="setComponent('reviews')"
             value="user_drawer_reviews"
@@ -1058,7 +1235,9 @@
               <v-icon class="white--text">preview</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">Reviews</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >Reviews</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <v-list-item
@@ -1070,7 +1249,9 @@
               <v-icon class="white--text">preview</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="active-drawer-item-content">
-              <v-list-item-title class="white--text active-drawer-item py-1">FAQS</v-list-item-title>
+              <v-list-item-title class="white--text active-drawer-item py-1"
+                >FAQS</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <!-- <v-divider></v-divider> -->
@@ -1083,7 +1264,7 @@
     </v-navigation-drawer>
     <v-main class="pa-0 ma-0">
       <v-app fluid>
-        <v-flex style="margin-top:105px">
+        <v-flex style="margin-top: 105px">
           <component
             class="myFont"
             id="tab_home"
@@ -1160,7 +1341,11 @@
         />
         <!-- <Terms @linkToHome="linkToHome" />
         <About @linkToHome="linkToHome" />-->
-        <Footer v-show="showParentContent" class="myFont mt-10 mb-0" id="footer" />
+        <Footer
+          v-show="showParentContent"
+          class="myFont mt-10 mb-0"
+          id="footer"
+        />
         <ShoppingCartDialog
           :showShoppingCartDialog="showShoppingCartDialog"
           @closeShoppingCartDialog="closeShoppingCartDialog"
@@ -1381,6 +1566,104 @@ export default {
     axios.defaults.headers.common["Content-Type"] = "application/json";
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("genius.jwt");
+  },
+  // this function to handle the prev and next in chrome history
+  watch: {
+    $route: function (newValue, oldValue) {
+      // alert(JSON.stringify(oldValue.path));
+      // alert(JSON.stringify(newValue.path));
+      let newparts = newValue.path.split("/");
+      let oldparts = oldValue.path.split("/");
+      console.log(newparts[1] + "-" + newparts[2]);
+      let source = oldparts[1];
+      let adminsource = oldparts[2];
+      let destination = newparts[1];
+      let admindestination = newparts[2];
+      switch (destination) {
+        // user_type==-1 || user_type==0
+        case "":
+          if (source != "checkout") this.setComponent("home");
+          break;
+        case "terms":
+          this.setComponent("terms");
+          break;
+        case "about":
+          this.setComponent("about");
+          break;
+        case "allfaqs":
+          this.setComponent("allfaqs");
+          break;
+        case "reviews":
+          this.setComponent("reviews");
+          break;
+        case "home":
+          this.setComponent("home");
+          break;
+        case "dashboard":
+          this.setComponent("userboard");
+          break;
+        case "cart":
+          this.setComponent("cart");
+          break;
+        // case "register":
+        //   this.setComponent("register");
+        //   break;
+        // case "login":
+        //   this.setComponent("login");
+        //   break;
+        case "changepassword":
+          this.setComponent("changepassword");
+          break;
+        case "startsession":
+          // let certificate_id = newparts[2];
+          // if (this.activeComponentName != "startsession")
+          //   this.StartSession(certificate_id);
+          break;
+        // case "checkout":
+        //   break;
+        // case "confirmation":
+        //   this.showConfirmation();
+        //   break;
+        // default:
+        //   this.setComponent("home");
+        //   break;
+      }
+      // switch (admindestination) {
+      //   // user_type==1
+      //   case "slider":
+      //     if (this.activeComponent != Slider) this.setComponent("slider");
+      //     break;
+      //   case "main":
+      //     if (this.activeComponent != Main) this.setComponent("main");
+      //     break;
+
+      //   case "users":
+      //     if (this.activeComponent != Users) this.setComponent("users");
+      //     break;
+      //   case "sessions":
+      //     if (this.activeComponent != Sessions) this.setComponent("sessions");
+      //     break;
+      //   case "coupons":
+      //     if (this.activeComponent != Coupons) this.setComponent("coupons");
+      //     break;
+      //   case "certificates":
+      //     if (this.activeComponent != Certificates)
+      //       this.setComponent("certificates");
+      //     break;
+      //   case "orders":
+      //     if (this.activeComponent != Orders) this.setComponent("orders");
+      //     break;
+      //   case "exams":
+      //     if (this.activeComponent != Exams) this.setComponent("exams");
+      //     break;
+      //   case "questions":
+      //     if (this.activeComponent != Questions) this.setComponent("questions");
+      //     break;
+      //   //
+      //   //
+      //   //
+      // }
+    },
   },
   methods: {
     loginForgotPassword() {
@@ -1618,6 +1901,11 @@ export default {
         this.active_admin_drawer = "admin_drawer_main";
         this.activeComponent = Main;
         this.activeComponentName = "main";
+        this.$router
+          .push({
+            name: "main",
+          })
+          .catch(() => {});
       } else if (this.user_type == 0) {
         this.showParentContent = true;
         this.active_tab = "tab_requests";
@@ -1628,6 +1916,7 @@ export default {
         this.active_user_drawer = 0;
         this.activeComponent = UserBoard;
         this.activeComponentName = "userboard";
+        this.$router.push({ name: "userboard" }).catch((err) => {});
       }
     },
     logout() {
@@ -1718,9 +2007,10 @@ export default {
             this.LoggedInMenu = "";
             this.active_admin_drawer = "admin_drawer_slider";
             this.activeComponent = Slider;
-            // this.$router.push({
-            //   name: "slider",
-            // });
+            this.$router.push({
+              name: "admin-pages",
+              params: { page: "slider" },
+            });
             break;
           case "main":
             this.showParentContent = true;

@@ -2,7 +2,13 @@
   <v-container fluid>
     <v-col pa-5>
       <v-row no-gutters justify="center" align="start">
-        <v-col cols="12" sm="auto" md="auto" lg="auto" class="underline-from-center">
+        <v-col
+          cols="12"
+          sm="auto"
+          md="auto"
+          lg="auto"
+          class="underline-from-center"
+        >
           <span class="big-dot mr-2">.</span>
           <span class="big-dot mr-2">.</span>
           <span class="medium-title mr-6 ml-4 black--text">FAQS</span>
@@ -12,7 +18,9 @@
       </v-row>
       <v-row no-gutters justify="center" align="start" class="py-0">
         <v-col cols="12" sm="auto" md="auto" lg="auto">
-          <span class="x-big-title mr-6 ml-4 mb-0 black--text">Frequently Ask & Questions</span>
+          <span class="x-big-title mr-6 ml-4 mb-0 black--text"
+            >Frequently Ask & Questions</span
+          >
         </v-col>
       </v-row>
       <v-row no-gutters justify="center" align="center">
@@ -21,20 +29,27 @@
             <v-row justify="center">
               <v-expansion-panels popout :hover="true">
                 <v-expansion-panel
-                  v-for="(item,i) in faqs"
+                  v-for="(item, i) in faqs"
                   :key="i"
                   active-class="orange lighten-5 underline-from-top"
                 >
-                  <v-expansion-panel-header class="expansion-panel-header font-weight-bold">
-                    <span class="expansion-panel-title">{{i+1 +"- "+item.title}}</span>
+                  <v-expansion-panel-header
+                    class="expansion-panel-header font-weight-bold"
+                  >
+                    <span class="expansion-panel-title">{{
+                      i + 1 + "- " + item.title
+                    }}</span>
                     <template v-slot:actions>
-                      <v-icon color="orange">mdi-arrow-down-drop-circle-outline</v-icon>
+                      <v-icon color="orange"
+                        >mdi-arrow-down-drop-circle-outline</v-icon
+                      >
                     </template>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content
                     color="white"
                     class="black--text underline-from-top expansion-panel-text"
-                  >{{item.body}}</v-expansion-panel-content>
+                    >{{ item.body }}</v-expansion-panel-content
+                  >
                 </v-expansion-panel>
               </v-expansion-panels>
             </v-row>
@@ -42,11 +57,21 @@
         </v-container>
       </v-row>
 
-      <v-row no-gutters justify="center" align="start" class="hidden-sm-and-down">
-        <v-tooltip bottom>
+      <v-row
+        no-gutters
+        justify="center"
+        align="start"
+        class="hidden-sm-and-down"
+      >
+        <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn fab class="mt-5 orange" @click="linkToAllFAQS" v-bind="attrs" v-on="on">
-              <v-icon large color="white">expand_more</v-icon>
+            <v-btn
+              class="mt-5 orange"
+              @click="linkToAllFAQS"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon large color="white" class="arrow-up">expand_more</v-icon>
             </v-btn>
           </template>
           Show all FAQS
@@ -102,5 +127,9 @@ export default {
 }
 .expansion-panel-text {
   font-size: 1.3em;
+}
+.arrow-up:hover {
+  transform: rotate(-180deg);
+  /* transform: scaleY(1.5); */
 }
 </style>

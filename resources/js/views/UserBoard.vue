@@ -12,7 +12,11 @@
         <v-card color="orange" dark>
           <v-card-text>
             Processing
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+            <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+            ></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -43,7 +47,7 @@
         </v-row>
       </v-col>
     </div>
-    <div v-if="orders.length>0">
+    <div v-if="orders.length > 0">
       <vueper-slides
         ref="myVueperSlides"
         class="ml-10 mr-10 no-shadow thumbnails py-0"
@@ -61,7 +65,7 @@
             <v-hover v-slot:default="{ hover }" class="mx-2 my-2 col-md-4">
               <v-card color="grey lighten-4" max-width="400">
                 <v-img
-                  :aspect-ratio="16/9"
+                  :aspect-ratio="16 / 9"
                   :src="order.certificate.image"
                   :alt="order.certificate.name"
                 >
@@ -69,11 +73,13 @@
                     <div
                       v-if="hover"
                       class="font-weight-bold d-flex transition-fast-in-fast-out grey darken-2 v-card--reveal display-3 white--text"
-                      style="height: 100%;"
-                    >{{order.certificate.price | dollars}}</div>
+                      style="height: 100%"
+                    >
+                      {{ order.certificate.price | dollars }}
+                    </div>
                   </v-expand-transition>
                 </v-img>
-                <v-card-text class="pt-6" style="position: relative;">
+                <v-card-text class="pt-6" style="position: relative">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
@@ -85,7 +91,7 @@
                         right
                         top
                         @click="startSession(order.certificate_id)"
-                        v-if="remainingDays[index]>0"
+                        v-if="remainingDays[index] > 0"
                         v-bind="attrs"
                         v-on="on"
                       >
@@ -103,7 +109,12 @@
                     right
                     top
                     @click="addToCart(order.certificate_id)"
-                    v-if="remainingDays[index]<=0 && (inCart.find((item)=> item== order.certificate_id)>-1?false:true)"
+                    v-if="
+                      remainingDays[index] <= 0 &&
+                      (inCart.find((item) => item == order.certificate_id) > -1
+                        ? false
+                        : true)
+                    "
                   >
                     <v-icon>mdi-cart-plus</v-icon>
                   </v-btn>
@@ -116,16 +127,25 @@
                     right
                     top
                     @click="removeFromCart(order.certificate_id)"
-                    v-if="remainingDays[index]<=0 && (inCart.find((item)=> item== order.certificate_id)>-1?true:false)"
+                    v-if="
+                      remainingDays[index] <= 0 &&
+                      (inCart.find((item) => item == order.certificate_id) > -1
+                        ? true
+                        : false)
+                    "
                   >
                     <v-icon>mdi-cart-minus</v-icon>
                   </v-btn>
                   <h3
                     class="textover font-weight-light orange--text mb-2 mouse-over"
                     @click="showSingleCertificate(order.certificate.id)"
-                  >{{order.certificate.name}}</h3>
+                  >
+                    {{ order.certificate.name }}
+                  </h3>
                   <v-row align="center" class="mx-0" no-gutters>
-                    <span style="color:#FF9800;">{{order.certificate.rate}}</span>
+                    <span style="color: #ff9800">{{
+                      order.certificate.rate
+                    }}</span>
                     <v-rating
                       :value="order.certificate.rate"
                       color="#FF9800"
@@ -139,35 +159,39 @@
 
                     <div class="grey--text ml-auto">
                       <v-icon small>book</v-icon>
-                      {{order.certificate.bookedNO}}
+                      {{ order.certificate.bookedNO }}
                     </div>
                     <div class="grey--text ml-1">
                       <v-icon small>mdi-star-circle</v-icon>
-                      {{order.certificate.ratedNO}}
+                      {{ order.certificate.ratedNO }}
                     </div>
                   </v-row>
-                  <div
-                    class="font-weight-light grey--text mb-2 textover"
-                  >{{order.certificate.description}}</div>
+                  <div class="font-weight-light grey--text mb-2 textover">
+                    {{ order.certificate.description }}
+                  </div>
                 </v-card-text>
                 <v-card-subtitle>
-                  <span v-if="remainingDays[index]>1">
-                    Remainig Days: {{remainingDays[index]}} Days
+                  <span v-if="remainingDays[index] > 1">
+                    Remainig Days: {{ remainingDays[index] }} Days
                     <br />
                     <v-icon>mdi-calendar</v-icon>
-                    {{moment(order.created_at).format('YYYY-MM-DD')}}
+                    {{ moment(order.created_at).format("YYYY-MM-DD") }}
                   </span>
-                  <span v-if="remainingDays[index]==1">
-                    Remainig Days: {{remainingDays[index]}} Day
+                  <span v-if="remainingDays[index] == 1">
+                    Remainig Days: {{ remainingDays[index] }} Day
                     <br />
                     <v-icon>mdi-calendar</v-icon>
-                    {{moment(order.created_at).format('YYYY-MM-DD')}}
+                    {{ moment(order.created_at).format("YYYY-MM-DD") }}
                   </span>
-                  <span class="error--text" v-if="remainingDays[index]<=0">
+                  <span class="error--text" v-if="remainingDays[index] <= 0">
                     Your subscription ended since:
                     <br />
                     <v-icon color="error">mdi-calendar</v-icon>
-                    {{moment(order.created_at).add(order.certificate.available_for,'days').format('YYYY-MM-DD')}}
+                    {{
+                      moment(order.created_at)
+                        .add(order.certificate.available_for, "days")
+                        .format("YYYY-MM-DD")
+                    }}
                   </span>
                 </v-card-subtitle>
               </v-card>
@@ -176,9 +200,14 @@
         </vueper-slide>
       </vueper-slides>
     </div>
-    <div class="row mx-15 justify-center" v-if="orders.length===0 && !spinner">
+    <div
+      class="row mx-15 justify-center"
+      v-if="orders.length === 0 && !spinner"
+    >
       <v-card class="mx-2 my-2 col-md-6">
-        <v-card-title class="justify-center">No booked certificates</v-card-title>
+        <v-card-title class="justify-center"
+          >No booked certificates</v-card-title
+        >
       </v-card>
     </div>
   </v-main>

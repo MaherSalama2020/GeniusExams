@@ -25,6 +25,7 @@ import Vuetify from "vuetify";
 import 'vuetify/dist/vuetify.min.css'
 import ForgotPassword from './views/ForgotPassword'
 import ResetPasswordForm from './views/ResetPasswordForm'
+import ChangePassword from "./views/ChangePassword";
 import store from './store';
 Vue.use(Vuetify);
 
@@ -48,6 +49,11 @@ const router = new VueRouter({
             path: '/register',
             name: 'register',
             component: Register
+        },
+        {
+            path: '/changepassword',
+            name: 'changepassword',
+            component: ChangePassword
         },
         {
             path: '/cart',

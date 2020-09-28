@@ -8,21 +8,29 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3">
-          <ul style="list-style-type:none">
+          <ul style="list-style-type: none">
             <li class="active">
-              <button class="btn" @click="setComponent('main')">Dashboard</button>
+              <button class="btn" @click="setComponent('main')">
+                Dashboard
+              </button>
             </li>
             <li>
-              <button class="btn" @click="setComponent('certificates')">Certificates</button>
+              <button class="btn" @click="setComponent('certificates')">
+                Certificates
+              </button>
             </li>
             <li>
-              <button class="btn" @click="setComponent('orders')">Requests</button>
+              <button class="btn" @click="setComponent('orders')">
+                Requests
+              </button>
             </li>
             <li>
               <button class="btn" @click="setComponent('exams')">Exams</button>
             </li>
             <li>
-              <button class="btn" @click="setComponent('questions')">Questions</button>
+              <button class="btn" @click="setComponent('questions')">
+                Questions
+              </button>
             </li>
             <li>
               <button class="btn" @click="setComponent('users')">Users</button>
@@ -121,17 +129,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.hero-section {
-  height: 20vh;
-  background: #ababab;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-top: -20px;
-}
-.title {
-  font-size: 60px;
-  color: #ffffff;
-}
-</style>

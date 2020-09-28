@@ -5,7 +5,11 @@
         <v-card color="orange" dark>
           <v-card-text>
             Processing
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+            <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+            ></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -24,7 +28,7 @@
         <div v-if="edit" class="col-md-12 row">
           <h4>
             <v-icon medium color="cyan">help</v-icon>
-            {{data.name}}
+            {{ data.name }}
           </h4>
         </div>
         <v-card-text>
@@ -130,14 +134,16 @@
             color="orange white--text"
             @click="saveCertificate"
             class="hovered-button"
-          >Save Certificate</v-btn>
+            >Save Certificate</v-btn
+          >
           <v-btn
             v-else
             :disabled="!isValid"
             color="orange white--text"
             @click="addCertificate"
             class="hovered-button"
-          >Add Certificate</v-btn>
+            >Add Certificate</v-btn
+          >
         </v-card-actions>
       </v-card>
       <ImageDialog
@@ -268,7 +274,8 @@ export default {
       let available_for = this.certificate.available_for;
       let description = this.certificate.description;
       let image = "";
-      if (!this.imageChanged) image = "http://localhost:8000/images/exam.jpeg";
+      if (!this.imageChanged)
+        image = "http://knowledgewavws.org/images/exam.jpeg";
       else image = this.certificate.image;
       axios
         .post("/api/certificates/", {

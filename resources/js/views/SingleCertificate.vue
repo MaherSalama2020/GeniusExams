@@ -5,7 +5,11 @@
         <v-card color="orange" dark>
           <v-card-text>
             Processing
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+            <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+            ></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -22,7 +26,7 @@
                 x-small
                 icon
                 @click="linkToHome"
-                v-if="reference_singlecertificate=='home'"
+                v-if="reference_singlecertificate == 'home'"
                 v-bind="attrs"
                 v-on="on"
               >
@@ -35,8 +39,9 @@
             small
             color="white"
             class="mr-1 ml-1"
-            v-if="reference_singlecertificate=='home'"
-          >arrow_forward</v-icon>
+            v-if="reference_singlecertificate == 'home'"
+            >arrow_forward</v-icon
+          >
           <!-- if arrived from cart -->
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -44,7 +49,7 @@
                 x-small
                 icon
                 @click="linkToHome"
-                v-if="reference_singlecertificate=='cart'"
+                v-if="reference_singlecertificate == 'cart'"
                 v-bind="attrs"
                 v-on="on"
               >
@@ -57,19 +62,22 @@
             small
             color="white"
             class="mr-1 ml-1"
-            v-if="reference_singlecertificate=='cart'"
-          >arrow_forward</v-icon>
+            v-if="reference_singlecertificate == 'cart'"
+            >arrow_forward</v-icon
+          >
           <span
             @click="linkToCart"
-            v-if="reference_singlecertificate=='cart'"
+            v-if="reference_singlecertificate == 'cart'"
             class="activeBreadcrumb"
-          >Shopping Cart</span>
+            >Shopping Cart</span
+          >
           <v-icon
             small
             color="white"
             class="mr-1 ml-1"
-            v-if="reference_singlecertificate=='cart'"
-          >arrow_forward</v-icon>
+            v-if="reference_singlecertificate == 'cart'"
+            >arrow_forward</v-icon
+          >
           <!-- if arrived from orders -->
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -77,7 +85,7 @@
                 x-small
                 icon
                 @click="linkToHome"
-                v-if="reference_singlecertificate=='orders'"
+                v-if="reference_singlecertificate == 'orders'"
                 v-bind="attrs"
                 v-on="on"
               >
@@ -90,20 +98,23 @@
             small
             color="white"
             class="mr-1 ml-1"
-            v-if="reference_singlecertificate=='orders'"
-          >arrow_forward</v-icon>
+            v-if="reference_singlecertificate == 'orders'"
+            >arrow_forward</v-icon
+          >
           <span
             @click="linkToOrders"
-            v-if="reference_singlecertificate=='orders'"
+            v-if="reference_singlecertificate == 'orders'"
             class="activeBreadcrumb"
-          >orders</span>
+            >orders</span
+          >
           <v-icon
             small
             color="white"
             class="mr-1 ml-1"
-            v-if="reference_singlecertificate=='orders'"
-          >arrow_forward</v-icon>
-          <span class="inactiveBreadcrumb">{{certificate.name}}</span>
+            v-if="reference_singlecertificate == 'orders'"
+            >arrow_forward</v-icon
+          >
+          <span class="inactiveBreadcrumb">{{ certificate.name }}</span>
         </v-row>
         <v-row class="ml-15 mt-3" no-gutters>
           <h3 class="white--text">Show Certificate</h3>
@@ -115,16 +126,22 @@
         <div class="col-md-5">
           <v-hover v-slot:default="{ hover }" class="mx-2 my-2 col-md-4">
             <v-card color="grey lighten-4" max-width="400">
-              <v-img :aspect-ratio="16/9" :src="certificate.image" :alt="certificate.name">
+              <v-img
+                :aspect-ratio="16 / 9"
+                :src="certificate.image"
+                :alt="certificate.name"
+              >
                 <v-expand-transition>
                   <div
                     v-if="hover"
                     class="font-weight-bold d-flex transition-fast-in-fast-out grey darken-2 v-card--reveal display-3 white--text"
-                    style="height: 100%;"
-                  >{{certificate.price | dollars}}</div>
+                    style="height: 100%"
+                  >
+                    {{ certificate.price | dollars }}
+                  </div>
                 </v-expand-transition>
               </v-img>
-              <v-card-text class="pt-6" style="position: relative;">
+              <v-card-text class="pt-6" style="position: relative">
                 <v-btn
                   absolute
                   color="orange"
@@ -133,7 +150,11 @@
                   large
                   right
                   top
-                  v-if="inCart.find((item)=> item== certificate.id)>-1?false:true"
+                  v-if="
+                    inCart.find((item) => item == certificate.id) > -1
+                      ? false
+                      : true
+                  "
                   @click="addToCart(certificate.id)"
                 >
                   <v-icon>add_shopping_cart</v-icon>
@@ -146,15 +167,21 @@
                   large
                   right
                   top
-                  v-if="inCart.find((item)=> item== certificate.id)>-1?true:false"
+                  v-if="
+                    inCart.find((item) => item == certificate.id) > -1
+                      ? true
+                      : false
+                  "
                   @click="removeFromCart(certificate.id)"
                 >
                   <v-icon>remove_shopping_cart</v-icon>
                 </v-btn>
-                <h5 class="font-weight-bold orange--text mb-2">{{certificate.name}}</h5>
+                <h5 class="font-weight-bold orange--text mb-2">
+                  {{ certificate.name }}
+                </h5>
 
                 <v-row no-gutters>
-                  <span style="color:#FF9800;">{{certificate.rate}}</span>
+                  <span style="color: #ff9800">{{ certificate.rate }}</span>
                   <v-rating
                     :value="certificate.rate"
                     color="#FF9800"
@@ -167,23 +194,25 @@
                   ></v-rating>
                   <div class="grey--text ml-auto">
                     <v-icon small>book</v-icon>
-                    {{certificate.bookedNO}}
+                    {{ certificate.bookedNO }}
                   </div>
                   <div class="grey--text ml-1">
                     <v-icon small>mdi-star-circle</v-icon>
-                    {{certificate.ratedNO}}
+                    {{ certificate.ratedNO }}
                   </div>
                 </v-row>
-                <div class="font-weight-light grey--text mb-2">{{certificate.description}}</div>
+                <div class="font-weight-light grey--text mb-2">
+                  {{ certificate.description }}
+                </div>
               </v-card-text>
               <v-card-subtitle>
-                <span v-if="certificate.available_for>1">
+                <span v-if="certificate.available_for > 1">
                   <v-icon>mdi-calendar</v-icon>
-                  {{certificate.available_for}} Days
+                  {{ certificate.available_for }} Days
                 </span>
-                <span v-if="certificate.available_for==1">
+                <span v-if="certificate.available_for == 1">
                   <v-icon>mdi-calendar</v-icon>
-                  {{certificate.available_for}} Day
+                  {{ certificate.available_for }} Day
                 </span>
               </v-card-subtitle>
               <!-- <v-divider light class="mt-0 mb-0" v-if="isLoggedIn"></v-divider>
@@ -288,23 +317,6 @@ export default {
 };
 </script>
 <style scoped>
-.inactiveBreadcrumb {
-  color: grey;
-}
-.activeBreadcrumb {
-  color: whitesmoke;
-  cursor: pointer;
-}
-.activeBreadcrumb:hover {
-  text-decoration: underline;
-}
-.hero-section {
-  background: #ababab;
-  height: 20vh;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-top: -20px;
-}
 .v-card--reveal {
   align-items: center;
   bottom: 0;

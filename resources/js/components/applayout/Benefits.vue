@@ -2,7 +2,13 @@
   <v-container fluid class="home-hero">
     <v-col pa-5>
       <v-row no-gutters justify="center" align="start">
-        <v-col cols="12" sm="auto" md="auto" lg="auto" class="underline-from-center">
+        <v-col
+          cols="12"
+          sm="auto"
+          md="auto"
+          lg="auto"
+          class="underline-from-center"
+        >
           <span class="big-dot mr-2">.</span>
           <span class="big-dot mr-2">.</span>
           <span class="medium-title mr-6 ml-4">BENEFITS</span>
@@ -12,7 +18,9 @@
       </v-row>
       <v-row no-gutters justify="center" align="start" class="py-0">
         <v-col cols="12" sm="auto" md="auto" lg="auto">
-          <span class="x-big-title mr-6 ml-4 mb-0">Reason Why Choose PM-point.</span>
+          <span class="x-big-title mr-6 ml-4 mb-0"
+            >Reason Why Choose PM-point.</span
+          >
         </v-col>
       </v-row>
       <v-row no-gutters justify="center" align="center">
@@ -33,18 +41,22 @@
             bullets-inside
           >
             <vueper-slide
-              v-for="slide in Benefits_slides "
-              :key="slide.title+'benefits-vueper-slide'"
+              v-for="slide in Benefits_slides"
+              :key="slide.title + 'benefits-vueper-slide'"
             >
               <template v-slot:content>
                 <v-card max-width="344" tile flat color="transparent">
                   <v-list-item three-line>
                     <v-list-item-avatar tile color="transparent" left>
-                      <v-icon x-large color="white" class="gradient_icon">{{slide.icon}}</v-icon>
+                      <v-icon x-large color="white" class="gradient_icon">{{
+                        slide.icon
+                      }}</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <div style="color:white;" class="slide_title mb-1">{{slide.title}}</div>
-                      <div class="description">{{slide.description}}</div>
+                      <div style="color: white" class="slide_title mb-1">
+                        {{ slide.title }}
+                      </div>
+                      <div class="description">{{ slide.description }}</div>
                     </v-list-item-content>
                   </v-list-item>
                 </v-card>
@@ -54,10 +66,17 @@
         </v-col>
         <v-col class="col-md-2"></v-col>
       </v-row>
-      <v-row no-gutters justify="center" align="center" class="hidden-sm-and-down">
+      <v-row
+        no-gutters
+        justify="center"
+        align="center"
+        class="hidden-sm-and-down"
+      >
         <v-col>
           <v-row no-gutters justify="center" align="center">
-            <div class="big-title ml-10 border-bottom underline-from-top">Students' Reviews</div>
+            <div class="big-title ml-10 border-bottom underline-from-top">
+              Students' Reviews
+            </div>
             <v-spacer />
             <v-btn
               color="orange"
@@ -82,7 +101,7 @@
             <v-col class="col-md-1"></v-col>
             <v-col class="col-md-10">
               <vueper-slides
-                v-if="reviews.length>0"
+                v-if="reviews.length > 0"
                 ref="reviewsVueperSlides"
                 :bullets="false"
                 :arrows="false"
@@ -98,11 +117,18 @@
                 :breakpoints="breakpoints"
                 bullets-inside
               >
-                <vueper-slide v-for="review in reviews" :key="review.id+'-reviews-vueper-slide'">
+                <vueper-slide
+                  v-for="review in reviews"
+                  :key="review.id + '-reviews-vueper-slide'"
+                >
                   <template v-slot:content>
                     <blockquote>
-                      <div class="description textover-5">{{review.review}}</div>
-                      <div class="description ml-8">{{review.user.name}} | {{review.user.country}}</div>
+                      <div class="description textover-5">
+                        {{ review.review }}
+                      </div>
+                      <div class="description ml-8">
+                        {{ review.user.name }} | {{ review.user.country }}
+                      </div>
                     </blockquote>
                   </template>
                 </vueper-slide>
@@ -113,11 +139,21 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters justify="center" align="start" class="hidden-sm-and-down">
-        <v-tooltip bottom>
+      <v-row
+        no-gutters
+        justify="center"
+        align="start"
+        class="hidden-sm-and-down"
+      >
+        <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn fab class="mt-5 orange" @click="linkToReviews" v-bind="attrs" v-on="on">
-              <v-icon large color="white">expand_more</v-icon>
+            <v-btn
+              class="mt-5 orange"
+              @click="linkToReviews"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon large color="white" class="arrow-up">expand_more</v-icon>
             </v-btn>
           </template>
           Show all Reviews
@@ -383,5 +419,9 @@ blockquote p {
 }
 .underline-from-top:hover:before {
   bottom: 0;
+}
+.arrow-up:hover {
+  transform: rotate(-180deg);
+  /* transform: scaleY(1.5); */
 }
 </style>

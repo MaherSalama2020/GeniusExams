@@ -35,7 +35,8 @@
           class="ml-auto hovered-button"
           color="orange white--text"
           @click="showExams"
-        >See your Orders</v-btn>
+          >See your Orders</v-btn
+        >
       </v-row>
     </v-container>
   </div>
@@ -58,33 +59,8 @@ export default {
 </script>
 
 <style scoped>
-.inactiveBreadcrumb {
-  color: grey;
-}
-.activeBreadcrumb {
-  color: whitesmoke;
-  cursor: pointer;
-}
-.activeBreadcrumb:hover {
-  text-decoration: underline;
-}
 .medium-text {
   font-size: 36px;
-}
-.hero-section {
-  background: #ababab;
-  height: 20vh;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-top: -20px;
-}
-.v-card--reveal {
-  align-items: center;
-  bottom: 0;
-  justify-content: center;
-  opacity: 0.5;
-  position: absolute;
-  width: 100%;
 }
 .hovered-button:hover {
   background-color: transparent !important;
